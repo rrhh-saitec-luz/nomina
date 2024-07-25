@@ -79,6 +79,7 @@ test:
 #
 production:
   <<: *default
-  database: nomina_production
-  username: nomina
-  password: <%= ENV["NOMINA_DATABASE_PASSWORD"] %>
+  database: nomina
+  username: tmedina
+  password: a123456 
+  host: 10.4.15.55
