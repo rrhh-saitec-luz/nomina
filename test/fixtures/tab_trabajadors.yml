@@ -1,0 +1,17 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  cedula: 1
+  nombre1: MyString
+  nombre2: MyString
+  apellido1: MyString
+  apellido2: MyString
+  fecha_de_nac: 2024-09-19
+
+two:
+  cedula: 1
+  nombre1: MyString
+  nombre2: MyString
+  apellido1: MyString
+  apellido2: MyString
+  fecha_de_nac: 2024-09-19

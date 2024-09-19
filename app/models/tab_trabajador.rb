@@ -1,0 +1,2 @@
+class TabTrabajador < ApplicationRecord
+end
