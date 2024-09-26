@@ -1,0 +1,14 @@
+<div class='d-flex align-items-center justify-content-between'>
+  <ul class='list-group list-group-horizontal'>                                                                    
+    <li class='list-group-item'>
+      <%= render 'shared/home' %>
+    </li>                                                   
+    <li class='list-group-item'>
+      <%= link_to 'Trabajadores', tab_trabajadors_index_path, class: 'link-primary active' %>
+    </li>                                                   
+    <li class='list-group-item'>
+      <%= link_to 'Nuevo Ingreso', tab_trabajadors_new_path, class: 'link-primary active' %>
+    </li>
+  </ul>
+   <%= render 'shared/logout' %>
+</div>

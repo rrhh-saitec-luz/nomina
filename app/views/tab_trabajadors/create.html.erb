@@ -1,2 +1,33 @@
 <h1>TabTrabajadors#create</h1>
 <p>Find me in app/views/tab_trabajadors/create.html.erb</p>
+  <%= form_with url: tab_trabajadors_create_path  do |form| %>
+    <div class="d-flex flex-column gap-4">
+      <div>
+        <%= form.label :cedula, 'Cedula', class: 'form-label'%>
+        <%= form.number_field :cedula, class: 'form-control' %>
+      </div>
+      <div>
+        <%= form.label :nombre1, 'Primer Nombre', class: 'form-label'%>
+        <%= form.text_field :nombre1, class: 'form-control' %>
+      </div>
+      <div>
+        <%= form.label :nombre2, 'Segundo Nombre', class: 'form-label'%>
+        <%= form.text_field :nombre2, class: 'form-control' %>
+      </div>
+      <div>
+        <%= form.label :apellido1, 'Primer Apellido', class: 'form-label'%>
+        <%= form.text_field :apellido1, class: 'form-control' %>
+      </div>
+      <div>
+        <%= form.label :apellido2, 'Segundo Apellido', class: 'form-label'%>
+        <%= form.text_field :apellido2, class: 'form-control' %>
+      </div>
+      <div>
+        <%= form.label :fecha_de_nac, 'Fecha de Nacimiento', class: 'form-label'%>
+        <%= form.date_field :fecha_de_nac, class: 'form-control' %>
+      </div>
+      <div class= 'd-flex justify-content-center'>
+        <%= form.submit class: 'btn btn-primary' %>
+      </div>
+    </div>
+  <% end %>

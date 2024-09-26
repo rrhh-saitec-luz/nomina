@@ -10,9 +10,21 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_07_23_135921) do
+ActiveRecord::Schema[7.1].define(version: 2024_09_19_130936) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "tab_trabajadors", force: :cascade do |t|
+    t.integer "cedula", null: false
+    t.string "nombre1", null: false
+    t.string "nombre2", default: ""
+    t.string "apellido1", null: false
+    t.string "apellido2", default: ""
+    t.date "fecha_de_nac", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["cedula"], name: "index_tab_trabajadors_on_cedula", unique: true
+  end
 
   create_table "users", force: :cascade do |t|
     t.string "nombre", default: "", null: false
