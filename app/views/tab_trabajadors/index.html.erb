@@ -2,25 +2,26 @@
   <h1>Sección de Trabajadores</h1>
     <%= render 'shared/menu' %>
 </div>
-<table class="table table-striped">
-  <thead>
-    <tr>
-      <th scope="col">Cedula</th>
-      <th scope="col">Nombre</th>
-      <th scope="col">Apellido</th>
-      <th scope="col">Detalle</th>
-    </tr>
-  </thead>
-  <tbody>
+<div class= "container-fluid border border-2 mt-3"> 
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th scope="col">Cedula</th>
+        <th scope="col">Nombre</th>
+        <th scope="col">Apellido</th>
+        <th scope="col">Detalle</th>
+      </tr>
+    </thead>
+    <tbody>
 
-  <% @trabajadores.each do |trabajador| %>
-    <tr>
-      <th scope="row"><%= trabajador.cedula %></th>
-      <td><%= trabajador.nombre1 %></td>
-      <td><%= trabajador.apellido1 %></td>
-      <td><%= trabajador.fecha_de_nac.strftime('%d-%m-%Y')%></td>
-    </tr>
-  <% end %>
-  </tbody>
-</table>
-
+    <% @trabajadores.each do |trabajador| %>
+      <tr>
+        <th scope="row"><%= trabajador.cedula %></th>
+        <td><%= trabajador.nombre1 %></td>
+        <td><%= trabajador.apellido1 %></td>
+        <td><%= trabajador.fecha_de_nac.strftime('%d-%m-%Y')%></td>
+      </tr>
+    <% end %>
+    </tbody>
+  </table>
+</div>

@@ -12,11 +12,11 @@ class TabTrabajadorsController < ApplicationController
 
   def create
     @nuevo = TabTrabajador.new(nuevo_ingreso_params)
-    
+
     if @nuevo.save
       redirect_to tab_trabajadors_index_path
     else
-      redirect_to tab_trabajadors_new_path
+      render :new, status: :unprocessable_entity
     end
   end
 
