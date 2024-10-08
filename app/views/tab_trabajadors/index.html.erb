@@ -8,6 +8,8 @@
     <thead>
       <tr>
         <th scope="col">Nombre</th>
+        <th scope="col">Cedula</th>
+        <th scope="col">Cargo</th>
       </tr>
     </thead>
     <tbody>
@@ -15,6 +17,8 @@
     <% @sidial.each do |trabajador| %>
       <tr>
         <td><%= trabajador.nombres %></td>
+        <td><%= trabajador.ce_trabajador %></td>
+        <td><%= trabajador.descripcion_cargo %></td>
       </tr>
     <% end %>
     </tbody>
