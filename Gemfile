@@ -73,3 +73,6 @@ gem 'sassc-rails'
 
 # Permite el registro de usuarios
 gem 'devise', '~> 4.9'
+
+# Permite crear una paginaciones en los indices
+gem 'kaminari'

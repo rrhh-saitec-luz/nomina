@@ -3,6 +3,15 @@
   <h1>Sección de Trabajadores</h1>
     <%= render 'shared/menu' %>
 </div>
+
+<%= form_with url: tab_trabajadors_index_path, method: :get, local: true, class: 'd-flex justify-content-center' do %>
+  <div>
+    <%= label_tag :q, "Buscar:" %>
+    <%= text_field_tag :q, @search_term, placeholder: "Ingrese el nombre o ID del trabajador" %>
+    <%= submit_tag "Buscar" %>
+  </div>
+<% end %>
+
 <div class= "container-fluid border border-2 mt-3"> 
   <table class="table table-striped">
     <thead>
@@ -23,4 +32,5 @@
     <% end %>
     </tbody>
   </table>
+  <%= paginate @sidial %>
 </div>

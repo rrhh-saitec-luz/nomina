@@ -1,7 +1,13 @@
 class TabTrabajadorsController < ApplicationController
   def index
     @trabajadores = TabTrabajador.all
-    @sidial = Admon.all
+    @search_term = params[:q]
+
+    if @search_term.present?
+      @sidial = Admon.where('nombres ILIKE ? OR ce_trabajador::text ILIKE ?', "%#{@search_term}%", "%#{@search_term}%").page(params[:page]).per(10)
+    else
+      @sidial = Admon.page(params[:page]).per(10)
+    end
   end
 
   def new
