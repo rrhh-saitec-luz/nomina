@@ -1,6 +1,7 @@
 class TabTrabajadorsController < ApplicationController
   def index
     @trabajadores = TabTrabajador.all
+    @sidial = Admon.all
   end
 
   def new

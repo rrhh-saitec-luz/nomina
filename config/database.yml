@@ -5,7 +5,15 @@ default: &default
 
 development:
   <<: *default
-  database: nomina_development
+  database: nomina_development 
+
+admon_schema:
+  <<: *default
+  database: rrhhdb
+  username: tmedina
+  password: a123456
+  host: 10.4.15.55
+  schema_search_path: 'admon_personal'
 
 test:
   <<: *default
