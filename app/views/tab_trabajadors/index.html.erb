@@ -7,30 +7,36 @@
 <%= form_with url: tab_trabajadors_index_path, method: :get, local: true, class: 'd-flex justify-content-center' do %>
   <div>
     <%= label_tag :q, "Buscar:" %>
-    <%= text_field_tag :q, @search_term, placeholder: "Ingrese el nombre o ID del trabajador" %>
+    <%= text_field_tag :q, @search_term, placeholder: "Ingrese cedula de identidad" %>
     <%= submit_tag "Buscar" %>
   </div>
 <% end %>
 
 <div class= "container-fluid border border-2 mt-3"> 
-  <table class="table table-striped">
-    <thead>
-      <tr>
-        <th scope="col">Nombre</th>
-        <th scope="col">Cedula</th>
-        <th scope="col">Cargo</th>
-      </tr>
-    </thead>
-    <tbody>
-
-    <% @sidial.each do |trabajador| %>
-      <tr>
-        <td><%= trabajador.nombres %></td>
-        <td><%= trabajador.ce_trabajador %></td>
-        <td><%= trabajador.descripcion_cargo %></td>
-      </tr>
-    <% end %>
-    </tbody>
-  </table>
-    <%= paginate @sidial %>
+  <% if @sidial.nil? %>
+    <h2> Ingrese Cedula de Identidad</>
+  <% else %>
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th scope="col">cedula</th>
+          <th scope="col">Estatus</th>
+          <th scope="col">Nombres</th>
+        </tr>
+      </thead>
+      <tbody>
+      <% @sidial.each do |trabajador| %>
+        <tr>
+          <td><%= trabajador.ce_trabajador %></td>
+          <%if trabajador.edo_cargo == 'A' %>
+            <td>Activo</td>
+          <%elsif trabajador.edo_cargo == 'F'%>
+            <td>Fallecido</td>
+          <%end%>
+          <td><%= trabajador.nombres %></td>
+        </tr>
+      <%end%>
+      </tbody>
+    </table>
+  <% end %>
 </div>
