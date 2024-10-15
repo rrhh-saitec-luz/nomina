@@ -2,11 +2,14 @@ class TabTrabajadorsController < ApplicationController
   def index
     @trabajadores = TabTrabajador.all
     @search_term = params[:q]
+    @desc_estatus = { 'A' => 'ACTIVO', 'F' => 'FALLECIDO', 'S' => 'SUSPENDIDO',
+                      'R' => 'RETIRADO', 'P' => 'PENSIONADO', 'T' => 'PENSIONADO',
+                      'C' => 'CONTRATADO' }
 
     if @search_term.present?
       @sidial = Admon.where('ce_trabajador::text ILIKE ?', "%#{@search_term}%").page(params[:page]).per(10)
     else
-      @sidial = nil 
+      @sidial = nil
     end
   end
 
@@ -15,6 +18,7 @@ class TabTrabajadorsController < ApplicationController
   end
 
   def show
+    @trabajador = Admon.find(params[:id])
   end
 
   def create

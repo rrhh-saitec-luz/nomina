@@ -28,8 +28,10 @@
       <% @sidial.each do |trabajador| %>
         <tr>
           <td> <%= trabajador.ce_trabajador %></td>
-          <td><%= trabajador.edo_cargo %>
+          <td><%= @desc_estatus[trabajador.edo_cargo] %>
           <td><%= trabajador.nombres %></td>
+          <td> <%= trabajador.id %></td>
+          <td><%= link_to 'Detalles', tab_trabajadors_show_path(trabajador.id) %>
         </tr>
       <%end%>
       </tbody>
