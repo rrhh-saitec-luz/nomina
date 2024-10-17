@@ -1,10 +1,18 @@
 class TabTrabajadorsController < ApplicationController
+  DESCRIPCION_DE_ESTADOS = { 'A' => 'ACTIVO',
+                             'F' => 'FALLECIDO',
+                             'S' => 'SUSPENDIDO',
+                             'R' => 'RETIRADO',
+                             'P' => 'PENSIONADO',
+                             'T' => 'PENSIONADO',
+                             'C' => 'CONTRATADO' }.freeze
+
+  DESCRIPCION_PRINCIPAL = { 'S' => 'SI', 'N' => 'NO' }.freeze
+
   def index
     @trabajadores = TabTrabajador.all
     @search_term = params[:q]
-    @desc_estatus = { 'A' => 'ACTIVO', 'F' => 'FALLECIDO', 'S' => 'SUSPENDIDO',
-                      'R' => 'RETIRADO', 'P' => 'PENSIONADO', 'T' => 'PENSIONADO',
-                      'C' => 'CONTRATADO' }
+    @desc_estatus = DESCRIPCION_DE_ESTADOS
 
     if @search_term.present?
       @sidial = Admon.where('ce_trabajador::text ILIKE ?', "%#{@search_term}%").page(params[:page]).per(10)
@@ -19,6 +27,8 @@ class TabTrabajadorsController < ApplicationController
 
   def show
     @trabajador = Admon.find(params[:id])
+    @desc_estatus = DESCRIPCION_DE_ESTADOS
+    @desc_principal = DESCRIPCION_PRINCIPAL
   end
 
   def create
@@ -45,6 +55,4 @@ class TabTrabajadorsController < ApplicationController
   def nuevo_ingreso_params
     params.permit(:cedula, :nombre1, :nombre2, :apellido1, :apellido2, :fecha_de_nac)
   end
-
-
 end

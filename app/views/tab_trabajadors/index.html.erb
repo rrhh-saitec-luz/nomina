@@ -1,6 +1,4 @@
 <div class="container-fluid">
-
-  <h1>Sección de Trabajadores</h1>
     <%= render 'shared/menu' %>
 </div>
 
@@ -20,17 +18,16 @@
       <thead>
         <tr>
           <th scope="col">cedula</th>
-          <th scope="col">Estatus</th>
           <th scope="col">Nombres</th>
+          <th scope="col">Estatus de Cargo</th>
         </tr>
       </thead>
       <tbody>
       <% @sidial.each do |trabajador| %>
         <tr>
           <td> <%= trabajador.ce_trabajador %></td>
-          <td><%= @desc_estatus[trabajador.edo_cargo] %>
           <td><%= trabajador.nombres %></td>
-          <td> <%= trabajador.id %></td>
+          <td><%= @desc_estatus[trabajador.edo_cargo] %>
           <td><%= link_to 'Detalles', tab_trabajadors_show_path(id: trabajador.id) %>
         </tr>
       <%end%>

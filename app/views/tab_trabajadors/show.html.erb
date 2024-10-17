@@ -1,3 +1,40 @@
-<h1>TabTrabajadors#show</h1>
-<h2> <%= @trabajador.inspect%>
-<p>Find me in app/views/tab_trabajadors/show.html.erb</p>
+<div class="container-fluid">
+  <%= render 'shared/menu' %>
+</div>
+<div class="d-flex flex-column">
+  <div class="card border-dark mb-3" style="">
+    <div class="card-header"><h5>Datos del trabajador</h5> </div>
+    <div class="card-body text-dark">
+      <p class="card-text"><b>Nombre del Trabajador:</b> <%= @trabajador.nombres %></p>
+      <p class="card-text"><b>Cédula del Trabajador:</b> <%=@trabajador.ce_trabajador %></p>
+      <p class="card-text"><b>Estatus del Trabajador:</b> <%=@desc_estatus[@trabajador.estatus] %></p>
+    </div>
+  </div>
+  <div class="card border-dark mb-3" style="">
+    <div class="card-header"><h5> Datos del Cargo:</h5></div>
+    <div class="card-body text-dark">
+      <p class="card-text"><b>Ubicación: </b> <%= @trabajador.co_ubicacion %>- <%= @trabajador.descripcion_larga%></p>
+      <p class="card-text"><b>Tipo de Personal: </b><%= @trabajador.tipopersonal%> - <%= @trabajador.descripcion_tp%></p>
+      <p class="card-text"><b>Dedicación: </b><%= @trabajador.dedicacion%> - <%= @trabajador.desc_dedicacion%></p>
+      <p class="card-text"><b>Código Cargo: </b><%= @trabajador.co_cargo%> - <%= @trabajador.descripcion_cargo%></p>
+      <p class="card-text"><b>Escala Nivel: </b><%= @trabajador.gdosalarial%></p>
+      <p class="card-text"><b>Categoria/Grado: </b><%= @trabajador.co_categrado %> - <%= @trabajador.desc_categrado%></p>
+      <p class="card-text"><b>Estatus Cargo: </b><%= @desc_estatus[@trabajador.edo_cargo] %></p>
+      <p class="card-text"><b>Principal: </b><%= @desc_principal[@trabajador.principal] %></p>
+     </div>
+  </div>
+  <div class="card border-dark mb-3" style="">
+    <div class="card-header"><h5>Datos de Ingreso</h5> </div>
+    <div class="card-body text-dark">
+      <p class="card-text"><b>Tipo de Ingreso: </b> <%= @trabajador.co_ingreso %> - <%=@trabajador.des_co_ingreso%></p>
+      <p class="card-text"><b>Fecha de Oficio: </b> <%=@trabajador.fe_docoficio.strftime("%d/%m/%Y") %></p>
+      <p class="card-text"><b>No. de Oficio: </b> <%= @trabajador.nu_oficio %></p>
+      <% if @trabajador.ce_sustituto.eql?(0) %>
+        <p class="card-text"><b>Cédula sustituto: </b></p>
+      <% else %>
+        <p class="card-text"><b>Cédula sustituto: </b> <% @trabajador.ce_sustituto %></p>
+      <% end %>
+      <p class="card-text"><b>Texto Carta: </b> <%= @trabajador.texto_carta %></p>
+    </div>
+  </div>
+</div>
