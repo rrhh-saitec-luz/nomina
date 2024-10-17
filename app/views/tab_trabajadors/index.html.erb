@@ -31,7 +31,7 @@
           <td><%= @desc_estatus[trabajador.edo_cargo] %>
           <td><%= trabajador.nombres %></td>
           <td> <%= trabajador.id %></td>
-          <td><%= link_to 'Detalles', tab_trabajadors_show_path(trabajador.id) %>
+          <td><%= link_to 'Detalles', tab_trabajadors_show_path(id: trabajador.id) %>
         </tr>
       <%end%>
       </tbody>
