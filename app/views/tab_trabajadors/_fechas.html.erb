@@ -1,0 +1,10 @@
+<div style="width: 30%">
+  <p class="card-text">
+  <b><%= titulo %> </b> 
+  </p>
+</div>
+<% if fecha.nil? %>
+  <%= '00/00/000' %>
+<% else %>
+  <%= fecha.strftime('%d/%m/%Y') %>
+<% end %>

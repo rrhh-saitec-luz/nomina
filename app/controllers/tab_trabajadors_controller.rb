@@ -55,4 +55,12 @@ class TabTrabajadorsController < ApplicationController
   def nuevo_ingreso_params
     params.permit(:cedula, :nombre1, :nombre2, :apellido1, :apellido2, :fecha_de_nac)
   end
+
+  def verificar_fecha(fecha)
+    if fecha.nil?
+      '00/00/0000'
+    else
+      fecha.strftime('%d/%m/%Y')
+    end
+  end
 end

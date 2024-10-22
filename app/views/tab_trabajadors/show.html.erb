@@ -13,21 +13,37 @@
   <div class="card border-dark mb-3" style="">
     <div class="card-header"><h5> Datos del Cargo:</h5></div>
     <div class="card-body text-dark">
-      <p class="card-text"><b>Ubicación: </b> <%= @trabajador.co_ubicacion %>- <%= @trabajador.descripcion_larga%></p>
-      <p class="card-text"><b>Tipo de Personal: </b><%= @trabajador.tipopersonal%> - <%= @trabajador.descripcion_tp%></p>
+      <p class="card-text">
+        <b>Ubicación: </b> <%= @trabajador.co_ubicacion %>- <%= @trabajador.descripcion_larga%>
+      </p>
+      <p class="card-text">
+        <b>Tipo de Personal: </b><%= @trabajador.tipopersonal%> - <%= @trabajador.descripcion_tp%>
+      </p>
       <p class="card-text"><b>Dedicación: </b><%= @trabajador.dedicacion%> - <%= @trabajador.desc_dedicacion%></p>
       <p class="card-text"><b>Código Cargo: </b><%= @trabajador.co_cargo%> - <%= @trabajador.descripcion_cargo%></p>
       <p class="card-text"><b>Escala Nivel: </b><%= @trabajador.gdosalarial%></p>
-      <p class="card-text"><b>Categoria/Grado: </b><%= @trabajador.co_categrado %> - <%= @trabajador.desc_categrado%></p>
+      <p class="card-text">
+        <b>Categoria/Grado: </b><%= @trabajador.co_categrado %> - <%= @trabajador.desc_categrado%>
+      </p>
       <p class="card-text"><b>Estatus Cargo: </b><%= @desc_estatus[@trabajador.edo_cargo] %></p>
       <p class="card-text"><b>Principal: </b><%= @desc_principal[@trabajador.principal] %></p>
      </div>
   </div>
   <div class="card border-dark mb-3" style="">
-    <div class="card-header"><h5>Datos de Ingreso</h5> </div>
+    <div class="card-header">
+      <h5>Datos de Ingreso</h5>
+    </div>
     <div class="card-body text-dark">
-      <p class="card-text"><b>Tipo de Ingreso: </b> <%= @trabajador.co_ingreso %> - <%=@trabajador.des_co_ingreso%></p>
-      <p class="card-text"><b>Fecha de Oficio: </b> <%=@trabajador.fe_docoficio.strftime("%d/%m/%Y") %></p>
+      <p class="card-text">
+        <b>Tipo de Ingreso: </b> <%= @trabajador.co_ingreso %> - <%=@trabajador.des_co_ingreso%>
+      </p>
+      <p class="card-text"><b>Fecha de Oficio: </b>
+        <% if @trabajador.fe_docoficio.nil? %>
+          <%= '00/00/0000' %>
+        <% else %>
+          <%=@trabajador.fe_docoficio.strftime("%d/%m/%Y") %>
+        <% end %>
+      </p>
       <p class="card-text"><b>No. de Oficio: </b> <%= @trabajador.nu_oficio %></p>
       <% if @trabajador.ce_sustituto.eql?(0) %>
         <p class="card-text"><b>Cédula sustituto: </b></p>
@@ -37,4 +53,86 @@
       <p class="card-text"><b>Texto Carta: </b> <%= @trabajador.texto_carta %></p>
     </div>
   </div>
+  <div class="card border-dark mb-3" style="">
+    <div class="card-header">
+      <h5>Fechas</h5>
+    </div>
+    <div class="card-body text-dark">
+<div class="container">
+  <div class="row">
+    <div class="col">
+      <ul class="list-group list-group-flush">
+        <li class="list-group-item">
+          <p class="card-text">
+            <b>Real: </b> <%= @trabajador.co_ingreso %> - <%=@trabajador.des_co_ingreso%>
+          </p>
+        </li>
+        <li class="list-group-item">
+          <p class="card-text">
+            <b>Administrativa: </b> <%= @trabajador.co_ingreso %> - <%=@trabajador.des_co_ingreso%>
+          </p>
+        </li>
+        <li class="list-group-item">
+          <p class="card-text">
+            <b>Inicio Contrato: </b> <%= @trabajador.co_ingreso %> - <%=@trabajador.des_co_ingreso%>
+          </p>
+        </li>
+        <li class="list-group-item">
+          <p class="card-text">
+            <b>Fin Contrato: </b> <%= @trabajador.co_ingreso %> - <%=@trabajador.des_co_ingreso%>
+          </p>
+        </li>
+        <li class="list-group-item">
+          <p class="card-text">
+            <b>Inicio Adm. Pública: </b> <%= @trabajador.co_ingreso %> - <%=@trabajador.des_co_ingreso%>
+          </p>
+        </li>
+        <li class="list-group-item">
+          <p class="card-text">
+            <b>Fin Adm. Pública: </b> <%= @trabajador.co_ingreso %> - <%=@trabajador.des_co_ingreso%>
+          </p>
+        </li>
+        <li class="list-group-item">
+          <p class="card-text">
+            <b>Nombramiento: </b> <%= @trabajador.co_ingreso %> - <%=@trabajador.des_co_ingreso%>
+          </p>
+         </li>
+        <li class="list-group-item">
+          <p class="card-text">
+            <b>Horario: </b> <%= @trabajador.co_ingreso %> - <%=@trabajador.des_co_ingreso%>
+          </p>
+         </li>
+      </ul>
+    </div>
+    <div class="col">
+      <ul class="list-group list-group-flush">
+        <li class="list-group-item d-flex ">
+          <%= render 'fechas', titulo: 'Ingreso a LUZ', fecha: @trabajador.fe_ingreso %> 
+        </li>
+        <li class="list-group-item d-flex">
+          <%= render 'fechas', titulo: 'Ingreso Nómina', fecha: @trabajador.fe_ingreso_nomina %> 
+        </li>
+        <li class="list-group-item d-flex">
+          <%= render 'fechas', titulo: 'Jubilación/Pensión', fecha: @trabajador.fe_jubilacion %>
+        </li>
+        <li class="list-group-item d-flex">
+          <%= render 'fechas', titulo: 'Retiro Efectivo', fecha: @trabajador.fe_retiro %>
+        </li>
+        <li class="list-group-item d-flex">
+          <%= render 'fechas', titulo: 'Retiro Nómina', fecha: @trabajador.fe_retiro %>
+        </li>
+        <li class="list-group-item d-flex">
+          <%= render 'fechas', titulo: 'Fecha de Finiquito', fecha: nil %>
+        </li>
+        <li class="list-group-item d-flex">
+          <%= render 'fechas', titulo: 'Fallecimiento', fecha: nil %>
+         </li>
+        <li class="list-group-item d-flex">
+          <%= render 'fechas', titulo: 'Años de Servicios', fecha: nil %>
+         </li>
+      </ul>
+    </div>
+  </div>
+</div>
+    </div>
 </div>
