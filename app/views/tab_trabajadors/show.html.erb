@@ -62,46 +62,30 @@
   <div class="row">
     <div class="col">
       <ul class="list-group list-group-flush">
-        <li class="list-group-item">
-          <p class="card-text">
-            <b>Real: </b> <%= @trabajador.co_ingreso %> - <%=@trabajador.des_co_ingreso%>
-          </p>
+        <li class="list-group-item d-flex">
+          <%= render 'fechas', titulo: 'Real', fecha: nil %> 
         </li>
-        <li class="list-group-item">
-          <p class="card-text">
-            <b>Administrativa: </b> <%= @trabajador.co_ingreso %> - <%=@trabajador.des_co_ingreso%>
-          </p>
+        <li class="list-group-item d-flex">
+          <%= render 'fechas', titulo: 'Administrativa', fecha: nil %> 
         </li>
-        <li class="list-group-item">
-          <p class="card-text">
-            <b>Inicio Contrato: </b> <%= @trabajador.co_ingreso %> - <%=@trabajador.des_co_ingreso%>
-          </p>
+        <li class="list-group-item d-flex">
+          <%= render 'fechas', titulo: 'Inicio Contrato', fecha: nil %> 
         </li>
-        <li class="list-group-item">
-          <p class="card-text">
-            <b>Fin Contrato: </b> <%= @trabajador.co_ingreso %> - <%=@trabajador.des_co_ingreso%>
-          </p>
+        <li class="list-group-item d-flex">
+          <%= render 'fechas', titulo: 'Fin Contrato', fecha: nil %> 
         </li>
-        <li class="list-group-item">
-          <p class="card-text">
-            <b>Inicio Adm. Pública: </b> <%= @trabajador.co_ingreso %> - <%=@trabajador.des_co_ingreso%>
-          </p>
+        <li class="list-group-item d-flex">
+          <%= render 'fechas', titulo: 'Inicio Adm. Pública:', fecha: nil %> 
         </li>
-        <li class="list-group-item">
-          <p class="card-text">
-            <b>Fin Adm. Pública: </b> <%= @trabajador.co_ingreso %> - <%=@trabajador.des_co_ingreso%>
-          </p>
+        <li class="list-group-item d-flex">
+          <%= render 'fechas', titulo: 'Fin Adm. Pública:', fecha: nil %> 
         </li>
-        <li class="list-group-item">
-          <p class="card-text">
-            <b>Nombramiento: </b> <%= @trabajador.co_ingreso %> - <%=@trabajador.des_co_ingreso%>
-          </p>
-         </li>
-        <li class="list-group-item">
-          <p class="card-text">
-            <b>Horario: </b> <%= @trabajador.co_ingreso %> - <%=@trabajador.des_co_ingreso%>
-          </p>
-         </li>
+        <li class="list-group-item d-flex">
+          <%= render 'fechas', titulo: 'Nombramiento', fecha: nil %> 
+        </li>
+        <li class="list-group-item d-flex">
+          <%= render 'fechas', titulo: 'horario', fecha: nil %> 
+        </li>
       </ul>
     </div>
     <div class="col">
@@ -125,10 +109,10 @@
           <%= render 'fechas', titulo: 'Fecha de Finiquito', fecha: nil %>
         </li>
         <li class="list-group-item d-flex">
-          <%= render 'fechas', titulo: 'Fallecimiento', fecha: nil %>
+          <%= render 'fechas', titulo: 'Fallecimiento', fecha: @trabajador.fe_efectiva2 %>
          </li>
         <li class="list-group-item d-flex">
-          <%= render 'fechas', titulo: 'Años de Servicios', fecha: nil %>
+          <%= render 'fechas', titulo: 'Años de Servicios', fecha: @antiguedad %>
          </li>
       </ul>
     </div>

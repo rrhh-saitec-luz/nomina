@@ -15,7 +15,8 @@ class TabTrabajadorsController < ApplicationController
     @desc_estatus = DESCRIPCION_DE_ESTADOS
 
     if @search_term.present?
-      @sidial = Admon.where('ce_trabajador::text ILIKE ?', "%#{@search_term}%").page(params[:page]).per(10)
+      @sidial = Admon.where('ce_trabajador::text ILIKE ?', "%#{@search_term}%")
+                     .page(params[:page]).per(10)
     else
       @sidial = nil
     end
@@ -29,6 +30,8 @@ class TabTrabajadorsController < ApplicationController
     @trabajador = Admon.find(params[:id])
     @desc_estatus = DESCRIPCION_DE_ESTADOS
     @desc_principal = DESCRIPCION_PRINCIPAL
+    @antiguedad = calculo_de_antiguedad(@trabajador)
+    @diurno_nocturno = params[:fecha]
   end
 
   def create
@@ -56,11 +59,31 @@ class TabTrabajadorsController < ApplicationController
     params.permit(:cedula, :nombre1, :nombre2, :apellido1, :apellido2, :fecha_de_nac)
   end
 
-  def verificar_fecha(fecha)
-    if fecha.nil?
-      '00/00/0000'
-    else
-      fecha.strftime('%d/%m/%Y')
+  def calculo_de_antiguedad(trabajador)
+    fecha_final = check_fecha_final(trabajador)
+    fecha_inicio = trabajador.fe_ingreso
+    fechas = [fecha_final, fecha_inicio]
+
+    return 0 if fecha_inicio.year == fecha_final.year
+
+    antiguedad = fecha_final.year - fecha_inicio.year
+
+    if check_month?(fechas) || (fecha_final.month == fecha_inicio.month && fecha_final.day < fecha_inicio.day)
+      antiguedad -= 1
     end
+
+    antiguedad
+  end
+
+  def check_month?(fechas)
+    fechas[0].month < fechas[1].month
+  end
+
+  def check_fecha_final(trabajador)
+    return trabajador.fe_efectiva unless trabajador.fe_efectiva.nil?
+    return trabajador.fe_jubilacion unless trabajador.fe_jubilacion.nil?
+    return trabajador.retiro_efectivo unless trabajador.retiro_efectivo.nil?
+
+    Date.today
   end
 end

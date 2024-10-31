@@ -3,7 +3,9 @@
   <b><%= titulo %> </b> 
   </p>
 </div>
-<% if fecha.nil? %>
+<% if fecha.is_a? Integer %>
+  <%= fecha %>
+<% elsif fecha.nil? %>
   <%= '00/00/000' %>
 <% else %>
   <%= fecha.strftime('%d/%m/%Y') %>
