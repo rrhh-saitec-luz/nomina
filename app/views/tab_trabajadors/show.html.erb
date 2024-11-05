@@ -62,58 +62,11 @@
   <div class="row">
     <div class="col">
       <ul class="list-group list-group-flush">
-        <li class="list-group-item d-flex">
-          <%= render 'fechas', titulo: 'Real', fecha: nil %> 
-        </li>
-        <li class="list-group-item d-flex">
-          <%= render 'fechas', titulo: 'Administrativa', fecha: nil %> 
-        </li>
-        <li class="list-group-item d-flex">
-          <%= render 'fechas', titulo: 'Inicio Contrato', fecha: nil %> 
-        </li>
-        <li class="list-group-item d-flex">
-          <%= render 'fechas', titulo: 'Fin Contrato', fecha: nil %> 
-        </li>
-        <li class="list-group-item d-flex">
-          <%= render 'fechas', titulo: 'Inicio Adm. Pública:', fecha: nil %> 
-        </li>
-        <li class="list-group-item d-flex">
-          <%= render 'fechas', titulo: 'Fin Adm. Pública:', fecha: nil %> 
-        </li>
-        <li class="list-group-item d-flex">
-          <%= render 'fechas', titulo: 'Nombramiento', fecha: nil %> 
-        </li>
-        <li class="list-group-item d-flex">
-          <%= render 'fechas', titulo: 'horario', fecha: nil %> 
-        </li>
       </ul>
     </div>
     <div class="col">
       <ul class="list-group list-group-flush">
-        <li class="list-group-item d-flex ">
-          <%= render 'fechas', titulo: 'Ingreso a LUZ', fecha: @trabajador.fe_ingreso %> 
-        </li>
-        <li class="list-group-item d-flex">
-          <%= render 'fechas', titulo: 'Ingreso Nómina', fecha: @trabajador.fe_ingreso_nomina %> 
-        </li>
-        <li class="list-group-item d-flex">
-          <%= render 'fechas', titulo: 'Jubilación/Pensión', fecha: @trabajador.fe_jubilacion %>
-        </li>
-        <li class="list-group-item d-flex">
-          <%= render 'fechas', titulo: 'Retiro Efectivo', fecha: @trabajador.fe_retiro %>
-        </li>
-        <li class="list-group-item d-flex">
-          <%= render 'fechas', titulo: 'Retiro Nómina', fecha: @trabajador.fe_retiro %>
-        </li>
-        <li class="list-group-item d-flex">
-          <%= render 'fechas', titulo: 'Fecha de Finiquito', fecha: nil %>
-        </li>
-        <li class="list-group-item d-flex">
-          <%= render 'fechas', titulo: 'Fallecimiento', fecha: @trabajador.fe_efectiva2 %>
-         </li>
-        <li class="list-group-item d-flex">
-          <%= render 'fechas', titulo: 'Años de Servicios', fecha: @antiguedad %>
-         </li>
+        <%= render 'fechas', tipo_fecha: 1 %>
       </ul>
     </div>
   </div>

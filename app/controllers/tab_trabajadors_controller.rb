@@ -31,7 +31,8 @@ class TabTrabajadorsController < ApplicationController
     @desc_estatus = DESCRIPCION_DE_ESTADOS
     @desc_principal = DESCRIPCION_PRINCIPAL
     @antiguedad = calculo_de_antiguedad(@trabajador)
-    @diurno_nocturno = params[:fecha]
+    @turno = params[:fecha]
+    @fechas_estatus_cargo = fechas_gral_cargo(@trabajador)
   end
 
   def create
@@ -85,5 +86,15 @@ class TabTrabajadorsController < ApplicationController
     return trabajador.retiro_efectivo unless trabajador.retiro_efectivo.nil?
 
     Date.today
+  end
+
+  def fechas_gral_cargo(trabajador)
+    {  'Ingreso a LUZ' => trabajador.fe_ingreso,
+       'Ingreso Nómina' => trabajador.fe_ingreso_nomina,
+       'Jubilación/Pensión' => trabajador.fe_jubilacion,
+       'Retiro Efectivo ' => trabajador.fe_retiro,
+       'Retiro Nómina' => trabajador.fe_retiro,
+       'Fecha de Finiquito' => nil,
+       'Fallecimiento' => trabajador.fe_efectiva2 }
   end
 end

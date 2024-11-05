@@ -1,12 +1,36 @@
-<div style="width: 30%">
-  <p class="card-text">
-  <b><%= titulo %> </b> 
-  </p>
-</div>
-<% if fecha.is_a? Integer %>
-  <%= fecha %>
-<% elsif fecha.nil? %>
-  <%= '00/00/000' %>
-<% else %>
-  <%= fecha.strftime('%d/%m/%Y') %>
+<% fechas = @fechas_estatus_cargo if tipo_fecha.eql?(1) %>
+<% fechas = @fechas_estatus_adm if tipo_fecha.eql?(2) %>
+<% fechas.each do |key, value| %>
+  <li class="list-group-item d-flex">
+    <div style="width: 30%">
+      <p class="card-text">
+        <b><%= key %> </b> 
+      </p>
+    </div>
+      <p>
+        <% if value.nil? %>
+          <%= '00/00/000' %>
+        <% else %>
+          <%= value.strftime('%d/%m/%Y') %>
+        <% end %>
+      </p>
+  </li>
 <% end %>
+  <li class="list-group-item d-flex">
+    <div style="width: 30%">
+      <p class="card-text">
+        <% if tipo_fecha.eql?(1) %>
+          <b>Años de Servicios: </b>
+        <% else %>
+          <b>Turno: </b>
+        <% end %>
+      </p>
+    </div>
+    <p>
+      <% if tipo_fecha.eql?(1) %>
+        <%= @antiguedad %>
+      <% else %>
+        <%= @turno %>
+      <% end %>
+    </p>
+  </li>
