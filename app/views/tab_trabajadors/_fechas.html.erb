@@ -30,7 +30,7 @@
       <% if tipo_fecha.eql?(1) %>
         <%= @antiguedad %>
       <% else %>
-        <%= @turno %>
+        <%= @turno[@trabajador.horario] %>
       <% end %>
     </p>
   </li>

@@ -9,6 +9,8 @@ class TabTrabajadorsController < ApplicationController
 
   DESCRIPCION_PRINCIPAL = { 'S' => 'SI', 'N' => 'NO' }.freeze
 
+  HORARIOS = { 1 => 'Diurno', 2 => 'Mixto' }.freeze
+
   def index
     @trabajadores = TabTrabajador.all
     @search_term = params[:q]
@@ -31,8 +33,9 @@ class TabTrabajadorsController < ApplicationController
     @desc_estatus = DESCRIPCION_DE_ESTADOS
     @desc_principal = DESCRIPCION_PRINCIPAL
     @antiguedad = calculo_de_antiguedad(@trabajador)
-    @turno = params[:fecha]
+    @turno = HORARIOS
     @fechas_estatus_cargo = fechas_gral_cargo(@trabajador)
+    @fechas_estatus_adm = fechas_adm_cargo(@trabajador)
   end
 
   def create
@@ -89,12 +92,22 @@ class TabTrabajadorsController < ApplicationController
   end
 
   def fechas_gral_cargo(trabajador)
-    {  'Ingreso a LUZ' => trabajador.fe_ingreso,
-       'Ingreso Nómina' => trabajador.fe_ingreso_nomina,
-       'Jubilación/Pensión' => trabajador.fe_jubilacion,
-       'Retiro Efectivo ' => trabajador.fe_retiro,
-       'Retiro Nómina' => trabajador.fe_retiro,
-       'Fecha de Finiquito' => nil,
-       'Fallecimiento' => trabajador.fe_efectiva2 }
+    {  'Ingreso a LUZ:' => trabajador.fe_ingreso,
+       'Ingreso Nómina:' => trabajador.fe_ingreso_nomina,
+       'Jubilación/Pensión:' => trabajador.fe_jubilacion,
+       'Retiro Efectivo:' => trabajador.fe_retiro,
+       'Retiro Nómina:' => trabajador.fe_retiro,
+       'Fecha de Finiquito:' => nil,
+       'Fallecimiento:' => trabajador.fe_efectiva2 }
+  end
+
+  def fechas_adm_cargo(trabajador)
+    {  'Real:' => trabajador.fe_reacat,
+       'Administrativa:' => trabajador.fe_admcat,
+       'Inicio Contrato:' => trabajador.fe_inicontrato,
+       'Fin Contrato:' => trabajador.fe_fincontrato,
+       'Inicio Adm. Pública:' => trabajador.fe_adm_publica,
+       'Fin Adm. Pública:' => trabajador.fe_fin_adm_publica,
+       'Nombramiento:' => trabajador.fe_nombramiento }
   end
 end
