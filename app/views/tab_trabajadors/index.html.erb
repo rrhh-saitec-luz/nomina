@@ -20,6 +20,7 @@
           <th scope="col">cedula</th>
           <th scope="col">Nombres</th>
           <th scope="col">Estatus de Cargo</th>
+          <th scope="col">Descripción</th>
         </tr>
       </thead>
       <tbody>
@@ -28,6 +29,7 @@
           <td> <%= trabajador.ce_trabajador %></td>
           <td><%= trabajador.nombres %></td>
           <td><%= @desc_estatus[trabajador.edo_cargo] %>
+          <td><%= trabajador.descripcion_cargo %></td>
           <td><%= link_to 'Detalles', tab_trabajadors_show_path(id: trabajador.id) %>
         </tr>
       <%end%>
