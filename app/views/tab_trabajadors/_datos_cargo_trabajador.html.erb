@@ -1,0 +1,11 @@
+<div class="card-header"><h5> Datos del Cargo:</h5></div>
+<div class="card-body text-dark">
+  <p class="card-text"><b>Ubicación: </b> <%= @trabajador.co_ubicacion %>- <%= @trabajador.descripcion_larga%></p>
+  <p class="card-text"><b>Tipo de Personal: </b><%= @trabajador.tipopersonal%> - <%= @trabajador.descripcion_tp%></p>
+  <p class="card-text"><b>Dedicación: </b><%= @trabajador.dedicacion%> - <%= @trabajador.desc_dedicacion%></p>
+  <p class="card-text"><b>Código Cargo: </b><%= @trabajador.co_cargo%> - <%= @trabajador.descripcion_cargo%></p>
+  <p class="card-text"><b>Categoria/Grado: </b><%= @trabajador.co_categrado %> - <%= @trabajador.desc_categrado%></p>
+  <p class="card-text"><b>Escala Nivel: </b><%= @trabajador.gdosalarial%></p>
+  <p class="card-text"><b>Estatus Cargo: </b><%= @desc_estatus[@trabajador.edo_cargo] %></p>
+  <p class="card-text"><b>Principal: </b><%= @desc_principal[@trabajador.principal] %></p>
+</div>

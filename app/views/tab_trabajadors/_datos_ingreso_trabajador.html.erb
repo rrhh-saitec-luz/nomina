@@ -1,0 +1,18 @@
+<div class="card-header"><h5>Datos de Ingreso</h5></div>
+<div class="card-body text-dark">
+  <p class="card-text"><b>Tipo de Ingreso: </b> <%= @trabajador.co_ingreso %> - <%=@trabajador.des_co_ingreso%></p>
+  <p class="card-text"><b>Fecha de Oficio: </b>
+    <% if @trabajador.fe_docoficio.nil? %>
+      <%= '00/00/0000' %>
+    <% else %>
+      <%=@trabajador.fe_docoficio.strftime("%d/%m/%Y") %>
+    <% end %>
+   </p>
+   <p class="card-text"><b>No. de Oficio: </b> <%= @trabajador.nu_oficio %></p>
+     <% if @trabajador.ce_sustituto.eql?(0) %>
+       <p class="card-text"><b>Cédula sustituto: </b></p>
+     <% else %>
+       <p class="card-text"><b>Cédula sustituto: </b> <% @trabajador.ce_sustituto %></p>
+     <% end %>
+  <p class="card-text"><b>Texto Carta: </b> <%= @trabajador.texto_carta %></p>
+</div>
