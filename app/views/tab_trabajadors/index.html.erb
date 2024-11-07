@@ -10,27 +10,42 @@
   </div>
 <% end %>
 
-<div class= "container-fluid border border-2 mt-3"> 
+<div class= "container-fluid mt-3"> 
   <% if @sidial.nil? %>
     <h2> Ingrese Cedula de Identidad</>
   <% else %>
-    <table class="table table-striped">
+    <table class="table table-striped table-bordered">
       <thead>
         <tr>
           <th scope="col">cedula</th>
           <th scope="col">Nombres</th>
           <th scope="col">Estatus de Cargo</th>
+          <th scope="col">Tipo Personal</th>
           <th scope="col">Descripción</th>
+          <th scope="col">Detalles</th>
         </tr>
       </thead>
       <tbody>
       <% @sidial.each do |trabajador| %>
         <tr>
-          <td> <%= trabajador.ce_trabajador %></td>
-          <td><%= trabajador.nombres %></td>
-          <td><%= @desc_estatus[trabajador.edo_cargo] %>
-          <td><%= trabajador.descripcion_cargo %></td>
-          <td><%= link_to 'Detalles', tab_trabajadors_show_path(id: trabajador.id) %>
+          <td>
+            <%= trabajador.ce_trabajador %>
+          </td>
+          <td>
+            <%= trabajador.nombres %>
+          </td>
+          <td>
+            <%= @desc_estatus[trabajador.edo_cargo] %>
+          </td>
+          <td>
+            <p><%= trabajador.tipopersonal %></p>
+            <p><%= trabajador.descripcion_tp %></p>
+          </td>
+          <td>
+            <%= trabajador.descripcion_cargo %>
+          </td>
+          <td>
+            <%= link_to 'Detalles', tab_trabajadors_show_path(id: trabajador.id) %>
         </tr>
       <%end%>
       </tbody>
