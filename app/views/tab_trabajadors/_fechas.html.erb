@@ -2,7 +2,7 @@
 <% fechas = @fechas_estatus_adm if tipo_fecha.eql?(2) %>
 <% fechas.each do |key, value| %>
   <li class="list-group-item d-flex">
-    <div style="width: 30%">
+    <div class="flex-grow-1">
       <p class="card-text">
         <b><%= key %> </b> 
       </p>
@@ -17,7 +17,7 @@
   </li>
 <% end %>
   <li class="list-group-item d-flex">
-    <div style="width: 30%">
+    <div class="flex-grow-1">
       <p class="card-text">
         <% if tipo_fecha.eql?(1) %>
           <b>Años de Servicios: </b>

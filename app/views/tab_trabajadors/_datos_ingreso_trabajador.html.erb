@@ -7,12 +7,12 @@
     <% else %>
       <%=@trabajador.fe_docoficio.strftime("%d/%m/%Y") %>
     <% end %>
-   </p>
-   <p class="card-text"><b>No. de Oficio: </b> <%= @trabajador.nu_oficio %></p>
-     <% if @trabajador.ce_sustituto.eql?(0) %>
-       <p class="card-text"><b>Cédula sustituto: </b></p>
-     <% else %>
-       <p class="card-text"><b>Cédula sustituto: </b> <% @trabajador.ce_sustituto %></p>
-     <% end %>
+  </p>
+  <p class="card-text"><b>No. de Oficio: </b> <%= @trabajador.nu_oficio %></p>
+  <% if @trabajador.ce_sustituto.eql?(0) %>
+    <p class="card-text"><b>Cédula sustituto: </b></p>
+  <% else %>
+    <p class="card-text"><b>Cédula sustituto: </b> <% @trabajador.ce_sustituto %></p>
+  <% end %>
   <p class="card-text"><b>Texto Carta: </b> <%= @trabajador.texto_carta %></p>
 </div>
