@@ -1,6 +1,15 @@
-<div class="card-header"><h5> Datos del Trabajador:</h5></div>
+<div class="card-header bg-primary"><h5 class="text-white"> Datos del Trabajador:</h5></div>
 <div class="card-body text-dark">
-  <p class="card-text"><b>Nombre del Trabajador:</b> <%= @trabajador.nombres %></p>
-  <p class="card-text"><b>Cédula del Trabajador:</b> <%=@trabajador.ce_trabajador %></p>
-  <p class="card-text"><b>Estatus del Trabajador:</b> <%=@desc_estatus[@trabajador.estatus] %></p>
+  <div class="d-flex gap-1 align-items-center flex-wrap"> 
+    <h4 class="card-text"><span class="badge bg-secondary">Nombre del Trabajador:</span></h4>
+    <p class="card-text"><b><%= @trabajador.nombres %></b></p>
+  </div>
+  <div class="d-flex gap-1 align-items-center flex-wrap"> 
+    <h4 class="card-text"><span class="badge bg-secondary">Cédula del Trabajador:</span></h4>
+    <p class="card-text"><b><%= @trabajador.ce_trabajador %></b></p>
+  </div>
+  <div class="d-flex gap-1 align-items-center flex-wrap"> 
+    <h4 class="card-text"><span class="badge bg-secondary">Estatus del Trabajador:</span></h4>
+    <p class="card-text"><b><%= @desc_estatus[@trabajador.estatus] %></b></p>
+  </div>
 </div>

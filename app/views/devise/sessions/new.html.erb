@@ -1,15 +1,19 @@
-<div class="container-fluid">
+<div class="d-flex flex-column justify-content-center" style="height: 100vh">
   <div class="d-flex flex-column align-items-center">
     <h2>Iniciar Sesión</h2>
     <%= form_for(resource, as: resource_name, url: session_path(resource_name)) do |f| %>
-      <div class="field">
-        <%= f.label :email %><br />
-        <%= f.email_field :email, autofocus: true, autocomplete: "email" %>
+      <div class="input-group mb-3">
+        <span class="input-group-text">
+          <%= f.label :email %><br />
+        </span>
+        <%= f.email_field :email, autofocus: true, autocomplete: "email", class: "input-group-text flex-grow-1" %>
       </div>
 
-      <div class="field">
-        <%= f.label :password %><br />
-        <%= f.password_field :password, autocomplete: "current-password" %>
+      <div class="input-group mb-3">
+        <span class="input-group-text">
+          <%= f.label :password %><br />
+        </span>
+        <%= f.password_field :password, autocomplete: "current-password", class: "input-group-text" %>
       </div>
 
       <% if devise_mapping.rememberable? %>
@@ -19,8 +23,8 @@
         </div>
       <% end %>
 
-      <div class="actions">
-        <%= f.submit "Iniciar" %>
+      <div class="actions d-flex">
+        <%= f.submit "Iniciar", class: "btn btn-primary flex-grow-1" %>
       </div>
     <% end %>
 

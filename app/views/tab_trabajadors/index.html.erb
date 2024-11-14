@@ -2,17 +2,21 @@
   <%= render 'shared/menu' %>
 </div>
 
-<%=form_with url: tab_trabajadors_index_path, method: :get, local: true, class: 'd-flex justify-content-center' do%>
-  <div class="d-flex align-items-center gap-1 mt-3">
+<%=form_with url: tab_trabajadors_index_path, method: :get, local: true, class: 'container-fluid d-flex justify-content-center input-group mb-3 mt-3', style: "width: 50%" do%>
+  <span class="input-group-text">
     <%= label_tag :q, "Buscar:" %>
-    <%= text_field_tag :q, @search_term, placeholder: "Ingrese cedula de identidad" %>
-    <%= submit_tag "Buscar" %>
+  </span>
+  <div class="row">
+    <%= text_field_tag :q, @search_term, placeholder: "Ingrese cedula de identidad", class: "form-control col-6" %>
   </div>
+    <%= submit_tag "Buscar", class: "btn btn-secondary" %>
 <% end %>
 
 <div class= "container-fluid mt-3"> 
   <% if @sidial.nil? %>
-    <h3> Ingrese Cedula de Identidad</>
+    <div class="alert alert-light" role="alert">
+      <h3>¡Realiza una busqueda para comenzar!</h3>
+    </div>
   <% else %>
     <div class="table-responsive">
       <table class="table table-striped table-bordered">
