@@ -1,11 +1,9 @@
 <% fechas = @fechas_estatus_cargo if tipo_fecha.eql?(1) %>
 <% fechas = @fechas_estatus_adm if tipo_fecha.eql?(2) %>
 <% fechas.each do |key, value| %>
-  <li class="list-group-item d-flex">
+  <li class="list-group-item d-flex flex-wrap">
     <div class="flex-grow-1">
-      <p class="card-text">
-        <b><%= key %> </b> 
-      </p>
+      <h4 class="card-text"><span class="badge bg-secondary"><%= key %></span></h4>
     </div>
       <p>
         <% if value.nil? %>
@@ -18,13 +16,11 @@
 <% end %>
   <li class="list-group-item d-flex">
     <div class="flex-grow-1">
-      <p class="card-text">
         <% if tipo_fecha.eql?(1) %>
-          <b>Años de Servicios: </b>
+          <h4 class="card-text"><span class="badge bg-secondary">Años de Servicios</span></h4>
         <% else %>
-          <b>Turno: </b>
+          <h4 class="card-text"><span class="badge bg-secondary">Tuerno</span></h4>
         <% end %>
-      </p>
     </div>
     <p>
       <% if tipo_fecha.eql?(1) %>

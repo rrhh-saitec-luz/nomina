@@ -1,11 +1,67 @@
-<div class="card-header"><h5> Datos del Cargo:</h5></div>
+<div class="card-header bg-primary"><h5 class="text-white"> Datos del Cargo:</h5></div>
 <div class="card-body text-dark">
-  <p class="card-text"><b>Ubicación: </b> <%= @trabajador.co_ubicacion %>- <%= @trabajador.descripcion_larga%></p>
-  <p class="card-text"><b>Tipo de Personal: </b><%= @trabajador.tipopersonal%> - <%= @trabajador.descripcion_tp%></p>
-  <p class="card-text"><b>Dedicación: </b><%= @trabajador.dedicacion%> - <%= @trabajador.desc_dedicacion%></p>
-  <p class="card-text"><b>Código Cargo: </b><%= @trabajador.co_cargo%> - <%= @trabajador.descripcion_cargo%></p>
-  <p class="card-text"><b>Categoria/Grado: </b><%= @trabajador.co_categrado %> - <%= @trabajador.desc_categrado%></p>
-  <p class="card-text"><b>Escala Nivel: </b><%= @trabajador.gdosalarial%></p>
-  <p class="card-text"><b>Estatus Cargo: </b><%= @desc_estatus[@trabajador.edo_cargo] %></p>
-  <p class="card-text"><b>Principal: </b><%= @desc_principal[@trabajador.principal] %></p>
+  <div class="d-flex gap-1 align-items-center flex-wrap">
+    <h4 class="card-text"><span class="badge bg-secondary">Ubicación:</span></h4>
+    <p class="card-text">
+      <b>
+        <%= @trabajador.co_ubicacion %>- <%= @trabajador.descripcion_larga%>
+      </b>
+    </p>
+  </div>
+  <div class="d-flex gap-1 align-items-center flex-wrap">
+    <h4 class="card-text"><span class="badge bg-secondary">Tipo de Personal:</span></h4>
+    <p class="card-text">
+      <b>
+        <%= @trabajador.tipopersonal%> - <%= @trabajador.descripcion_tp%>
+      </b>
+    </p>
+  </div>
+  <div class="d-flex gap-1 align-items-center flex-wrap">
+    <h4 class="card-text"><span class="badge bg-secondary">Dedicación:</span></h4>
+    <p class="card-text">
+      <b>
+        <%= @trabajador.dedicacion%> - <%= @trabajador.desc_dedicacion%>
+      </b>
+    </p>
+  </div>
+  <div class="d-flex gap-1 align-items-center flex-wrap">
+    <h4 class="card-text"><span class="badge bg-secondary">Código Cargo:</span></h4>
+    <p class="card-text">
+      <b>
+        <%= @trabajador.co_cargo%> - <%= @trabajador.descripcion_cargo%>
+      </b>
+    </p>
+  </div>
+  <div class="d-flex gap-1 align-items-center flex-wrap">
+    <h4 class="card-text"><span class="badge bg-secondary">Categoría/Grado:</span></h4>
+    <p class="card-text">
+      <b>
+        <%= @trabajador.co_categrado %> - <%= @trabajador.desc_categrado%>
+      </b>
+    </p>
+  </div>
+  <div class="d-flex gap-1 align-items-center flex-wrap">
+    <h4 class="card-text"><span class="badge bg-secondary">Escala Nivel:</span></h4>
+    <p class="card-text">
+      <b>
+        <%= @trabajador.gdosalarial%>
+      </b>
+    </p>
+  </div>
+  <div class="d-flex gap-1 align-items-center flex-wrap">
+    <h4 class="card-text"><span class="badge bg-secondary">Estatus Cargo:</span></h4>
+    <p class="card-text">
+      <b>
+        <%= @desc_estatus[@trabajador.edo_cargo] %>
+      </b>
+    </p>
+  </div>
+  <div class="d-flex gap-1 align-items-center flex-wrap">
+    <h4 class="card-text"><span class="badge bg-secondary">Principal:</span></h4>
+    <p class="card-text">
+      <b>
+        <%= @desc_principal[@trabajador.principal] %>
+      </b>
+    </p>
+  </div>
 </div>

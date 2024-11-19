@@ -1,15 +1,15 @@
 <div class="card-header bg-primary"><h5 class="text-white"> Datos del Trabajador:</h5></div>
 <div class="card-body text-dark">
   <div class="d-flex gap-1 align-items-center flex-wrap"> 
-    <h4 class="card-text"><span class="badge bg-secondary">Nombre del Trabajador:</span></h4>
-    <p class="card-text"><b><%= @trabajador.nombres %></b></p>
+    <h4 class="card-text col-12 col-sm-4 col-lg-2"><span class="badge bg-secondary">Nombre del Trabajador:</span></h4>
+    <p class="card-text ms-sm-3"><b><%= @trabajador.nombres %></b></p>
   </div>
   <div class="d-flex gap-1 align-items-center flex-wrap"> 
-    <h4 class="card-text"><span class="badge bg-secondary">Cédula del Trabajador:</span></h4>
-    <p class="card-text"><b><%= @trabajador.ce_trabajador %></b></p>
+    <h4 class="card-text col-12 col-sm-4 col-lg-2"><span class="badge bg-secondary">Cédula del Trabajador:</span></h4>
+    <p class="card-text ms-sm-3"><b><%= @trabajador.ce_trabajador %></b></p>
   </div>
   <div class="d-flex gap-1 align-items-center flex-wrap"> 
-    <h4 class="card-text"><span class="badge bg-secondary">Estatus del Trabajador:</span></h4>
-    <p class="card-text"><b><%= @desc_estatus[@trabajador.estatus] %></b></p>
+    <h4 class="card-text col-12 col-sm-4 col-lg-2"><span class="badge bg-secondary">Estatus del Trabajador:</span></h4>
+    <p class="card-text ms-sm-3"><b><%= @desc_estatus[@trabajador.estatus] %></b></p>
   </div>
 </div>
