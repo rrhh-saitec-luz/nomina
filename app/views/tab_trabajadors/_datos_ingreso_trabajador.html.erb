@@ -1,47 +1,16 @@
 <div class="card-header bg-primary"><h5 class="text-white"> Datos de Ingreso:</h5></div>
 <div class="card-body text-dark">
+<% @datos_ingreso.each do |key, val| %>
   <div class="d-flex gap-1 align-items-center flex-wrap"> 
-    <h4 class="card-text"><span class="badge bg-secondary">Tipo de Ingreso:</span></h4>
+    <h4 class="card-text" style="width: 7.5em"><span class="badge bg-secondary"><%= key %></span></h4>
     <p class="card-text">
       <b>
-        <%= @trabajador.co_ingreso %> - <%=@trabajador.des_co_ingreso%>
-      </b>
-    </p>
-  </div>
-  <div class="d-flex gap-1 align-items-center flex-wrap"> 
-    <h4 class="card-text"><span class="badge bg-secondary">Fecha de Oficio:</span></h4>
-    <p class="card-text">
-      <b>
-        <% if @trabajador.fe_docoficio.nil? %>
-          <%= '00/00/0000' %>
+        <% if val.size.eql?(1) %>
+          <%= val.first %>
         <% else %>
-          <%=@trabajador.fe_docoficio.strftime("%d/%m/%Y") %>
+          <%= val.first %> - <%= val.last %>
         <% end %>
       </b>
     </p>
   </div>
-  <div class="d-flex gap-1 align-items-center flex-wrap"> 
-    <h4 class="card-text"><span class="badge bg-secondary">No. de Oficio:</span></h4>
-    <p class="card-text">
-      <b>
-        <%= @trabajador.nu_oficio %>
-      </b>
-    </p>
-  </div>
-  <div class="d-flex gap-1 align-items-center flex-wrap"> 
-    <h4 class="card-text"><span class="badge bg-secondary">Cédula sustituto:</span></h4>
-    <p class="card-text">
-      <b>
-        <% @trabajador.ce_sustituto unless @trabajador.ce_sustituto.eql?(0) %>
-      </b>
-    </p>
-  </div>
-  <div class="d-flex gap-1 align-items-center flex-wrap"> 
-    <h4 class="card-text"><span class="badge bg-secondary">Texto Carta:</span></h4>
-    <p class="card-text">
-      <b>
-        <%= @trabajador.texto_carta %>
-      </b>
-    </p>
-  </div>
-</div>
+<% end %>

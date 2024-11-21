@@ -17,12 +17,13 @@ class TabTrabajadorsController < ApplicationController
 
   def show
     @trabajador = Admon.find(params[:id])
-    @desc_estatus = DESCRIPCION_DE_ESTADOS
-    @desc_principal = DESCRIPCION_PRINCIPAL
     @antiguedad = calculo_de_antiguedad(@trabajador)
     @turno = HORARIOS
     @fechas_estatus_cargo = fechas_gral_cargo(@trabajador)
     @fechas_estatus_adm = fechas_adm_cargo(@trabajador)
+    @datos_cargo = datos_cargo_trabajador(@trabajador)
+    @datos_trabajador = datos_personales(@trabajador)
+    @datos_ingreso = ingreso_trabajador(@trabajador)
   end
 
   def create

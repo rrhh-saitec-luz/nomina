@@ -63,4 +63,34 @@ module Constantes
        'Fin Adm. Pública:' => trabajador.fe_fin_adm_publica,
        'Nombramiento:' => trabajador.fe_nombramiento }
   end
+
+  def datos_cargo_trabajador(trabajador)
+    {  'Ubicación:' => [trabajador.co_ubicacion, trabajador.descripcion_larga],
+       'Tipo de Personal:' => [trabajador.tipopersonal, trabajador.descripcion_tp],
+       'Dedicación:' => [trabajador.dedicacion, trabajador.desc_dedicacion],
+       'Código Cargo:' => [trabajador.co_cargo, trabajador.descripcion_cargo],
+       'Categoría/Grado:' => [trabajador.co_categrado, trabajador.desc_categrado],
+       'Escala Nivel:' => [trabajador.gdosalarial],
+       'Estatus Cargo:' => [DESCRIPCION_DE_ESTADOS[trabajador.edo_cargo]],
+       'Principal:' => [DESCRIPCION_PRINCIPAL[trabajador.principal]] }
+  end
+
+  def datos_personales(trabajador)
+    {  'Nombre del Trabajador:' => trabajador.nombres,
+       'Cédula del Trabajador:' => trabajador.ce_trabajador,
+       'Estatus del Trabajador:' => DESCRIPCION_DE_ESTADOS[trabajador.estatus] }
+  end
+
+  def ingreso_trabajador(trabajador)
+    fecha_oficio = if trabajador.fe_docoficio.nil?
+                     '00/00/0000'
+                   else
+                     trabajador.fe_docoficio.strftime('%d/%m/%Y')
+                   end
+    {  'Tipo de Ingreso:' => [trabajador.co_ingreso, trabajador.des_co_ingreso],
+       'Fecha de Oficio:' => [fecha_oficio],
+       'No. de Oficio:' => [trabajador.nu_oficio],
+       'Cédula sustituto:' => [trabajador.ce_sustituto],
+       'Texto Carta:' => [trabajador.texto_carta] }
+  end
 end

@@ -5,6 +5,7 @@
     <div class="flex-grow-1">
       <h4 class="card-text"><span class="badge bg-secondary"><%= key %></span></h4>
     </div>
+    <b>
       <p>
         <% if value.nil? %>
           <%= '00/00/000' %>
@@ -12,6 +13,7 @@
           <%= value.strftime('%d/%m/%Y') %>
         <% end %>
       </p>
+    </b>
   </li>
 <% end %>
   <li class="list-group-item d-flex">
@@ -19,14 +21,16 @@
         <% if tipo_fecha.eql?(1) %>
           <h4 class="card-text"><span class="badge bg-secondary">Años de Servicios</span></h4>
         <% else %>
-          <h4 class="card-text"><span class="badge bg-secondary">Tuerno</span></h4>
+          <h4 class="card-text"><span class="badge bg-secondary">Turno</span></h4>
         <% end %>
     </div>
-    <p>
-      <% if tipo_fecha.eql?(1) %>
-        <%= @antiguedad %>
-      <% else %>
-        <%= @turno[@trabajador.horario] %>
-      <% end %>
-    </p>
+    <b>
+      <p>
+        <% if tipo_fecha.eql?(1) %>
+          <%= @antiguedad %>
+        <% else %>
+          <%= @turno[@trabajador.horario] %>
+        <% end %>
+      </p>
+    </b>
   </li>
