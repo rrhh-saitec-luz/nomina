@@ -1,16 +1,17 @@
 <div class="card-header bg-primary"><h5 class="text-white"> Datos de Ingreso:</h5></div>
 <div class="card-body text-dark">
-<% @datos_ingreso.each do |key, val| %>
-  <div class="d-flex gap-1 align-items-center flex-wrap"> 
-    <h4 class="card-text" style="width: 7.5em"><span class="badge bg-secondary"><%= key %></span></h4>
-    <p class="card-text">
-      <b>
-        <% if val.size.eql?(1) %>
-          <%= val.first %>
-        <% else %>
-          <%= val.first %> - <%= val.last %>
-        <% end %>
-      </b>
-    </p>
-  </div>
-<% end %>
+  <% @datos_ingreso.each do |key, val| %>
+    <div class="d-flex gap-1 align-items-center flex-wrap"> 
+      <h4 class="card-text" style="width: 7.5em"><span class="badge bg-secondary"><%= key %></span></h4>
+      <p class="card-text">
+        <b>
+          <% if val.size.eql?(1) %>
+            <%= val.first %>
+          <% else %>
+            <%= val.first %> - <%= val.last %>
+          <% end %>
+        </b>
+      </p>
+    </div>
+  <% end %>
+</div>
