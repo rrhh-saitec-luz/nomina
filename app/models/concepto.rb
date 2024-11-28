@@ -1,6 +1,6 @@
 # Frozen_string_literal: true
 
 # clase que permite obtener conceptos en la nomina
-class Conceptos < Pago
+class Concepto < Pago
   self.table_name = 'nomina.hist_detalle_pago'
 end

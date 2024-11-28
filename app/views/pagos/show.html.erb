@@ -1,0 +1,26 @@
+<div class='container-fluid d-flex'>
+  <div class='container'>
+  <h3>Asignaciones</h3>
+  <% @conceptos_trabajador.each do |trabajador| %>
+    <% if trabajador.INDICE_CONCEPTO.eql?('A') %>
+      <div>
+        <p><%= trabajador.DESCRIPCION_CO %></p>
+        <p><%= trabajador.MO_CONCEP %>
+      </div>
+    <% end %>
+  <% end %>
+  <p>Total de asignaciones</p>
+  <%= @asignaciones_trabajador['total_asignacion'] %>
+  </div>
+  <div class='container'>
+  <h3>Deducciones</h3>
+  <% @conceptos_trabajador.each do |trabajador| %>
+    <% unless trabajador.INDICE_CONCEPTO.eql?('A') %>
+      <div>
+        <p><%= trabajador.DESCRIPCION_CO %></p>
+        <p><%= trabajador.MO_CONCEP %>
+      </div>
+    <% end %>
+  <% end %>
+  </div>
+</div>
