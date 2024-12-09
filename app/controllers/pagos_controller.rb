@@ -3,12 +3,15 @@
 # Clase para manejar información del trabajador
 class PagosController < ApplicationController
   def index
-    @conceptos = Concepto.all
+    @conceptos = Concepto.select(:INDICE_CONCEPTO, :MO_CONCEP).all
+    @cantidad_trabajadores = Concepto.select(:CE_TRABAJADOR).distinct.count
     @asignaciones = asignaciones(@conceptos)
   end
 
   def show
-    @conceptos_trabajador = Concepto.where(CE_TRABAJADOR: 18_987_722)
+    @conceptos_trabajador = Concepto.where(CE_TRABAJADOR: params[:CE_TRABAJADOR])
+                                    .where(CO_UBICACION: params[:CO_UBICACION])
+                                    .where(TIPOPERSONAL: params[:TIPOPERSONAL])
     @asignaciones_trabajador = asignaciones(@conceptos_trabajador)
   end
 
