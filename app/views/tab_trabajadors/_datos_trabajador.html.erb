@@ -1,9 +1,11 @@
-<div class="card-header bg-primary"><h5 class="text-white"> Datos del Trabajador:</h5></div>
-<div class="card-body text-dark">
-  <% @datos_trabajador.each do |key, val| %>
-  <div class="d-flex gap-1 align-items-center flex-wrap"> 
-    <h4 class="card-text" style="width: 9em"><span class="badge bg-secondary"><%= key %></span></h4>
-    <p class="card-text ms-sm-3"><b><%= val %></b></p>
-  </div>
-  <% end %>
+<div class="d-flex justify-content-center border border-bottom-2">
+  <h5>Datos del Trabajador</h5>
 </div>
+<ul class="list-group list-group-horizontal-sm">
+  <% @datos_trabajador.each do |key, val| %>
+    <li class="list-group-item flex-fill">
+      <div><%= key %></div>
+      <div><%= val %></div>
+    </li>
+  <% end %>
+</ul>
