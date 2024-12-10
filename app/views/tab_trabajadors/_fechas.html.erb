@@ -1,36 +1,30 @@
 <% fechas = @fechas_estatus_cargo if tipo_fecha.eql?(1) %>
 <% fechas = @fechas_estatus_adm if tipo_fecha.eql?(2) %>
-<% fechas.each do |key, value| %>
-  <li class="list-group-item d-flex flex-wrap">
-    <div class="flex-grow-1">
-      <h4 class="card-text"><span class="badge bg-secondary"><%= key %></span></h4>
+<% fechas.each do |key, val| %>
+  <li class="list-group-item flex-fill">
+    <div><%= key %></div>
+    <div>
+      <% if val.nil? %>
+        <%= '00/00/000' %>
+      <% else %>
+        <%= val.strftime('%d/%m/%Y') %>
+      <% end %>
     </div>
-    <b>
-      <p>
-        <% if value.nil? %>
-          <%= '00/00/000' %>
-        <% else %>
-          <%= value.strftime('%d/%m/%Y') %>
-        <% end %>
-      </p>
-    </b>
   </li>
 <% end %>
-  <li class="list-group-item d-flex">
-    <div class="flex-grow-1">
-        <% if tipo_fecha.eql?(1) %>
-          <h4 class="card-text"><span class="badge bg-secondary">Años de Servicios</span></h4>
-        <% else %>
-          <h4 class="card-text"><span class="badge bg-secondary">Turno</span></h4>
-        <% end %>
-    </div>
-    <b>
-      <p>
-        <% if tipo_fecha.eql?(1) %>
-          <%= @antiguedad %>
-        <% else %>
-          <%= @turno[@trabajador.horario] %>
-        <% end %>
-      </p>
-    </b>
-  </li>
+<li class="list-group-item flex-fill">
+  <div>
+    <% if tipo_fecha.eql?(1) %>
+      <div>Años de Servicios</div>
+    <% else %>
+      <div>Turno</div>
+    <% end %>
+  </div>
+  <p>
+    <% if tipo_fecha.eql?(1) %>
+      <%= @antiguedad %>
+    <% else %>
+      <%= @turno[@trabajador.horario] %>
+    <% end %>
+  </p>
+</li>

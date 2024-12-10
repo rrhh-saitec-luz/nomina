@@ -3,20 +3,9 @@
 </div>
 
 <div class="container-fluid">
+  <% @renders.each do |show_render|  %>
   <div class="card border-primary mb-3 mt-sm-3">
-    <%= render 'datos_trabajador' %>
+    <%= render show_render %>
   </div>
-
-  <div class="card border-primary mb-3">
-    <%= render 'datos_cargo_trabajador' %>
-  </div>
-
-
-  <div class="card border-primary mb-3">
-    <%= render 'datos_ingreso_trabajador' %>
-  </div>
-
-  <div class="card border-primary mb-3">
-    <%= render 'datos_fechas_trabajador' %>
-  </div>
+  <% end%>
 </div>

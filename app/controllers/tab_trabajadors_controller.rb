@@ -24,6 +24,7 @@ class TabTrabajadorsController < ApplicationController
     @datos_cargo = datos_cargo_trabajador(@trabajador)
     @datos_trabajador = datos_personales(@trabajador)
     @datos_ingreso = ingreso_trabajador(@trabajador)
+    @renders = %w[datos_trabajador datos_cargo_trabajador datos_ingreso_trabajador datos_fechas_trabajador]
   end
 
   def create
