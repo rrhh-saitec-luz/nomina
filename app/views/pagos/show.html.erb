@@ -1,26 +1,59 @@
-<div class='container-fluid d-flex'>
-  <div class='container'>
-  <h3>Asignaciones</h3>
-  <% @conceptos_trabajador.each do |trabajador| %>
-    <% if trabajador.INDICE_CONCEPTO.eql?('A') %>
-      <div>
-        <p><%= trabajador.DESCRIPCION_CO %></p>
-        <p><%= trabajador.MO_CONCEP %>
-      </div>
-    <% end %>
-  <% end %>
-  <p>Total de asignaciones</p>
-  <%= @asignaciones_trabajador['total_asignacion'] %>
-  </div>
-  <div class='container'>
-  <h3>Deducciones</h3>
-  <% @conceptos_trabajador.each do |trabajador| %>
-    <% unless trabajador.INDICE_CONCEPTO.eql?('A') %>
-      <div>
-        <p><%= trabajador.DESCRIPCION_CO %></p>
-        <p><%= trabajador.MO_CONCEP %>
-      </div>
-    <% end %>
-  <% end %>
-  </div>
+<div class="container-fluid">
+  <%= render 'shared/menu' %>
 </div>
+
+<%=form_with url: pagos_show_path, method: :get, local: true do%>
+  <div>
+    <%= label_tag :ano, "Año"%>
+    <%= select_tag :ano, options_for_select(@años_disponibles) %>
+  </div> 
+  <div>
+    <%= label_tag :mes, "Mes" %>
+    <%= select_tag :mes, options_for_select(@meses_disponibles) %>
+  </div>
+  <div>
+    <%= hidden_field_tag :CE_TRABAJADOR, params[:CE_TRABAJADOR]%>
+  </div>
+  <div>
+    <%= hidden_field_tag :CO_UBICACION, params[:CO_UBICACION]%>
+  </div>
+  <div>
+    <%= hidden_field_tag :TIPOPERSONAL, params[:TIPOPERSONAL]%>
+  </div>
+  <div>
+    <%= submit_tag "Buscar" %>
+  </div>
+<% end %>
+
+<% if params[:mes].present? && params[:ano].present? %>
+  <div class='container-fluid d-flex'>
+    <div class='container'>
+    <h3>Asignaciones</h3>
+    <% @nomina_mes.each do |trabajador| %>
+      <% if trabajador.INDICE_CONCEPTO.eql?('A') %>
+        <div>
+          <p><%= trabajador.DESCRIPCION_CO %></p>
+          <p><%= trabajador.MO_CONCEP %>
+        </div>
+      <% end %>
+    <% end %>
+    <p>Total de asignaciones</p>
+    <%= @asignaciones_trabajador['total_asignacion'] %>
+    </div>
+    <div class='container'>
+      <h3>Deducciones</h3>
+      <% @conceptos_trabajador.each do |trabajador| %>
+        <% unless trabajador.INDICE_CONCEPTO.eql?('A') %>
+          <div>
+            <p><%= trabajador.DESCRIPCION_CO %></p>
+            <p><%= trabajador.MO_CONCEP %>
+          </div>
+        <% end %>
+      <% end %>
+    </div>
+  </div>
+<% else %>
+  <div>
+    <h2>Reailiza una búsqueda</h2>
+  </div>
+<% end %>

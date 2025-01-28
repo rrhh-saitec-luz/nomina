@@ -12,6 +12,9 @@ class PagosController < ApplicationController
     @conceptos_trabajador = Concepto.where(CE_TRABAJADOR: params[:CE_TRABAJADOR])
                                     .where(CO_UBICACION: params[:CO_UBICACION])
                                     .where(TIPOPERSONAL: params[:TIPOPERSONAL])
+    @meses_disponibles = @conceptos_trabajador.select(:MES).distinct.pluck(:MES)
+    @años_disponibles = @conceptos_trabajador.select(:ANO).distinct.pluck(:ANO)
+    @nomina_mes = mostrar_nomina(@conceptos_trabajador)
     @asignaciones_trabajador = asignaciones(@conceptos_trabajador)
   end
 
@@ -28,5 +31,9 @@ class PagosController < ApplicationController
       end
     end
     { 'total_asignacion' => suma_asignaciones, 'total_deducciones' => suma_deducciones }
+  end
+
+  def mostrar_nomina(conceptos)
+    conceptos.where(ANO: params[:ano], MES: params[:mes])
   end
 end

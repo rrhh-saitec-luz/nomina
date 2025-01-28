@@ -4,7 +4,7 @@
 <ul class="list-group list-group-horizontal-md">
   <% @datos_ingreso.each do |key, val| %>
     <li class="list-group-item flex-fill">
-      <div><%= key %></div>
+      <div><b><p><%= key %></p></b></div>
       <div>
         <% if val.size.eql?(1) %>
           <%= val.first %>

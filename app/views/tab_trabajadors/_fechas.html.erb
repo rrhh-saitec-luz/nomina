@@ -2,7 +2,7 @@
 <% fechas = @fechas_estatus_adm if tipo_fecha.eql?(2) %>
 <% fechas.each do |key, val| %>
   <li class="list-group-item flex-fill">
-    <div><%= key %></div>
+    <div><b><p><%= key %></p></b></div>
     <div>
       <% if val.nil? %>
         <%= '00/00/000' %>

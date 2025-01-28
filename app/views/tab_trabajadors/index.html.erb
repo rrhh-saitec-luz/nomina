@@ -50,8 +50,8 @@
                 <%= trabajador.descripcion_cargo %>
               </td>
               <td>
-                <%= link_to 'Detalles', tab_trabajadors_show_path(id: trabajador.id), class: 'd-flex flex-column' %>
-                <%= link_to 'Asignaciones actuales', pagos_show_path(CE_TRABAJADOR: trabajador.ce_trabajador, CO_UBICACION: trabajador.co_ubicacion, TIPOPERSONAL: trabajador.tipopersonal ) %>
+                <%= link_to 'Detalle de cargo', tab_trabajadors_show_path(id: trabajador.id), class: 'd-flex flex-column' %>
+                <%= link_to 'Detalle de Asignaciones', pagos_show_path(CE_TRABAJADOR: trabajador.ce_trabajador, CO_UBICACION: trabajador.co_ubicacion, TIPOPERSONAL: trabajador.tipopersonal ) %>
               </td>
             </tr>
           <%end%>
