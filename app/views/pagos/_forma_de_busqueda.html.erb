@@ -1,0 +1,17 @@
+<%=form_with url: pagos_show_path, method: :get, local: true, class: 'd-flex align-items-end gap-2 justify-content-center mt-3 border border-primary rounded-3' do%>
+  <div> 
+    <%= label_tag :ano, "Año"%>
+    <%= select_tag :ano, options_for_select([['Seleccine Año', ''], @años_disponibles]), class: "form-select" %>
+  </div> 
+  <div class="">
+    <%= label_tag :mes, "Mes" %>
+    <%= select_tag :mes, options_for_select([['Seleccine Mes', ''], @meses_disponibles]), class: "form-select" %>
+  </div>
+    <%= hidden_field_tag :CE_TRABAJADOR, params[:CE_TRABAJADOR]%>
+    <%= hidden_field_tag :CO_UBICACION, params[:CO_UBICACION]%>
+    <%= hidden_field_tag :TIPOPERSONAL, params[:TIPOPERSONAL]%>
+    <%= hidden_field_tag :NOMBRE, params[:NOMBRE]%>
+  <div>
+    <%= submit_tag "Buscar", class: "btn btn-secondary" %>
+  </div>
+<% end %>
