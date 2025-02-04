@@ -9,30 +9,45 @@
   <%= render "forma_de_busqueda" %>
   <% if params[:mes].present? && params[:ano].present? %>
     <h5 class="text-center mt-2">Conceptos</h5>
-
-  <table class="table">
-  <thead>
-    <tr>
-      <th scope="col">#</th>
-      <th scope="col">Código</th>
-      <th scope="col">Descripción</th>
-      <th scope="col">Monto</th>
-    </tr>
-  </thead>
-  <tbody>
-  <% counter = 1 %>
-  <% @nomina_mes.each do |concepto|%>
-    <tr>
-      <th scope="row"><%= counter %></th>
-      <td><%= concepto.CO_CONCEPTO %></td>
-      <td><%= concepto.DESCRIPCION_CO %></td>
-      <td><%= concepto.MO_CONCEP %></td>
-    </tr>
-    <% counter += 1%>
-  <% end %>
-  </tbody>
-  </table>
-
+    <table class="table">
+      <thead>
+        <tr>
+          <th scope="col">#</th>
+          <th scope="col">Código</th>
+          <th scope="col">Descripción</th>
+          <th scope="col">Monto</th>
+        </tr>
+      </thead>
+      <tbody>
+      <% counter = 1 %>
+      <% @nomina_mes.each do |concepto|%>
+        <tr>
+          <th scope="row"><%= counter %></th>
+          <td><%= concepto.CO_CONCEPTO %></td>
+          <td><%= concepto.DESCRIPCION_CO %></td>
+          <td><%= concepto.MO_CONCEP %></td>
+        </tr>
+      <% counter += 1%>
+      <% end %>
+      </tbody>
+    </table>
+    <div class="container-fluid d-flex gap-3 justify-content-center">
+      <div>
+        <b>Primera Quincena: </b>
+        <%= quincena_1  = @nomina_mes.find { |concepto| concepto.CO_CONCEPTO == 'X500' }.MO_CONCEP %>
+      </div>
+      <div>|</div>
+      <div>
+        <b>Segunda Quincena: </b>
+        <% conceptos_por_indices = @nomina_mes.group_by {|indice| indice[:INDICE_CONCEPTO]}  %>
+        <%= quincena_2 = conceptos_por_indices['A'].sum(&:MO_CONCEP) - conceptos_por_indices['X'].sum(&:MO_CONCEP) %>
+      </div>
+      <div>|</div>
+      <div>
+        <b>Total mes: </b>
+        <%= quincena_1 + quincena_2 %>
+      </div>
+    </div>
 <% else %>
   <div>
     <h2>Reailiza una búsqueda</h2>

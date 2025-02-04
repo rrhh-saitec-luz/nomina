@@ -13,7 +13,6 @@ class PagosController < ApplicationController
     @meses_disponibles = @conceptos_trabajador.select(:MES).distinct.pluck(:MES)
     @años_disponibles = @conceptos_trabajador.select(:ANO).distinct.pluck(:ANO)
     @nomina_mes = mostrar_nomina(@conceptos_trabajador)
-    @asignaciones_trabajador = asignaciones(@conceptos_trabajador)
   end
 
   private
@@ -24,17 +23,10 @@ class PagosController < ApplicationController
             .where(TIPOPERSONAL: params[:TIPOPERSONAL])
   end
 
-  def asignaciones(conceptos)
-    suma_asignaciones = 0
-    suma_deducciones = 0
-    conceptos.each do |concepto|
-      if concepto.INDICE_CONCEPTO.eql?('A')
-        suma_asignaciones += concepto.MO_CONCEP
-      else
-        suma_deducciones += concepto.MO_CONCEP
-      end
-    end
-    { 'total_asignacion' => suma_asignaciones, 'total_deducciones' => suma_deducciones }
+  def calculo_de_quincenas(nomina)
+    indices_de_conceptos = nomina.group_by { |concepto| concepto[:INDICE_CONCEPTO] }
+    segunda_quincena = indices_de_conceptos['A'].sum(&:MO_CONCEP) - indices_de_conceptos['X'].sum(&:MO_CONCEP)
+    [primera_quincena, segunda_quincena]
   end
 
   def mostrar_nomina(conceptos)
