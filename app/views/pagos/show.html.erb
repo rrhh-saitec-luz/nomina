@@ -38,9 +38,16 @@
       </div>
       <div>|</div>
       <div>
-        <b>Segunda Quincena: </b>
         <% conceptos_por_indices = @nomina_mes.group_by {|indice| indice[:INDICE_CONCEPTO]}  %>
-        <%= quincena_2 = conceptos_por_indices['A'].sum(&:MO_CONCEP) - conceptos_por_indices['X'].sum(&:MO_CONCEP) %>
+        <% suma_conceptos = {} %>
+        <% conceptos_por_indices.each do | indice, conceptos| %>
+          <% suma_conceptos[indice] = conceptos.reduce(0) do |suma, concepto| %>
+            <% suma + concepto.MO_CONCEP %>
+          <% end %>
+        <% end %>
+        <% quincena_2 = suma_conceptos.values.first %>
+        <% suma_conceptos.values[1..].each {|valor| quincena_2 -= valor } %>
+        <b>Segunda Quincena: </b> <%= quincena_2 %>
       </div>
       <div>|</div>
       <div>
