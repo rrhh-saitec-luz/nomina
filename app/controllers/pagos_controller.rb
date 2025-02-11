@@ -10,9 +10,12 @@ class PagosController < ApplicationController
 
   def show
     @conceptos_trabajador = buscar_conceptos
-    @meses_disponibles = @conceptos_trabajador.select(:MES).distinct.pluck(:MES)
-    @años_disponibles = @conceptos_trabajador.select(:ANO).distinct.pluck(:ANO)
+    @meses_disponibles = buscar_lapso(@conceptos_trabajador, :MES)
+    @años_disponibles = buscar_lapso(@conceptos_trabajador, :ANO)
+    @periodo = { 'Año' => params[:ano], 'Mes' => params[:mes] }
     @nomina_mes = mostrar_nomina(@conceptos_trabajador)
+    @trabajador = Admon.find(params[:id])
+    @quincenas = calcular_quincenas(@nomina_mes)
   end
 
   private
@@ -23,13 +26,32 @@ class PagosController < ApplicationController
             .where(TIPOPERSONAL: params[:TIPOPERSONAL])
   end
 
-  def calculo_de_quincenas(nomina)
-    indices_de_conceptos = nomina.group_by { |concepto| concepto[:INDICE_CONCEPTO] }
-    segunda_quincena = indices_de_conceptos['A'].sum(&:MO_CONCEP) - indices_de_conceptos['X'].sum(&:MO_CONCEP)
-    [primera_quincena, segunda_quincena]
+  def buscar_lapso(conceptos, ciclo)
+    conceptos.select(ciclo).distinct.pluck(ciclo)
   end
 
   def mostrar_nomina(conceptos)
     conceptos.where(ANO: params[:ano], MES: params[:mes])
+  end
+
+  def calcular_quincenas(nomina_mes)
+    primera_quincena = nomina_mes.find { |concepto| concepto.CO_CONCEPTO == 'X500' }
+    conceptos_por_indices = indices(nomina_mes)
+    suma_conceptos = suma_de_conceptos(conceptos_por_indices)
+    [primera_quincena, suma_conceptos.values]
+  end
+
+  def indices(nomina)
+    nomina.group_by { |indice| indice[:INDICE_CONCEPTO] }
+  end
+
+  def suma_de_conceptos(indices)
+    suma_concepto = {}
+    indices.each do |indice, conceptos|
+      suma_concepto[indice] = conceptos.reduce(0) do |suma, concepto|
+        suma + concepto.MO_CONCEP
+      end
+    end
+    suma_concepto
   end
 end

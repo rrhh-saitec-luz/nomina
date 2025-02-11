@@ -1,13 +1,16 @@
 <div class = "container-fluid">
   <%= render 'shared/menu' %>
 </div>
-
 <div class = "container-fluid mt-3">
-  <span><b>Trabajador:</b> <%= params[:NOMBRE] %> </span>
+  <span><b>Trabajador:</b> <%= @trabajador.nombres %> </span>
 </div>
 <div class="container-fluid">
   <%= render "forma_de_busqueda" %>
-  <% if params[:mes].present? && params[:ano].present? %>
+  <% if @periodo.values.any?(nil)  %>
+    <div>
+      <h2>Reailiza una búsqueda</h2>
+    </div>
+  <% else %>
     <h5 class="text-center mt-2">Conceptos</h5>
     <table class="table">
       <thead>
@@ -34,32 +37,20 @@
     <div class="container-fluid d-flex gap-3 justify-content-center">
       <div>
         <b>Primera Quincena: </b>
-        <%= quincena_1  = @nomina_mes.find { |concepto| concepto.CO_CONCEPTO == 'X500' }.MO_CONCEP %>
+        <%=  primera_quincena = @quincenas.first.MO_CONCEP %>
       </div>
       <div>|</div>
       <div>
-        <% conceptos_por_indices = @nomina_mes.group_by {|indice| indice[:INDICE_CONCEPTO]}  %>
-        <% suma_conceptos = {} %>
-        <% conceptos_por_indices.each do | indice, conceptos| %>
-          <% suma_conceptos[indice] = conceptos.reduce(0) do |suma, concepto| %>
-            <% suma + concepto.MO_CONCEP %>
-          <% end %>
-        <% end %>
-        <% quincena_2 = suma_conceptos.values.first %>
-        <% suma_conceptos.values[1..].each {|valor| quincena_2 -= valor } %>
-        <b>Segunda Quincena: </b> <%= quincena_2 %>
+        <b>Segunda Quincena: </b>
+        <%= segunda_quincena = @quincenas.last.first - @quincenas.last[1..].sum  %>
+
+        <%=  %>
       </div>
       <div>|</div>
       <div>
         <b>Total mes: </b>
-        <%= quincena_1 + quincena_2 %>
+        <%=  primera_quincena + segunda_quincena %>
       </div>
     </div>
-<% else %>
-  <div>
-    <h2>Reailiza una búsqueda</h2>
-  </div>
-<% end %>
+  <% end %>
 </div>
-
-
