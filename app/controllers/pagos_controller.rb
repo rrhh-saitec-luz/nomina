@@ -18,7 +18,18 @@ class PagosController < ApplicationController
     @quincenas = calcular_quincenas(@nomina_mes)
   end
 
+  def variaciones
+    @trabajador = Admon.find(params[:id])
+    @conceptos_trabajador = buscar_conceptos
+    @conceptos = conceptos_disponibles(@conceptos_trabajador)
+  end
+
   private
+
+  def conceptos_disponibles(conceptos)
+    conceptos.select(:DESCRIPCION_CO, :CO_CONCEPTO, :MO_CONCEP)
+      .group(:CO_CONCEPTO, :DESCRIPCION_CO, :MO_CONCEP)
+  end
 
   def buscar_conceptos
     Concepto.where(CE_TRABAJADOR: params[:CE_TRABAJADOR])
