@@ -12,7 +12,7 @@ Rails.application.routes.draw do
     end
   end
 
-  resources :variaciones do
+  resources :variacions do
     collection do
       get 'index', action: :index
     end
