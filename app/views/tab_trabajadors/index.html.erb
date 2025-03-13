@@ -2,7 +2,7 @@
   <%= render 'shared/menu' %>
 </div>
 
-<%=form_with url: tab_trabajadors_index_path, method: :get, local: true, class: 'container-fluid d-flex justify-content-center input-group mb-3 mt-3', style: "width: 50%" do%>
+<%=form_with url: tab_trabajadors_path, method: :get, local: true, class: 'container-fluid d-flex justify-content-center input-group mb-3 mt-3', style: "width: 50%" do%>
   <span class="input-group-text">
     <%= label_tag :q, "Buscar:" %>
   </span>

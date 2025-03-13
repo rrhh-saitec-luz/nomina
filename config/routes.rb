@@ -1,14 +1,22 @@
-Rails.application.routes.draw do
-  get 'tab_trabajadors/index'
-  get 'tab_trabajadors/new'
-  get 'tab_trabajadors/show'
-  post 'tab_trabajadors/create'
-  get 'tab_trabajadors/edit'
-  get 'tab_trabajadors/update'
-  get 'tab_trabajadors/destroy'
-  get 'pagos/index'
-  get 'pagos/show'
+# Frozen_string_literal: true
 
+Rails.application.routes.draw do
+  resources :tab_trabajadors do
+    get %i[index new show edit update destroy]
+  end
+
+  resources :pagos do
+    collection do
+      get 'index', action: :index
+      get 'show', action: :show
+    end
+  end
+
+  resources :variaciones do
+    collection do
+      get 'index', action: :index
+    end
+  end
   devise_for :users
   get 'home/index'
   root to: 'home#index'
