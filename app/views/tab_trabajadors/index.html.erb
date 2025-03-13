@@ -51,11 +51,13 @@
               </td>
               <td>
                 <div class="d-flex flex-column gap-3">
-                <%= link_to 'Detalle de cargo', tab_trabajadors_show_path(id: trabajador.id), class: 'd-flex flex-column' %>
-
-                <%= render 'links_variaciones_asignaciones',
-                  render_trabajador: trabajador,
-                  opciones: ['Detalle asignaciones', 'Variación'] %>
+                <%= link_to 'Detalle de cargo', tab_trabajador_path(id: trabajador.id), class: 'd-flex flex-column' %>
+                <%= link_to 'Pagos trabajador', pago_path(
+                  CE_TRABAJADOR: trabajador.ce_trabajador,
+                  CO_UBICACION: trabajador.co_ubicacion,
+                  TIPOPERSONAL: trabajador.tipopersonal,
+                  id: trabajador.id 
+                ) %>
                 </div>
               </td>
             </tr>
