@@ -1,0 +1,2 @@
+class Variacion < ApplicationRecord
+end

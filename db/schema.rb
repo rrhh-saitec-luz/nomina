@@ -10,11 +10,37 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_10_08_134507) do
+ActiveRecord::Schema[7.1].define(version: 2025_03_13_150948) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
   create_table "admons", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "nueva_hist_detalle_pagos", force: :cascade do |t|
+    t.integer "CE_TRABAJADOR"
+    t.string "CO_UBICACION"
+    t.string "TIPOPERSONAL"
+    t.string "DESCRIPCION_TP"
+    t.string "CE_BENEFICIARIO"
+    t.string "CO_CONCEPTO"
+    t.string "DESCRIPCION_CO"
+    t.string "IN_NOMINA"
+    t.string "INDICPAGO"
+    t.string "ESTATUS_CONCEPTO"
+    t.date "FE_NOMINA"
+    t.date "FE_EFECTIVA"
+    t.decimal "STATUS_DEDUCCION"
+    t.decimal "MO_CONCEP"
+    t.decimal "MO_SALDO"
+    t.string "STATUS_DEDUC"
+    t.integer "TIPO_NOMINA"
+    t.integer "TIPO_NOMINA_ESPECIFICA"
+    t.integer "ANO"
+    t.integer "MES"
+    t.string "INDICE_CONCEPTO"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
@@ -49,6 +75,34 @@ ActiveRecord::Schema[7.1].define(version: 2024_10_08_134507) do
     t.datetime "updated_at", null: false
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
+  end
+
+  create_table "variacions", force: :cascade do |t|
+    t.integer "ce_trabajador"
+    t.string "co_ubicacion"
+    t.string "tipopersonal"
+    t.string "descripcion_tp"
+    t.integer "ce_beneficiario"
+    t.string "co_concepto"
+    t.string "descripcion_co"
+    t.string "in_nomina"
+    t.string "inicpago"
+    t.string "estatus_concepto"
+    t.date "fe_nomina"
+    t.date "fe_efectiva"
+    t.date "fe_efectiva_real"
+    t.decimal "estatus_deduccion"
+    t.decimal "mo_concepto"
+    t.decimal "mo_saldo"
+    t.decimal "status_deduc"
+    t.integer "tipo_nomina"
+    t.integer "tipo_nomina_especifica"
+    t.integer "ano"
+    t.integer "mes"
+    t.string "indice_concepto"
+    t.string "usuario"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
 end
