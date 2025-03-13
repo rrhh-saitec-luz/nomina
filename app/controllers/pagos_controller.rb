@@ -28,7 +28,7 @@ class PagosController < ApplicationController
 
   def conceptos_disponibles(conceptos)
     conceptos.select(:DESCRIPCION_CO, :CO_CONCEPTO, :MO_CONCEP)
-      .group(:CO_CONCEPTO, :DESCRIPCION_CO, :MO_CONCEP)
+             .group(:CO_CONCEPTO, :DESCRIPCION_CO, :MO_CONCEP)
   end
 
   def buscar_conceptos

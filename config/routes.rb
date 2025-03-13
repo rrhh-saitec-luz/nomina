@@ -8,7 +8,7 @@ Rails.application.routes.draw do
   get 'tab_trabajadors/destroy'
   get 'pagos/index'
   get 'pagos/show'
-  get 'pagos/variaciones'
+
   devise_for :users
   get 'home/index'
   root to: 'home#index'
