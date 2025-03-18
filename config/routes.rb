@@ -15,6 +15,7 @@ Rails.application.routes.draw do
   resources :variacions do
     collection do
       get 'index', action: :index
+      get 'show', action: :show
     end
   end
   devise_for :users

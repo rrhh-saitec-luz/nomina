@@ -58,7 +58,9 @@
                   TIPOPERSONAL: trabajador.tipopersonal,
                   id: trabajador.id 
                 ) %>
-               <%= link_to 'Variaciones trabajador', variacions_path(trabajador) %>
+              <%= link_to 'Variaciones trabajador', variacion_path(
+                  id: trabajador.id 
+                ) %>
                 </div>
               </td>
             </tr>
