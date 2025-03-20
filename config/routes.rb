@@ -16,6 +16,7 @@ Rails.application.routes.draw do
     collection do
       get 'index', action: :index
       get 'show', action: :show
+      get 'new', action: :new
     end
   end
   devise_for :users
