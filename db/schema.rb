@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2025_03_24_150222) do
+ActiveRecord::Schema[7.1].define(version: 2025_03_25_121629) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -106,7 +106,6 @@ ActiveRecord::Schema[7.1].define(version: 2025_03_24_150222) do
     t.datetime "updated_at", null: false
     t.boolean "status", default: false
     t.string "accion"
-    t.integer "id_trabajador"
   end
 
 end
