@@ -11,13 +11,16 @@ class VariacionsController < ApplicationController
   end
 
   def new
+    @conceptos = Concepto.select(:CO_CONCEPTO, :DESCRIPCION_CO).distinct
+    @trab = Admon.find(params[:id])
     @variacion = Variacion.new
   end
 
   def create
-    @form = Variacion.new(variacion_params)
-    if @form.save
-      redirect_to root_path, notice: 'Variación creada'
+    @trab = Admon.find(params[:variacion][:id_trabajador])
+    @variacion = Variacion.new(variacion_params)
+    if @variacion.save
+      redirect_to variacion_path(@trab), notice: 'Variación creada'
     else
       render new_variacion_path
     end

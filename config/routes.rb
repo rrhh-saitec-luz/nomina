@@ -12,13 +12,8 @@ Rails.application.routes.draw do
     end
   end
 
-  resources :variacions do
-    collection do
-      get 'index', action: :index
-      get 'show', action: :show
-      get 'new', action: :new
-    end
-  end
+  resources :variacions
+
   devise_for :users
   get 'home/index'
   root to: 'home#index'
