@@ -1,26 +1,23 @@
 <div class="container-fluid">
   <%= render 'shared/menu' %>
 </div>
-<div class="container-fluid">
-  <%= render 'shared/mostrar_nombre', nombre: @trab.nombres %>
-</div>
 
-<div class="container-fluid border mt-4"> 
+<div class="container-fluid border mt-2 d-flex justify-content-center"> 
 
-<%= form_with(model: @variacion, local: true) do |form| %>
+<%= form_with model: @variacion, local: true, class:"d-flex flex-column col-11 gap-2 mt-2" do |form| %>
 
   <div>
-    <%= form.label :nombres, 'Nombres',  class: 'form-control' %>
+    <%= form.label :nombres, 'Nombres',  class: 'form-control fw-bold' %>
     <%= form.text_field :nombres, value: @trab.nombres, class: 'form-control', disabled: true %>
   </div>
 
   <div>
-    <%= form.label :ubicacion, 'Ubicacion',  class: 'form-control' %>
+    <%= form.label :ubicacion, 'Ubicacion',  class: 'form-control fw-bold' %>
     <%= form.text_field :ubicacion, value: @trab.descripcion_larga, class: 'form-control', disabled: true %>
   </div>
 
   <div data-controller= "varconcepto"  data-varconcepto-target="prueba"> 
-    <%= form.label :co_concepto, "Selecciona un concepto", class: 'form-control' %>
+    <%= form.label :co_concepto, "Selecciona un concepto", class: 'fw-bold form-control' %>
     <%= form.select :co_concepto,
                     @con.map { |concepto|
                       [
@@ -35,12 +32,12 @@
   </div>
 
   <div>
-    <%= form.label :ce_beneficiario, 'Beneficiario',  class: 'form-control' %>
+    <%= form.label :ce_beneficiario, 'Beneficiario',  class: 'form-control fw-bold' %>
     <%= form.number_field :ce_beneficiario, class: 'form-control' %>
   </div>
 
   <div>
-    <%= form.label :TIPO_NOMINA,  class: 'form-control' %>
+    <%= form.label :TIPO_NOMINA,  class: 'form-control fw-bold' %>
     <%= form.number_field :TIPO_NOMINA, class: 'form-control' %>
   </div>
 
@@ -49,6 +46,6 @@
     <%= form.hidden_field :tipopersonal, value: @trab.tipopersonal %>
     <%= form.hidden_field :descripcion_tp, value: @trab.descripcion_tp %>
     <%= form.hidden_field :id_trabajador, value: @trab.id %>
-    <%= form.submit "Crear", class: "btn btn-secondary" %>
+    <%= form.submit "Crear", class: "btn btn-secondary col-1 align-self-center" %>
 <% end %>
 </div>
