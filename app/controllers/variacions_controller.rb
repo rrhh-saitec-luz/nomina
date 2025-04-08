@@ -11,7 +11,6 @@ class VariacionsController < ApplicationController
   end
 
   def new
-    @conceptos = Concepto.select(:CO_CONCEPTO, :DESCRIPCION_CO).distinct
     @trab = Admon.find(params[:id])
     @variacion = Variacion.new
     @con = Listado.all
