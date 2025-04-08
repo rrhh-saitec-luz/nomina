@@ -4,7 +4,6 @@
 <div class="container-fluid">
   <%= render 'shared/mostrar_nombre', nombre: @trab.nombres %>
 </div>
-<%= @con.inspect %>
 
 <div class="container-fluid border mt-4"> 
 
@@ -23,11 +22,11 @@
   <div data-controller= "varconcepto"  data-varconcepto-target="prueba"> 
     <%= form.label :co_concepto, "Selecciona un concepto", class: 'form-control' %>
     <%= form.select :co_concepto,
-                    @conceptos.map { |concepto|
+                    @con.map { |concepto|
                       [
-                        "#{concepto.CO_CONCEPTO}-#{concepto.DESCRIPCION_CO}",
-                         concepto.CO_CONCEPTO,
-                        { data: { descripcion: concepto.DESCRIPCION_CO }}
+                        "#{concepto.co_concepto}-#{concepto.descripcion}",
+                         concepto.co_concepto,
+                        { data: { descripcion: concepto.descripcion }}
                       ]
                     },
                     { prompt: 'Selecciona un concepto' },
