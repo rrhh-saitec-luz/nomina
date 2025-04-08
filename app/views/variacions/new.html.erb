@@ -1,15 +1,14 @@
-
-<%= @trab.inspect %>
 <div class="container-fluid">
   <%= render 'shared/menu' %>
-<div class = "container-fluid mt-3">
+</div>
 <div class="container-fluid">
   <%= render 'shared/mostrar_nombre', nombre: @trab.nombres %>
 </div>
+<%= @con.inspect %>
 
 <div class="container-fluid border mt-4"> 
 
-<%= form_with model: @variacion do |form| %>
+<%= form_with(model: @variacion, local: true) do |form| %>
 
   <div>
     <%= form.label :nombres, 'Nombres',  class: 'form-control' %>
@@ -21,9 +20,19 @@
     <%= form.text_field :ubicacion, value: @trab.descripcion_larga, class: 'form-control', disabled: true %>
   </div>
 
-  <div>
+  <div data-controller= "varconcepto"  data-varconcepto-target="prueba"> 
     <%= form.label :co_concepto, "Selecciona un concepto", class: 'form-control' %>
-    <%= form.select :co_concepto, @conceptos.map {|concepto| ["#{concepto.CO_CONCEPTO}-#{concepto.DESCRIPCION_CO}", concepto.CO_CONCEPTO]} %>
+    <%= form.select :co_concepto,
+                    @conceptos.map { |concepto|
+                      [
+                        "#{concepto.CO_CONCEPTO}-#{concepto.DESCRIPCION_CO}",
+                         concepto.CO_CONCEPTO,
+                        { data: { descripcion: concepto.DESCRIPCION_CO }}
+                      ]
+                    },
+                    { prompt: 'Selecciona un concepto' },
+                    data: {varconcepto_target: "codigoselecto", action: "change->varconcepto#seleccionar"} %>
+     <%= form.hidden_field :descripcion_co, data: {varconcepto_target: "descripcionselecto"}%>
   </div>
 
   <div>
@@ -41,32 +50,6 @@
     <%= form.hidden_field :tipopersonal, value: @trab.tipopersonal %>
     <%= form.hidden_field :descripcion_tp, value: @trab.descripcion_tp %>
     <%= form.hidden_field :id_trabajador, value: @trab.id %>
-  <div>
     <%= form.submit "Crear", class: "btn btn-secondary" %>
-  </div>
 <% end %>
 </div>
-
- <script>
-  function updateDescripcion() {
-    var select = document.getElementById('concepto_select');
-    var descripcion = document.getElementById('descripcion_concepto');
-
-    // Obtener el valor seleccionado
-    var selectedValue = select.value;
-
-    // Buscar la descripción correspondien
-    var conceptos = <%= @conceptos.to_json.html_safe %>; // Convertir @conceptos a JSON
-
-    // Encontrar el concepto seleccionado
-    /.
-      var conceptoSeleccionado = conceptos.find(c => c.CO_CONCEPTO === selectedValue);
-
-    // Actualizar el campo oculto con la descripción
-    if (conceptoSeleccionado) {
-      descripcion.value = conceptoSeleccionado.DESCRIPCION_CO;
-    } else {
-      descripcion.value = ''; // Limpiar si no hay selección
-    }
-  }
-</script>
