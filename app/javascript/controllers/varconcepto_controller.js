@@ -13,10 +13,21 @@ export default class extends Controller {
     this.descripcionselectoTarget.value = description
  } 
 
-  seleccionarNomina(){
-    const tipoNomina = this.tiponominaTarget.options[this.tiponominaTarget.selectedIndex].value
-    this.nominaespecificaTarget
-      console.log(tipoNomina)
-
+  cargarNominaEspecifica(e){
+    const tipoNominaId = e.target.value
+	  console.log(tipoNominaId)
+    fetch(`/variacions/nomina_espc_tipos.json?tipo_nomina=${tipoNominaId}`)
+	.then(response => response.json())
+	.then(datos => {
+	  const cargarNominaEspc = this.nominaespecificaTarget
+	  cargarNominaEspc.innerHTML = "<option value =''>Nomina especifica</option>"
+	  datos.forEach(nomina =>{
+	    const option = document.createElement('option');
+	    option.value = nomina.tipo_nomina_especifica;
+	    option.textContent = nomina.descripcion;
+	    cargarNominaEspc.appendChild(option);
+	  });
+	});
   }
+
 }

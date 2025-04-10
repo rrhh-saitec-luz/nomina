@@ -3,4 +3,5 @@
 # clase que permite obtener conceptos en la nomina
 class NominaEspecifica < Pago
   self.table_name = 'nomina.tab_tipo_nomina_especifica'
+  belongs_to :nomina_tipo
 end

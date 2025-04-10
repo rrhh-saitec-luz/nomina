@@ -12,7 +12,11 @@ Rails.application.routes.draw do
     end
   end
 
-  resources :variacions
+  resources :variacions do
+    collection do
+      get :nomina_espc_tipos
+    end
+  end
 
   devise_for :users
   get 'home/index'

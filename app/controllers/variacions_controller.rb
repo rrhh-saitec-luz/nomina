@@ -18,6 +18,13 @@ class VariacionsController < ApplicationController
     @tipo_nomina_especifica = NominaEspecifica.all
   end
 
+  def nomina_espc_tipos
+    @nomina_especifica = NominaEspecifica.where(tipo_nomina: params[:tipo_nomina])
+    respond_to do |format|
+      format.json { render json: @nomina_especifica }
+    end
+  end
+
   def create
     @trab = Admon.find(params[:variacion][:id_trabajador])
     @variacion = Variacion.new(variacion_params)

@@ -19,10 +19,10 @@
     <%= content_tag :div,
                     data: { controller: "varconcepto" },
                     class:"input-group mb-3" do %> 
-    <%= form.label :co_concepto, "Concepto", class: 'fw-bold input-group-text' %>
-    <%= form.select :co_concepto,
-                    @con.map { |concepto|
-                      [
+      <%= form.label :co_concepto, "Concepto", class: 'fw-bold input-group-text' %>
+      <%= form.select :co_concepto,
+                      @con.map { |concepto|
+                        [
                         "#{concepto.co_concepto}-#{concepto.descripcion}",
                          concepto.co_concepto,
                         { data: { descripcion: concepto.descripcion }}
@@ -31,16 +31,14 @@
                     { prompt: 'Selecciona un concepto' },
                     data: {varconcepto_target: "codigoselecto", action: "change->varconcepto#seleccionar"},
                     class: "form-select" %>
-     <%= form.hidden_field :descripcion_co, data: {varconcepto_target: "descripcionselecto"}%>
+      <%= form.hidden_field :descripcion_co, data: {varconcepto_target: "descripcionselecto"}%>
     <% end %>
 
-  <div>
+   <div>
     <%= form.label :ce_beneficiario, 'Beneficiario',  class: 'form-control fw-bold' %>
     <%= form.number_field :ce_beneficiario, class: 'form-control' %>
   </div>
-
   <%= content_tag :div, data: {controller: 'varconcepto'} do %>
-
     <%= tag.div class: "input-group mb-3" do %>
       <%= form.label :tipo_nomina,  class: 'fw-bold input-group-text' %>
       <%= form.select :tipo_nomina,
@@ -48,29 +46,23 @@
                         ["#{nomina.descripcion}", nomina.tipo_nomina]
                       },
                       { prompt: "Selecciona tipo de nomina" },
-                      data: { varconcepto_target: "tiponomina", action: "change->varconcepto#seleccionarNomina" },
+                      data: { varconcepto_target: "tiponomina", action: "change->varconcepto#cargarNominaEspecifica" },
                       class: 'form-select' %>
     <%end%>
-
-    <% op = [1,2,3,4,5,6] %>
-    <%= tag.div id: "hola" do %>
-      hola mundo
-      <%= tag.div class: "input-group mb-3" do %>
-        <%= form.label :tipo_nomina_especifica, "Nomina Específica",  class: 'fw-bold input-group-text' %>
-        <%= form.select :tipo_nomina_especifica,
-                        op.map {|o| ["Opción #{o}", o]},
-                        data: { varconcepto_target: "nominaespecifica" },
-                        class: "form-select",
-                        disabled: true %>
-      <% end %>
+    <%= tag.div class: ' input-group mb-3' do %>
+      <%= form.label :tipo_nomina_especifica, 'Nomina específica',  class: 'fw-bold input-group-text' %>
+      <%= form.select :tipo_nomina_especifica,
+                      [],
+                      { prompt: "Nómina específica" },
+                      data: {varconcepto_target: "nominaespecifica"},
+                      class: 'form-select' %> 
     <% end %>
   <% end %>
-
     <%= form.hidden_field :ce_trabajador, value: @trab.ce_trabajador %>
     <%= form.hidden_field :co_ubicacion, value: @trab.co_ubicacion %>
     <%= form.hidden_field :tipopersonal, value: @trab.tipopersonal %>
     <%= form.hidden_field :descripcion_tp, value: @trab.descripcion_tp %>
     <%= form.hidden_field :id_trabajador, value: @trab.id %>
     <%= form.submit "Crear", class: "btn btn-secondary col-1 align-self-center" %>
-<% end %>
+  <% end %>
 <% end %>
