@@ -14,6 +14,8 @@ class VariacionsController < ApplicationController
     @trab = Admon.find(params[:id])
     @variacion = Variacion.new
     @con = Listado.all
+    @tipo_nomina = NominaTipo.all
+    @tipo_nomina_especifica = NominaEspecifica.all
   end
 
   def create
