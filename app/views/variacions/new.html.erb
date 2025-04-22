@@ -1,4 +1,5 @@
 <%= tag.div class: "container-fluid" do %>
+  <%= current_user.nombre  %>
   <%= render 'shared/menu' %>
 <% end %>
 
@@ -25,13 +26,17 @@
                         [
                         "#{concepto.co_concepto}-#{concepto.descripcion}",
                          concepto.co_concepto,
-                        { data: { descripcion: concepto.descripcion }}
+                         { data: { descripcion: concepto.descripcion,
+                                   estatus: concepto.estatus,
+                                   indc: concepto.in_pago}}
                       ]
                     },
                     { prompt: 'Selecciona un concepto' },
                     data: {varconcepto_target: "codigoselecto", action: "change->varconcepto#seleccionar"},
                     class: "form-select" %>
       <%= form.hidden_field :descripcion_co, data: {varconcepto_target: "descripcionselecto"}%>
+      <%= form.hidden_field :estatus_concepto, data: {varconcepto_target: "estatusConcepto"} %>
+      <%= form.hidden_field :indic_pago, data: {varconcepto_target: "indicePago"} %>
     <% end %>
 
    <div>
@@ -63,6 +68,7 @@
     <%= form.hidden_field :tipopersonal, value: @trab.tipopersonal %>
     <%= form.hidden_field :descripcion_tp, value: @trab.descripcion_tp %>
     <%= form.hidden_field :id_trabajador, value: @trab.id %>
+    <%= form.hidden_field :usuario, value: current_user.nombre %>
     <%= form.submit "Crear", class: "btn btn-secondary col-1 align-self-center" %>
   <% end %>
 <% end %>

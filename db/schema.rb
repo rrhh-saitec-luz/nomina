@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2025_03_25_121629) do
+ActiveRecord::Schema[7.1].define(version: 2025_04_22_153058) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -87,7 +87,7 @@ ActiveRecord::Schema[7.1].define(version: 2025_03_25_121629) do
     t.string "co_concepto"
     t.string "descripcion_co"
     t.string "in_nomina"
-    t.string "inicpago"
+    t.string "indic_pago"
     t.string "estatus_concepto"
     t.date "fe_nomina"
     t.date "fe_efectiva"
