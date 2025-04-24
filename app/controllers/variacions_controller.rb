@@ -16,6 +16,7 @@ class VariacionsController < ApplicationController
     @con = Listado.all
     @tipo_nomina = NominaTipo.all
     @tipo_nomina_especifica = NominaEspecifica.all
+    @estatus = estatus(@trab)
   end
 
   def nomina_espc_tipos
@@ -39,6 +40,10 @@ class VariacionsController < ApplicationController
 
   def ubicar_cargo(id)
     Admon.find(id)
+  end
+
+  def estatus(trabajador)
+    trabajador.estatus.eql?('P') and 'P' or trabajador.tp
   end
 
   def variacion_params

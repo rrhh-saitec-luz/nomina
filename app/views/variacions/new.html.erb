@@ -6,15 +6,16 @@
 <%= content_tag :div, class: "container-fluid border mt-2 d-flex justify-content-center" do %> 
 
   <%= form_with model: @variacion, local: true, class:"d-flex flex-column col-11 gap-2 mt-2" do |form| %>
+    <%= content_tag :div, class: "d-flex" do %>
+      <%= tag.div class: "flex-fill" do %>
+        <%= form.label :nombres, 'Nombres',  class: 'form-control fw-bold' %>
+        <%= form.text_field :nombres, value: @trab.nombres, class: 'form-control', disabled: true %>
+      <% end %>
 
-    <%= tag.div do %>
-      <%= form.label :nombres, 'Nombres',  class: 'form-control fw-bold' %>
-      <%= form.text_field :nombres, value: @trab.nombres, class: 'form-control', disabled: true %>
-    <% end %>
-
-    <%= tag.div do %>
-      <%= form.label :ubicacion, 'Ubicacion',  class: 'form-control fw-bold' %>
-      <%= form.text_field :ubicacion, value: @trab.descripcion_larga, class: 'form-control', disabled: true %>
+      <%= tag.div class: "flex-fill" do %>
+        <%= form.label :ubicacion, 'Ubicacion',  class: 'form-control fw-bold' %>
+        <%= form.text_field :ubicacion, value: @trab.descripcion_larga, class: 'form-control', disabled: true %>
+      <% end %>
     <% end %>
 
     <%= content_tag :div,
@@ -36,7 +37,7 @@
                     class: "form-select" %>
       <%= form.hidden_field :descripcion_co, data: {varconcepto_target: "descripcionselecto"}%>
       <%= form.hidden_field :estatus_concepto, data: {varconcepto_target: "estatusConcepto"} %>
-      <%= form.hidden_field :indic_pago, data: {varconcepto_target: "indicePago"} %>
+      <%= form.hidden_field :indic_pago, data: {varconcepto_target: "indicadorPago"} %>
     <% end %>
 
    <div>
@@ -54,7 +55,7 @@
                       data: { varconcepto_target: "tiponomina", action: "change->varconcepto#cargarNominaEspecifica" },
                       class: 'form-select' %>
     <%end%>
-    <%= tag.div class: ' input-group mb-3' do %>
+    <%= tag.div class: 'input-group mb-3' do %>
       <%= form.label :tipo_nomina_especifica, 'Nomina específica',  class: 'fw-bold input-group-text' %>
       <%= form.select :tipo_nomina_especifica,
                       [],
@@ -63,12 +64,31 @@
                       class: 'form-select' %> 
     <% end %>
   <% end %>
+  <%= content_tag :div, class: "d-flex" do %>
+    <%= content_tag :div, class: 'input-group mb-3' do %>
+      <%= form.label :fe_nomina, "Fecha Nómina", class: 'fw-bold input-group-text' %> 
+      <%= form.date_field :fe_nomina %> 
+    <% end %>
+    <%= content_tag :div, class: 'input-group mb-3' do %>
+      <%= form.label :fe_efectiva, "Fecha efectiva", class: 'fw-bold input-group-text' %> 
+      <%= form.date_field :fe_efectiva %> 
+    <% end %>
+    <%= content_tag :div, class: 'input-group mb-3' do %>
+      <%= form.label :fe_efectiva_real, "Fecha efectiva real", class: 'fw-bold input-group-text' %> 
+      <%= form.date_field :fe_efectiva_real %> 
+    <% end %>
+  <% end %>
+  <%= content_tag :div do %>
+    <%= form.label :indicador_de_pago, "Indicador de Pago",  class: 'fw-bold input-group-text' %> 
+    <%= form.text_field :indicador_de_pago,  disabled: true, data: {controller: "varconcepto", varconcepto_target: "indicadorPagoLargo"} %>
+  <% end %>
     <%= form.hidden_field :ce_trabajador, value: @trab.ce_trabajador %>
     <%= form.hidden_field :co_ubicacion, value: @trab.co_ubicacion %>
     <%= form.hidden_field :tipopersonal, value: @trab.tipopersonal %>
     <%= form.hidden_field :descripcion_tp, value: @trab.descripcion_tp %>
     <%= form.hidden_field :id_trabajador, value: @trab.id %>
     <%= form.hidden_field :usuario, value: current_user.nombre %>
+    <%= form.hidden_field :in_nomina, value: @estatus %>
     <%= form.submit "Crear", class: "btn btn-secondary col-1 align-self-center" %>
   <% end %>
 <% end %>

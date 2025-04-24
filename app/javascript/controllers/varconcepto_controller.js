@@ -7,17 +7,19 @@ export default class extends Controller {
 	  	    "tiponomina",
   		    "nominaespecifica",
   		    "estatusConcepto",
-  		    "indicePago"]
+  		    "indicadorPago",
+  		    "inidiceNomina",
+  		    "indicadorPagoLargo"]
   seleccionar(){
     const selecto = this.codigoselectoTarget.value
     const opcionselecta = this.codigoselectoTarget.options[this.codigoselectoTarget.selectedIndex]
     const description = opcionselecta.dataset.descripcion
     const estatus = opcionselecta.dataset.estatus
-    const indice = opcionselecta.dataset.indc
+    const indicador = opcionselecta.dataset.indc
     this.descripcionselectoTarget.value = description
     this.estatusConceptoTarget.value = estatus
-    this.indicePagoTarget.value = indice 
-	  console.log(indice)
+    this.indicadorPagoTarget.value = indicador 
+    this.indicadorPagoLargoTarget.value = indicador 
  } 
 
   cargarNominaEspecifica(e){
