@@ -45,7 +45,7 @@ class VariacionsController < ApplicationController
     params.require(:variacion).permit(
       :ce_trabajador, :co_ubicacion, :tipopersonal, :descripcion_tp,
       :ce_beneficiario, :co_concepto, :descripcion_co, :in_nomina,
-      :inicpago, :estatus_concepto, :fe_nomina, :fe_efectiva,
+      :indic_pago, :estatus_concepto, :fe_nomina, :fe_efectiva,
       :fe_efectiva_real, :estatus_deduccion, :mo_concepto,
       :mo_saldo, :status_deduc, :tipo_nomina, :tipo_nomina_especifica,
       :ano, :mes, :indice_concepto, :usuario, :status, :usuario, :accion

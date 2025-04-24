@@ -17,6 +17,7 @@ export default class extends Controller {
     this.descripcionselectoTarget.value = description
     this.estatusConceptoTarget.value = estatus
     this.indicePagoTarget.value = indice 
+	  console.log(indice)
  } 
 
   cargarNominaEspecifica(e){
