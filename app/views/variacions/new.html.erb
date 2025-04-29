@@ -80,7 +80,7 @@
   <% end %>
   <%= content_tag :div do %>
     <%= form.label :indicador_de_pago, "Indicador de Pago",  class: 'fw-bold input-group-text' %> 
-    <%= form.text_field :indicador_de_pago,  disabled: true, data: {controller: "varconcepto", varconcepto_target: "indicadorPagoLargo"} %>
+    <%= form.text_field :indicador_de_pago,  disabled: true %>
   <% end %>
     <%= form.hidden_field :ce_trabajador, value: @trab.ce_trabajador %>
     <%= form.hidden_field :co_ubicacion, value: @trab.co_ubicacion %>
