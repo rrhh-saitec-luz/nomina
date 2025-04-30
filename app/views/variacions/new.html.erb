@@ -5,7 +5,7 @@
 
 <%= content_tag :div, class: "container-fluid border mt-2 d-flex justify-content-center" do %> 
 
-  <%= form_with model: @variacion, local: true, class:"d-flex flex-column col-11 gap-2 mt-2" do |form| %>
+  <%= form_with model: @variacion, data: {controller: "varconcepto"}, local: true, class:"d-flex flex-column col-11 gap-2 mt-2" do |form| %>
     <%= content_tag :div, class: "d-flex" do %>
       <%= tag.div class: "flex-fill" do %>
         <%= form.label :nombres, 'Nombres',  class: 'form-control fw-bold' %>
@@ -19,7 +19,6 @@
     <% end %>
 
     <%= content_tag :div,
-                    data: { controller: "varconcepto" },
                     class:"input-group mb-3" do %> 
       <%= form.label :co_concepto, "Concepto", class: 'fw-bold input-group-text' %>
       <%= form.select :co_concepto,
@@ -29,7 +28,10 @@
                          concepto.co_concepto,
                          { data: { descripcion: concepto.descripcion,
                                    estatus: concepto.estatus,
-                                   indc: concepto.in_pago}}
+                                   indc: concepto.in_pago,
+                                   monto: concepto.mo_fijo,
+                                   operacion: concepto.operacion,
+                                   indice: concepto.tipo }}
                       ]
                     },
                     { prompt: 'Selecciona un concepto' },
@@ -38,13 +40,15 @@
       <%= form.hidden_field :descripcion_co, data: {varconcepto_target: "descripcionselecto"}%>
       <%= form.hidden_field :estatus_concepto, data: {varconcepto_target: "estatusConcepto"} %>
       <%= form.hidden_field :indic_pago, data: {varconcepto_target: "indicadorPago"} %>
+      <%= form.hidden_field :indice_concepto, data: {varconcepto_target: "indiceConcepto"} %>
+
     <% end %>
 
    <div>
     <%= form.label :ce_beneficiario, 'Beneficiario',  class: 'form-control fw-bold' %>
     <%= form.number_field :ce_beneficiario, class: 'form-control' %>
   </div>
-  <%= content_tag :div, data: {controller: 'varconcepto'} do %>
+  <%= content_tag :div do %>
     <%= tag.div class: "input-group mb-3" do %>
       <%= form.label :tipo_nomina,  class: 'fw-bold input-group-text' %>
       <%= form.select :tipo_nomina,
@@ -67,7 +71,7 @@
   <%= content_tag :div, class: "d-flex" do %>
     <%= content_tag :div, class: 'input-group mb-3' do %>
       <%= form.label :fe_nomina, "Fecha Nómina", class: 'fw-bold input-group-text' %> 
-      <%= form.date_field :fe_nomina %> 
+      <%= form.date_field :fe_nomina , data: { action: "change->varconcepto#actualizarFecha" } %> 
     <% end %>
     <%= content_tag :div, class: 'input-group mb-3' do %>
       <%= form.label :fe_efectiva, "Fecha efectiva", class: 'fw-bold input-group-text' %> 
@@ -77,10 +81,30 @@
       <%= form.label :fe_efectiva_real, "Fecha efectiva real", class: 'fw-bold input-group-text' %> 
       <%= form.date_field :fe_efectiva_real %> 
     <% end %>
+    <%= form.hidden_field :mes, data: { varconcepto_target: "mes" } %>
+    <%= form.hidden_field :ano, data: { varconcepto_target: "ano" } %>
   <% end %>
-  <%= content_tag :div do %>
-    <%= form.label :indicador_de_pago, "Indicador de Pago",  class: 'fw-bold input-group-text' %> 
-    <%= form.text_field :indicador_de_pago,  disabled: true %>
+
+  <%= content_tag :div, class: "d-flex" do %>
+    <%= content_tag :div, class: "input-group mb-3" do %>
+      <%= form.label :indicador_de_pago, "Indicador de Pago",  class: 'fw-bold input-group-text' %> 
+      <%= form.text_field :indicador_de_pago,  disabled: true, value: "Indicador", data: {varconcepto_target: "indicadorPago"} %>
+    <% end %>
+    <%= content_tag :div, class: "input-group mb-3" do %>
+      <%= form.label :monto_concepto_previo, "Monto concepto",  class: 'fw-bold input-group-text' %> 
+      <%= form.text_field :monto_concepto_previo, value: "0.0", data: { varconcepto_target: "montoPrevio" } %>
+    <% end %>
+    <%= content_tag :div, class: "input-group mb-3" do %>
+      <%= form.label :mo_saldo, "Monto saldo",  class: 'fw-bold input-group-text' %> 
+      <%= form.number_field :mo_saldo,
+                            value: 0.00,
+                            data: {varconcepto_target: "saldo", action: "input->varconcepto#calculo"} %>
+    <% end %>
+    <%= content_tag :div, class: "input-group mb-3" do %>
+      <%= form.hidden_field :operacion, disable: true %>
+      <%= form.label :mo_concepto, "Total concepto",  class: 'fw-bold input-group-text' %> 
+      <%= form.number_field :mo_concepto, value: 0.00, data: { varconcepto_target: "subTotal"}, step: :any %>
+    <% end %>
   <% end %>
     <%= form.hidden_field :ce_trabajador, value: @trab.ce_trabajador %>
     <%= form.hidden_field :co_ubicacion, value: @trab.co_ubicacion %>
