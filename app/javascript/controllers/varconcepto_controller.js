@@ -79,5 +79,4 @@ export default class extends Controller {
       this.anoTarget.value = parseInt(year)
     }
   }
-
 }
