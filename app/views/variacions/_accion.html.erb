@@ -1,0 +1,9 @@
+<%= content_tag :div,
+                class: "input-group mb-3" do %>
+  <%= form.label :accion, "Accion",
+                  class: 'fw-bold input-group-text' %>
+  <%= form.select :accion,
+                  ["Sustituir","Sumar"," Restar"," Eliminar"],
+                  {},
+                  class: "form-select" %>
+<% end %>

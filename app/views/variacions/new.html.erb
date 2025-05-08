@@ -9,15 +9,7 @@
                 local: true,
                 class:"d-flex flex-column col-11 gap-2 mt-2" do |form| %>
     <%= render "cabecera_variacion", trab: @trab %>
-    <%= content_tag :div,
-                    class: "input-group mb-3" do %>
-      <%= form.label :accion, "Accion",
-                      class: 'fw-bold input-group-text' %>
-      <%= form.select :accion,
-                      ["Sustituir","Sumar"," Restar"," Eliminar"],
-                      {},
-                      class: "form-select" %>
-    <% end %>
+    <%= render "accion", form: form %>
     <%= content_tag :div,
                     class:"input-group mb-3" do %> 
       <%= form.label :co_concepto, "Concepto",
