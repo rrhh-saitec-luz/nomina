@@ -1,0 +1,14 @@
+<%= content_tag :div,
+                class: "input-group mb-3" do %>
+  <%= form.label :tipo_nomina,
+                  class: 'fw-bold input-group-text' %>
+  <%= form.select :tipo_nomina,
+                  tipo_nomina.map { |nomina|
+                    ["#{nomina.descripcion}", nomina.tipo_nomina]
+                  },
+                  { prompt: "Selecciona tipo de nomina",
+                    required: true },
+                  data: { varconcepto_target: "tiponomina",
+                          action: "change->varconcepto#cargarNominaEspecifica" },
+                  class: 'form-select' %>
+<% end %>

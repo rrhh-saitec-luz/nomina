@@ -1,0 +1,28 @@
+<%= content_tag :div,
+                class: "d-flex" do %>
+  <%= content_tag :div,
+                  class: 'input-group mb-3' do %>
+    <%= form.label :fe_nomina, "Fecha Nómina",
+                   class: 'fw-bold input-group-text' %> 
+    <%= form.date_field :fe_nomina ,
+                        data: { action: "change->varconcepto#actualizarFecha" },
+                        required: true %> 
+  <% end %>
+  <%= content_tag :div,
+                  class: 'input-group mb-3' do %>
+    <%= form.label :fe_efectiva, "Fecha efectiva",
+                   class: 'fw-bold input-group-text' %> 
+    <%= form.date_field :fe_efectiva,
+                        required: true %> 
+  <% end %>
+  <%= content_tag :div,
+                  class: 'input-group mb-3' do %>
+    <%= form.label :fe_efectiva_real, "Fecha efectiva real",
+                  class: 'fw-bold input-group-text' %> 
+    <%= form.date_field :fe_efectiva_real %> 
+  <% end %>
+  <%= form.hidden_field :mes,
+                        data: { varconcepto_target: "mes" } %>
+  <%= form.hidden_field :ano,
+                        data: { varconcepto_target: "ano" } %>
+<% end %>

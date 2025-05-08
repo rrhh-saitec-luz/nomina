@@ -1,0 +1,29 @@
+<%= content_tag :div,
+                class:"input-group mb-3" do %> 
+  <%= form.label :co_concepto, "Concepto",
+                  class: 'fw-bold input-group-text' %>
+  <%= form.select :co_concepto,
+                  con.map { |concepto|
+                    [
+                    "#{concepto.co_concepto}-#{concepto.descripcion}",
+                     concepto.co_concepto,
+                     { data: { descripcion: concepto.descripcion,
+                               estatus: concepto.estatus,
+                               indicador: concepto.in_pago,
+                               monto: concepto.mo_fijo,
+                               operacion: concepto.operacion,
+                               indice: concepto.tipo }}
+                  ]
+                },
+                { prompt: 'Selecciona un concepto',
+                  required: true },
+                  data: {varconcepto_target: "codigoselecto",
+                         action: "change->varconcepto#seleccionar"},
+                         class: "form-select" %>
+  <%= form.hidden_field :descripcion_co,
+                         data: {varconcepto_target: "descripcionselecto"}%>
+  <%= form.hidden_field :estatus_concepto,
+                         data: {varconcepto_target: "estatusConcepto"} %>
+  <%= form.hidden_field :indice_concepto,
+                         data: {varconcepto_target: "indiceConcepto"} %>
+<% end %>

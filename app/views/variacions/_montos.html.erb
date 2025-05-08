@@ -1,0 +1,39 @@
+<%= content_tag :div, class: "d-flex" do %>
+  <%= content_tag :div,
+                  class: "input-group mb-3" do %>
+  <%= form.label :indicador_pago, "Indicador de Pago",
+                 class: 'fw-bold input-group-text' %> 
+  <%= form.text_field :indicador_pago,
+                       disabled: true,
+                       value: "Indicador",
+                       data: {varconcepto_target: "indicadorPago"} %>
+  <%= form.hidden_field :indic_pago,
+                          data: { varconcepto_target: "indicadorReal" } %>
+  <% end %>
+  <%= content_tag :div,
+                  class: "input-group mb-3" do %>
+    <%= form.label :monto_concepto_previo, "Monto concepto",
+                   class: 'fw-bold input-group-text' %> 
+    <%= form.text_field :monto_concepto_previo,
+                        value: "0.0",
+                        data: { varconcepto_target: "montoPrevio",
+                                action: "input->varconcepto#calculoMontoConcepto"} %>
+  <% end %>
+  <%= content_tag :div,
+                  class: "input-group mb-3" do %>
+    <%= form.label :mo_saldo, "Monto saldo",
+                   class: 'fw-bold input-group-text' %> 
+    <%= form.number_field :mo_saldo,
+                          value: 0.00,
+                          data: {varconcepto_target: "saldo",
+                                 action: "input->varconcepto#calculoMontoSaldo"} %>
+  <% end %>
+  <%= content_tag :div, class: "input-group mb-3" do %>
+    <%= form.label :mo_concepto, "Total concepto",
+                   class: 'fw-bold input-group-text' %> 
+    <%= form.number_field :mo_concepto,
+                          value: 0.00,
+                          data: { varconcepto_target: "subTotal"},
+                          step: :any %>
+  <% end %>
+<% end %>
