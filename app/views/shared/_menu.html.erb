@@ -9,6 +9,11 @@
     <li class='list-group-item'>
       <%= link_to 'Volver', :back %>
     </li>
+    <% if current_user.rol.eql?("admin") %>
+      <li class='list-group-item'>
+        <%= link_to 'Administrar', admins_path, class: 'link-primary active' %>
+      </li>
+    <% end %>
   </ul>
    <%= render 'shared/logout' %>
 </div>
