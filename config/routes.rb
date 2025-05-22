@@ -23,6 +23,7 @@ Rails.application.routes.draw do
     collection do
       get 'index', action: :index
       get 'generar_nomina', action: :generar_nomina
+      post 'prenomina', action: :prenomina
     end
   end
 

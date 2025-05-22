@@ -76,3 +76,5 @@ gem 'devise', '~> 4.9'
 
 # Permite crear una paginaciones en los indices
 gem 'kaminari'
+
+gem 'activerecord-import'

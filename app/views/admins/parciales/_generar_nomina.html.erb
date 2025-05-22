@@ -1,4 +1,23 @@
 <turbo-frame id="contenido">
+  <%= form_with url: prenomina_admins_path, method: :post do |form| %>
+    <%= content_tag :div do %>
+      <%= form.label :month, "Mes Base" %>
+      <%= form.number_field :month, required: true %>
+    <% end %>
+    <%= content_tag :div do %>
+      <%= form.label :year, "Año Base" %>
+      <%= form.number_field :year, required: true %>
+    <% end %>
+    <%= content_tag :div do %>
+      <%= form.label :new_month, "Nuevo Mes" %>
+      <%= form.number_field :new_month, required: true %>
+    <% end %>
+    <%= content_tag :div do %>
+      <%= form.label :new_year, "Nuevo año" %>
+      <%= form.number_field :new_year, required: true %>
+    <% end %>
+    <%= form.submit "Generar prenomina" %>
+  <% end %>
   <h1>Admins#Generar_Nomina</h1>
   <p>Find me in app/views/admins/index.html.erb</p>
 </turbo-frame>  
