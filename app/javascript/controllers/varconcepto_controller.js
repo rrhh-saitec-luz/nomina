@@ -11,11 +11,13 @@ export default class extends Controller {
   		    "inidiceNomina",
 	  	    "montoPrevio",
   		    "subTotal",
+	  	    "saldoContent",
   		    "saldo",
   		    "mes",
   		    "ano",
   		    "indiceConcepto",
-  		    "indicadorReal" ]
+  		    "indicadorReal",
+  		    "salarioBase"]
   seleccionar(){
     const opciones = {
 	    M: "MONTO",
@@ -31,6 +33,7 @@ export default class extends Controller {
     const indice = opcionselecta.dataset.indice
     const indicadorPago = this.indicadorPagoTarget 
     const montoConceptoPrevio = this.montoPrevioTarget
+    const saldoContent = this.saldoContentTarget
     const saldo = this.saldoTarget
     const subTotal = this.subTotalTarget
     this.descripcionselectoTarget.value = description
@@ -40,6 +43,12 @@ export default class extends Controller {
     this.indicadorRealTarget.value = indicador
     indicadorPago.value = opciones[indicador]
     montoConceptoPrevio.value = montoFijo
+    if(indicadorPago.value == "CANTIDAD"){
+      saldoContent.classList.remove("visually-hidden") 
+    }else if(indicadorPago.value == "PORCENTAJE"){
+      saldoContent.classList.add("visually-hidden") 
+    }else{
+    }
     saldo.value =  "0.0"
     subTotal.value = montoFijo 
  } 
@@ -68,6 +77,7 @@ export default class extends Controller {
     const montoConceptoPrevio = this.montoPrevioTarget.value     
     const montoSaldo = parseFloat(e.target.value)
     const montoPrev = parseFloat(montoConceptoPrevio)
+    const accion = ""
     if(obtenerIndicador == "PORCENTAJE"){
       const subTotal = (montoPrev * montoSaldo)/100 
       this.subTotalTarget.value = subTotal
@@ -92,5 +102,8 @@ export default class extends Controller {
       this.mesTarget.value = parseInt(formattedMonth)
       this.anoTarget.value = parseInt(year)
     }
+  }
+  action(e){
+    console.log(e.target.value)
   }
 }

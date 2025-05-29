@@ -1,6 +1,6 @@
 <%= content_tag :div, class: "container-fluid" do %>
   <%= render 'shared/menu' %>
-  <%= content_tag :div, class:"d-flex mt-3" do %>
+  <%= content_tag :div, class:"d-flex mt-3 gap-2" do %>
     <%= content_tag :ul, class:"list-group" do %>
       <%= content_tag :li, class:"list-group-item list-group-item-primary" do %>
         <%= link_to "GENERAR NOMINA", generar_nomina_admins_path, data: { turbo_frame: "contenido" } %>
@@ -9,7 +9,7 @@
         <%= link_to "OTRO CONTENIDO" %>
       <% end %>
     <% end %>
-    <%= turbo_frame_tag "contenido", class:"ms-3" do %>
+    <%= turbo_frame_tag "contenido", class:" container-fluid border border-primary rounded-3" do %>
       <p>Selecciona una opción para cargar contenido.</p>
     <% end %>
   <% end %>  

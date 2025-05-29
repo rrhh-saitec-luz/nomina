@@ -1,23 +1,35 @@
 <turbo-frame id="contenido">
-  <%= form_with url: prenomina_admins_path, method: :post do |form| %>
-    <%= content_tag :div do %>
-      <%= form.label :month, "Mes Base" %>
-      <%= form.number_field :month, required: true %>
-    <% end %>
-    <%= content_tag :div do %>
-      <%= form.label :year, "Año Base" %>
-      <%= form.number_field :year, required: true %>
-    <% end %>
-    <%= content_tag :div do %>
-      <%= form.label :new_month, "Nuevo Mes" %>
-      <%= form.number_field :new_month, required: true %>
-    <% end %>
-    <%= content_tag :div do %>
-      <%= form.label :new_year, "Nuevo año" %>
-      <%= form.number_field :new_year, required: true %>
-    <% end %>
-    <%= form.submit "Generar prenomina" %>
+  <% if flash[:notice] %>
+    <p class="notice"><%= flash[:notice] %></p>
   <% end %>
-  <h1>Admins#Generar_Nomina</h1>
-  <p>Find me in app/views/admins/index.html.erb</p>
+  <%= form_with url: prenomina_admins_path, method: :post, class: "d-flex mt-3 gap-1 justify-content-center" do |form| %>
+    <%= content_tag :div do %>
+      <%= form.label :month, "Mes Base", class: "form-label" %>
+      <%= form.number_field :month, required: true, class: "form-control" %>
+    <% end %>
+    <%= content_tag :div do %>
+      <%= form.label :year, "Año Base", class: "form-label" %>
+      <%= form.number_field :year, required: true, class: "form-control" %>
+    <% end %>
+    <%= content_tag :div, class:" d-flex align-self-end" do %>
+      <%= form.submit "Generar prenomina", class: "btn btn-primary" %>
+    <% end %>
+  <% end %>
+  <%= content_tag :h1, "Generar Nomina" %>
+  <%= content_tag :h3, "En el campo Mes base indique el ordinal del mes" %>
+  <%= content_tag :ul, class: " d-flex gap-3 list-group-numbered list-group-item-primary flex-wrap" do %>
+    <%= content_tag :li, "Enero", class:"list-group-item" %>
+    <%= content_tag :li, "Febrero", class:"list-group-item" %>
+    <%= content_tag :li, "Marzo", class:"list-group-item" %>
+    <%= content_tag :li, "Abril", class:"list-group-item" %>
+    <%= content_tag :li, "Mayo", class:"list-group-item" %>
+    <%= content_tag :li, "Junio", class:"list-group-item" %>
+    <%= content_tag :li, "Julio", class:"list-group-item" %>
+    <%= content_tag :li, "Agosto", class:"list-group-item" %>
+    <%= content_tag :li, "Septiembre", class:"list-group-item" %>
+    <%= content_tag :li, "Octubre", class:"list-group-item" %>
+    <%= content_tag :li, "Noviembre", class:"list-group-item" %>
+    <%= content_tag :li, "Diciembre", class:"list-group-item" %>
+  <% end %>
+  <%= content_tag :h3, "En el campo Año base indique el año ejemplo: 2025" %>
 </turbo-frame>  

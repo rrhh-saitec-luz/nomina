@@ -20,12 +20,24 @@
                                 action: "input->varconcepto#calculoMontoConcepto"} %>
   <% end %>
   <%= content_tag :div,
-                  class: "input-group mb-3" do %>
+                  class: "input-group mb-3 visually-hidden",
+                  data: { varconcepto_target: "saldoContent"} do %>
     <%= form.label :mo_saldo, "Monto saldo",
                    class: 'fw-bold input-group-text' %> 
     <%= form.number_field :mo_saldo,
                           value: 0.00,
                           data: {varconcepto_target: "saldo",
+                                 action: "input->varconcepto#calculoMontoSaldo"} %>
+  <% end %>
+  <%= content_tag :div,
+                  class: "input-group mb-3 visually-hidden",
+                  data: {varconcepto_target: "salarioBaseContenedor"} do %>
+                  
+    <%= form.label :mo_base, "Sueldo Base",
+                   class: 'fw-bold input-group-text' %> 
+    <%= form.number_field :mo_base,
+                          value: 0.00,
+                          data: {varconcepto_target: "salarioBase",
                                  action: "input->varconcepto#calculoMontoSaldo"} %>
   <% end %>
   <%= content_tag :div, class: "input-group mb-3" do %>

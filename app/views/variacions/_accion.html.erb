@@ -2,8 +2,9 @@
                 class: "input-group mb-3" do %>
   <%= form.label :accion, "Accion",
                   class: 'fw-bold input-group-text' %>
-  <%= form.select :accion,
-                  ["Sustituir","Sumar"," Restar"," Eliminar"],
-                  {},
+<%= form.select :accion,
+  [["Sustituir", "sustituir"],["Sumar", "sumar"],[" Restar", "restar"],["Eliminar", "eliminar"]],
+                  { prompt: "Seleccione una acción", required: true },
+                  data: {varconcepto_target: "action", action: "change->varconcepto#action"},
                   class: "form-select" %>
 <% end %>

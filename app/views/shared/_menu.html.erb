@@ -6,14 +6,14 @@
     <li class='list-group-item'>
       <%= link_to 'Trabajadores', tab_trabajadors_path, class: 'link-primary active' %>
     </li>
-    <li class='list-group-item'>
-      <%= link_to 'Volver', :back %>
-    </li>
     <% if current_user.rol.eql?("admin") %>
       <li class='list-group-item'>
         <%= link_to 'Administrar', admins_path, class: 'link-primary active' %>
       </li>
     <% end %>
+    <li class='list-group-item'>
+      <%= link_to 'Volver', :back %>
+    </li>
   </ul>
    <%= render 'shared/logout' %>
 </div>

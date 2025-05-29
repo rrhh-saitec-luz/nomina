@@ -10,14 +10,14 @@ class AdminsController < ApplicationController
   end
 
   def prenomina
-    Concepto.find_in_batches(batch_size: 1000) do |batch|
-      nuevos_registros = []
-
-      batch.each do |registro|
-        nuevo_registro = registro.dup
-        nuevos_registros << nuevo_registro if registro.ANO == params[:year] && registro.MES == params[:mes]
+    registros_filtrados = Concepto.where(ANO: params[:year], MES: params[:month])
+    registros_filtrados.find_in_batches(batch_size: 1000) do |batch|
+      nuevos_registros = batch.map do |registro|
+        HistoricoPago.new(registro.attributes)
       end
-      Concepto.import nuevos_registros, validate: false
+      HistoricoPago.import nuevos_registros, validate: false
     end
+    flash[:notice] = 'Proceso finalizado correctamente.'
+    redirect_to admins_path
   end
 end
