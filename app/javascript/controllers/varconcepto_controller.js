@@ -17,7 +17,8 @@ export default class extends Controller {
   		    "ano",
   		    "indiceConcepto",
   		    "indicadorReal",
-  		    "salarioBase"]
+  		    "salarioContent",
+  		    "salario"]
   seleccionar(){
     const opciones = {
 	    M: "MONTO",
@@ -36,6 +37,8 @@ export default class extends Controller {
     const saldoContent = this.saldoContentTarget
     const saldo = this.saldoTarget
     const subTotal = this.subTotalTarget
+    const salarioBaseContent = this.salarioContentTarget
+    const salario = this.salarioTarget
     this.descripcionselectoTarget.value = description
     this.estatusConceptoTarget.value = estatus
     this.indicadorPagoTarget.value = indicador
@@ -44,12 +47,17 @@ export default class extends Controller {
     indicadorPago.value = opciones[indicador]
     montoConceptoPrevio.value = montoFijo
     if(indicadorPago.value == "CANTIDAD"){
-      saldoContent.classList.remove("visually-hidden") 
+      saldoContent.classList.remove("d-none")
+      salarioBaseContent.classList.add("d-none")
     }else if(indicadorPago.value == "PORCENTAJE"){
-      saldoContent.classList.add("visually-hidden") 
+      saldoContent.classList.add("d-none")
+      salarioBaseContent.classList.remove("d-none")
     }else{
+      saldoContent.classList.add("d-none")
+      salarioBaseContent.classList.add("d-none")
     }
     saldo.value =  "0.0"
+    salario.value = "0.0"
     subTotal.value = montoFijo 
  } 
 
