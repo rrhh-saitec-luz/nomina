@@ -19,6 +19,8 @@ export default class extends Controller {
   		    "indicadorReal",
   		    "salarioContent",
   		    "salario"]
+  connect() {
+  }
   seleccionar(){
     const opciones = {
 	    M: "MONTO",
@@ -113,5 +115,6 @@ export default class extends Controller {
   }
   action(e){
     console.log(e.target.value)
+    console.log(tipoNomina)
   }
 }

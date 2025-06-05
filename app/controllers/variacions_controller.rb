@@ -15,7 +15,6 @@ class VariacionsController < ApplicationController
     @variacion = Variacion.new
     @con = Listado.all
     @tipo_nomina = NominaTipo.all
-    @tipo_nomina_especifica = NominaEspecifica.all
     @estatus = estatus(@trab)
   end
 
