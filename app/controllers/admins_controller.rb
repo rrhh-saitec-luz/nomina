@@ -3,9 +3,23 @@
 require 'activerecord-import'
 # Todas las opciones de administrador
 class AdminsController < ApplicationController
+  MESES = [[1, 'Enero'],
+           [2, 'Febrero'],
+           [3, 'Marzo'],
+           [4, 'Abril'],
+           [5, 'Mayo'],
+           [6, 'Junio'],
+           [7, 'Julio'],
+           [8, 'Agosto'],
+           [9, 'Septiembre'],
+           [10, 'Octubre'],
+           [11, 'Noviembre'],
+           [12, 'Diciembre']].freeze
   def index; end
 
   def generar_nomina
+    @nomina = NominaTipo.all
+    @meses = Concepto.all.select(:MES).distinct.pluck(:MES)
     render partial: 'admins/parciales/generar_nomina'
   end
 

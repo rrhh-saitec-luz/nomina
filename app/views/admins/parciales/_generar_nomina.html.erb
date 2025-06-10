@@ -2,7 +2,10 @@
   <% if flash[:notice] %>
     <p class="notice"><%= flash[:notice] %></p>
   <% end %>
-  <%= form_with url: prenomina_admins_path, method: :post, class: "d-flex mt-3 gap-1 justify-content-center" do |form| %>
+  <%= form_with url: prenomina_admins_path,
+    method: :post,
+    class: "d-flex flex-column mt-3 gap-1 justify-content-center",
+    data: {controller: "admin"}  do |form| %>
     <%= content_tag :div do %>
       <%= form.label :month, "Mes Base", class: "form-label" %>
       <%= form.number_field :month, required: true, class: "form-control" %>
@@ -11,12 +14,33 @@
       <%= form.label :year, "Año Base", class: "form-label" %>
       <%= form.number_field :year, required: true, class: "form-control" %>
     <% end %>
+    <%= content_tag :div do %>
+      <%= form.label :tipo_nomina, "Tipo nomina", class: "form-label" %>
+      <%= form.select :tipo_nomina,
+        options_from_collection_for_select(@nomina, :tipo_nomina, :descripcion),
+        { include_blank: "Seleccione nomina", required: true },
+        class: "form-select",
+        data: {admin_target: "tipoNomina",
+               action: "change->admin#nominaEspecifica"} %>
+        
+    <% end %>  
+    <%= content_tag :div do %>
+      <%= form.label :tipo_nomina_especifica, 'Nomina específica',
+                     class: 'form-label' %>
+      <%= form.select :tipo_nomina_especifica,
+                      [],
+                      { prompt: "Nómina específica",
+                      required: true },
+                      data: {admin_target: "nominaEspecifica"},
+                      class: 'form-select' %> 
+    <% end %>
     <%= content_tag :div, class:" d-flex align-self-end" do %>
       <%= form.submit "Generar prenomina", class: "btn btn-primary" %>
     <% end %>
   <% end %>
   <%= content_tag :h1, "Generar Nomina" %>
   <%= content_tag :h3, "En el campo Mes base indique el ordinal del mes" %>
+
   <%= content_tag :ul, class: " d-flex gap-3 list-group-numbered list-group-item-primary flex-wrap" do %>
     <%= content_tag :li, "Enero", class:"list-group-item" %>
     <%= content_tag :li, "Febrero", class:"list-group-item" %>
