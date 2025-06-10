@@ -6,7 +6,7 @@
         <%= link_to "GENERAR NOMINA", generar_nomina_admins_path, data: { turbo_frame: "contenido" } %>
       <% end %>
       <%= content_tag :li, class:"list-group-item list-group-item-primary" do %>
-        <%= link_to "OTRO CONTENIDO" %>
+        <%= link_to "OTRO CONTENIDO", modificar_prenomina_admins_path, data: { turbo_frame: "contenido" } %>
       <% end %>
     <% end %>
     <%= turbo_frame_tag "contenido", class:" container-fluid border border-primary rounded-3" do %>
