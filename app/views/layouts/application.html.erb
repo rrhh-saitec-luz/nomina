@@ -15,6 +15,11 @@
       <%= notice %>
       <%= alert %>
     </div>
-        <%= yield %>
+    <% if current_user.present? %>
+      <%= content_tag :div, class: "container-fluid" do %>
+        <%= render 'shared/menu' %>
+      <% end %>
+    <% end %>
+    <%= yield %>
   </body>
 </html>
