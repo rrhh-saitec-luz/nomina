@@ -24,7 +24,10 @@
       <% end %>
 
       <div class="actions d-flex">
-        <%= f.submit "Iniciar", class: "btn btn-primary flex-grow-1" %>
+        <%= f.submit "Iniciar",
+          class: "btn btn-primary flex-grow-1",
+          data_bs_toggle: "modal",
+          data_bs_target: "#exampleModal"%>
       </div>
     <% end %>
 
