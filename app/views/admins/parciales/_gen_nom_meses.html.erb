@@ -1,0 +1,13 @@
+<%= content_tag :div do %>
+  <%= form.label :month, "Mes Base", class: "form-label" %>
+    <%= form.select :month, options_for_select(
+        [["Seleccione mes", nil, {selected: true, disabled: true}]] + meses.map { |val, mes| [mes,val] }),
+        { required: true }, class: "form-select" %>
+<% end %>
+<%= content_tag :div do %>
+  <%= form.label :year, "Año Base", class: "form-label" %>
+  <%= form.select :year,
+      options_for_select([["Seleccione Año", nil, {selected: true, disabled: true}]] + years.map {|val| [val,val]}),
+                      { required: true },
+                      class: "form-select" %>
+<% end %>

@@ -1,3 +1,9 @@
+<% if flash[:notice] %>
+  <div class="notice" style="color: green;"><%= flash[:notice] %></div>
+<% end %>
+<% if flash[:alert] %>
+  <div class="alert" style="color: red;"><%= flash[:alert] %></div>
+<% end %>
 <%= content_tag :div, class: "container-fluid" do %>
   <%= content_tag :div, class:"d-flex mt-3 gap-2" do %>
     <%= content_tag :ul, class:"list-group" do %>

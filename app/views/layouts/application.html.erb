@@ -11,20 +11,12 @@
   </head>
 
   <body>
-    <% if notice.present? %>
-      <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel"  >
-        <div class="modal-dialog modal-sm">
-          <div class="modal-content">
-            <%= notice %>
-          </div>
-        </div>
-      </div>
+    <% if flash[:notice] %>
+      <div class="notice" style="color: green;"><%= flash[:notice] %></div>
     <% end %>
-    <% if alert.present? %>
-      <div class="alert alert-secondary">
-        <%= alert %>
-      </div>
-   <% end %>
+    <% if flash[:alert] %>
+      <div class="alert" style="color: red;"><%= flash[:alert] %></div>
+    <% end %>
     <% if current_user.present? %>
       <%= content_tag :div, class: "container-fluid" do %>
         <%= render 'shared/menu' %>

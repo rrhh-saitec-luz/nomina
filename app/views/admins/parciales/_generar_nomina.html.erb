@@ -1,59 +1,19 @@
 <turbo-frame id="contenido">
-  <% if flash[:notice] %>
-    <p class="notice"><%= flash[:notice] %></p>
-  <% end %>
+    <% if flash[:notice] %>
+      <div class="notice" style="color: green;"><%= flash[:notice] %></div>
+    <% end %>
+    <% if flash[:alert] %>
+      <div class="alert" style="color: red;"><%= flash[:alert] %></div>
+    <% end %>
   <%= form_with url: prenomina_admins_path,
     method: :post,
     class: "d-flex flex-column mt-3 gap-1 justify-content-center",
     data: {controller: "admin"}  do |form| %>
-    <%= content_tag :div do %>
-      <%= form.label :month, "Mes Base", class: "form-label" %>
-      <%= form.select :month, options_for_select([]), { required: true }, class: "form-control" %>
-    <% end %>
-    <%= content_tag :div do %>
-      <%= form.label :year, "Año Base", class: "form-label" %>
-      <%= form.number_field :year, required: true, class: "form-control" %>
-    <% end %>
-    <%= content_tag :div do %>
-      <%= form.label :tipo_nomina, "Tipo nomina", class: "form-label" %>
-      <%= form.select :tipo_nomina,
-        options_from_collection_for_select(@nomina, :tipo_nomina, :descripcion),
-        { include_blank: "Seleccione nomina", required: true },
-        class: "form-select",
-        data: {admin_target: "tipoNomina",
-               action: "change->admin#nominaEspecifica"} %>
-        
-    <% end %>  
-    <%= content_tag :div do %>
-      <%= form.label :tipo_nomina_especifica, 'Nomina específica',
-                     class: 'form-label' %>
-      <%= form.select :tipo_nomina_especifica,
-                      [],
-                      { prompt: "Nómina específica",
-                      required: true },
-                      data: {admin_target: "nominaEspecifica"},
-                      class: 'form-select' %> 
-    <% end %>
+    <%= render "admins/parciales/gen_nom_meses", meses: @meses, years: @years, form: form %>
+    <%= render "admins/parciales/gen_nom_nominas", nomina: @nomina, form: form %>
     <%= content_tag :div, class:" d-flex align-self-end" do %>
       <%= form.submit "Generar prenomina", class: "btn btn-primary" %>
     <% end %>
   <% end %>
-  <%= content_tag :h1, "Generar Nomina" %>
-  <%= content_tag :h3, "En el campo Mes base indique el ordinal del mes" %>
-
-  <%= content_tag :ul, class: " d-flex gap-3 list-group-numbered list-group-item-primary flex-wrap" do %>
-    <%= content_tag :li, "Enero", class:"list-group-item" %>
-    <%= content_tag :li, "Febrero", class:"list-group-item" %>
-    <%= content_tag :li, "Marzo", class:"list-group-item" %>
-    <%= content_tag :li, "Abril", class:"list-group-item" %>
-    <%= content_tag :li, "Mayo", class:"list-group-item" %>
-    <%= content_tag :li, "Junio", class:"list-group-item" %>
-    <%= content_tag :li, "Julio", class:"list-group-item" %>
-    <%= content_tag :li, "Agosto", class:"list-group-item" %>
-    <%= content_tag :li, "Septiembre", class:"list-group-item" %>
-    <%= content_tag :li, "Octubre", class:"list-group-item" %>
-    <%= content_tag :li, "Noviembre", class:"list-group-item" %>
-    <%= content_tag :li, "Diciembre", class:"list-group-item" %>
-  <% end %>
-  <%= content_tag :h3, "En el campo Año base indique el año ejemplo: 2025" %>
+  <%= render "admins/parciales/gen_nom_footer" %>
 </turbo-frame>  

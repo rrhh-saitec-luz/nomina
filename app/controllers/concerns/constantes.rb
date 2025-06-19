@@ -16,6 +16,19 @@ module Constantes
 
   HORARIOS = { 1 => 'Diurno', 2 => 'Mixto' }.freeze
 
+  MESES = [[1, 'Enero'],
+           [2, 'Febrero'],
+           [3, 'Marzo'],
+           [4, 'Abril'],
+           [5, 'Mayo'],
+           [6, 'Junio'],
+           [7, 'Julio'],
+           [8, 'Agosto'],
+           [9, 'Septiembre'],
+           [10, 'Octubre'],
+           [11, 'Noviembre'],
+           [12, 'Diciembre']].freeze
+
   def calculo_de_antiguedad(trabajador)
     fecha_final = check_fecha_final(trabajador)
     fecha_inicio = trabajador.fe_ingreso

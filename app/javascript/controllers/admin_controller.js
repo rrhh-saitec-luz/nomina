@@ -20,7 +20,7 @@ export default class extends Controller {
 	.then(response => response.json())
 	.then(datos => {
 	  const cargarNominaEspc = this.nominaEspecificaTarget
-	  cargarNominaEspc.innerHTML = "<option value =''>Nomina especifica</option>"
+	  cargarNominaEspc.innerHTML = "<option value =''> Seleccione opción</option>"
 	  datos.forEach(nomina =>{
 	    const option = document.createElement('option');
 	    option.value = nomina.tipo_nomina_especifica;
