@@ -1,17 +1,11 @@
-<% if flash[:notice] %>
-  <div class="notice" style="color: green;"><%= flash[:notice] %></div>
-<% end %>
-<% if flash[:alert] %>
-  <div class="alert" style="color: red;"><%= flash[:alert] %></div>
-<% end %>
 <%= content_tag :div, class: "container-fluid" do %>
   <%= content_tag :div, class:"d-flex mt-3 gap-2" do %>
-    <%= content_tag :ul, class:"list-group" do %>
-      <%= content_tag :li, class:"list-group-item list-group-item-primary" do %>
-        <%= link_to "GENERAR NOMINA", generar_nomina_admins_path, data: { turbo_frame: "contenido" } %>
+    <%= content_tag :ul, class:"list-group", data: { controller: "admin"} do %>
+      <%= content_tag :li, class:"list-group-item", data: { admin_target: "links", action: "click->admin#menu" } do %>
+        <%= link_to "Generar nomina", generar_nomina_admins_path, data: { turbo_frame: "contenido" } %>
       <% end %>
-      <%= content_tag :li, class:"list-group-item list-group-item-primary" do %>
-        <%= link_to "OTRO CONTENIDO", modificar_prenomina_admins_path, data: { turbo_frame: "contenido" } %>
+      <%= content_tag :li, class:"list-group-item", data: { admin_target: "links", action: "click->admin#menu" } do %>
+        <%= link_to "Actualizar fechas de prenomina", modificar_prenomina_admins_path, data: { turbo_frame: "contenido" } %>
       <% end %>
     <% end %>
     <%= turbo_frame_tag "contenido", class:" container-fluid border border-primary rounded-3" do %>

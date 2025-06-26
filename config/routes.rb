@@ -25,6 +25,7 @@ Rails.application.routes.draw do
       get 'generar_nomina', action: :generar_nomina
       post 'prenomina', action: :prenomina
       get 'modificar_prenomina', action: :modificar_prenomina
+      post 'actualizar', action: :actualizar_prenomina
     end
   end
 

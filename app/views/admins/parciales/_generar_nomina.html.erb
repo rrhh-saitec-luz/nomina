@@ -1,10 +1,10 @@
 <turbo-frame id="contenido">
-    <% if flash[:notice] %>
-      <div class="notice" style="color: green;"><%= flash[:notice] %></div>
-    <% end %>
-    <% if flash[:alert] %>
-      <div class="alert" style="color: red;"><%= flash[:alert] %></div>
-    <% end %>
+  <% if flash[:notice] %>
+    <div class="alert" style="color: green;"><%= flash[:notice] %></div>
+  <% end %>
+  <% if flash[:alert] %>
+    <div class="alert" style="color: red;"><%= flash[:alert] %></div>
+  <% end %>
   <%= form_with url: prenomina_admins_path,
     method: :post,
     class: "d-flex flex-column mt-3 gap-1 justify-content-center",

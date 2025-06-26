@@ -1,7 +1,31 @@
 <turbo-frame id="contenido">
-  <%= @meses %>
-  <%= @years %>
-  <%= @nominas %>
-  <%= @especificas %>
-  <h1>Modificar</h1>
+  <% if flash[:notice] %>
+    <div class="alert" style="color: green;"><%= flash[:notice] %></div>
+  <% end %>
+  <% if flash[:alert] %>
+    <div class="alert" style="color: red;"><%= flash[:alert] %></div>
+  <% end %>
+  <%= form_with url: actualizar_admins_path,
+                method: :post,
+                class: "d-flex flex-column mt-3 gap-3 justify-content-center"  do |form| %>
+    <%= content_tag :div do %>
+      <%= form.label :fecha, "Nueva fecha", class: "form-label" %>
+      <%= form.date_field :fecha, class: "form-control", required: true %>
+    <% end %>  
+    <%= content_tag :div do %>
+      <%= form.label :mes, "Nuevo mes", class: "form-label" %>
+      <%= form.select :mes, options_for_select(
+                      [["Seleccione mes", nil, {selected: true, disabled: true}]] + meses.map { |val, mes| [mes,val] }),
+                      { required: true },
+                      class: "form-select" %>
+    <% end %>  
+    <%= content_tag :div do %>
+      <%= form.label :year, "Nuevo año", class: "form-label" %>
+      <%= form.number_field :year, class: "form-control", required: true %>
+    <% end %>  
+    <%= content_tag :div do %>
+      <%= form.submit "Actualizar", class:"btn btn-primary" %>
+    <% end %>  
+
+  <% end %>
 </turbo-frame>

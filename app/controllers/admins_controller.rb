@@ -22,12 +22,15 @@ class AdminsController < ApplicationController
   end
 
   def modificar_prenomina
-    @prenomina = HistoricoPago.all
-    @meses = Concepto.all.select(:MES).distinct.pluck(:MES)
-    @years = Concepto.all.select(:ANO).distinct.pluck(:ANO)
-    @nominas = NominaTipo.all.select(:tipo_nomina).distinct.pluck(:tipo_nomina)
-    @especificas = NominaEspecifica.all.select(:tipo_nomina_especifica).distinct.pluck(:tipo_nomina_especifica)
-    render 'admins/parciales/modificar_prenomina'
+    render partial: 'admins/parciales/modificar_prenomina', locals: { meses: MESES }
+  end
+
+  def actualizar_prenomina
+    flash[:notice] = 'Proceso finalizado correctamente.'
+    HistoricoPago.update_all(MES: params[:mes], ANO: params[:year], FE_NOMINA: params[:fecha])
+    render partial: 'admins/parciales/modificar_prenomina',
+           status: :unprocessable_entity,
+           locals: { meses: MESES }
   end
 
   private
@@ -56,8 +59,8 @@ class AdminsController < ApplicationController
     end
     flash[:notice] = 'Proceso finalizado correctamente.'
     render partial: 'admins/parciales/generar_nomina',
-           locals: { meses: l_mes, years: l_year, nomina: l_nomina },
-           status: :unprocessable_entity
+           status: :unprocessable_entity,
+           locals: { meses: l_mes, years: l_year, nomina: l_nomina }
   end
 
   def concepto_pluck(campo)

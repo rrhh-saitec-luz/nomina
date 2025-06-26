@@ -11,12 +11,6 @@
   </head>
 
   <body>
-    <% if flash[:notice] %>
-      <div class="notice" style="color: green;"><%= flash[:notice] %></div>
-    <% end %>
-    <% if flash[:alert] %>
-      <div class="alert" style="color: red;"><%= flash[:alert] %></div>
-    <% end %>
     <% if current_user.present? %>
       <%= content_tag :div, class: "container-fluid" do %>
         <%= render 'shared/menu' %>
