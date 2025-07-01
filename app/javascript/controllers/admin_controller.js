@@ -32,11 +32,12 @@ export default class extends Controller {
         });
   }
   
-  menu(evento){
-    const enlaces = this.targets.findAll("links")
+  menu(event){
+    const enlaces = this.linksTargets
+    const enlaceActual = event.currentTarget
     enlaces.forEach(link => {
 	link.classList.remove("list-group-item-primary")
       })
-   console.log(this.linksTarget) 
+    enlaceActual.classList.add("list-group-item-primary")
   }
 }
