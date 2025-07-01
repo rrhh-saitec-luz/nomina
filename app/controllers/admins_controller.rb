@@ -10,6 +10,8 @@ class AdminsController < ApplicationController
     @nomina = NominaTipo.all
     @meses = MESES
     @years = concepto_pluck(:ANO)
+    flash[:notice] = ''
+    flash[:alert] = ''
     render partial: 'admins/parciales/generar_nomina'
   end
 
@@ -22,6 +24,8 @@ class AdminsController < ApplicationController
   end
 
   def modificar_prenomina
+    flash[:notice] = ''
+    flash[:alert] = ''
     render partial: 'admins/parciales/modificar_prenomina', locals: { meses: MESES }
   end
 
@@ -29,7 +33,6 @@ class AdminsController < ApplicationController
     flash[:notice] = 'Proceso finalizado correctamente.'
     HistoricoPago.update_all(MES: params[:mes], ANO: params[:year], FE_NOMINA: params[:fecha])
     render partial: 'admins/parciales/modificar_prenomina',
-           status: :unprocessable_entity,
            locals: { meses: MESES }
   end
 
@@ -46,7 +49,6 @@ class AdminsController < ApplicationController
   def lotes_vacios(l_mes, l_year, l_nomina)
     flash[:alert] = 'Busqueda sin resultados.'
     render partial: 'admins/parciales/generar_nomina',
-           status: :unprocessable_entity,
            locals: { meses: l_mes, years: l_year, nomina: l_nomina }
   end
 
@@ -59,7 +61,6 @@ class AdminsController < ApplicationController
     end
     flash[:notice] = 'Proceso finalizado correctamente.'
     render partial: 'admins/parciales/generar_nomina',
-           status: :unprocessable_entity,
            locals: { meses: l_mes, years: l_year, nomina: l_nomina }
   end
 

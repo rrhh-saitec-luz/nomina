@@ -8,8 +8,7 @@ Rails.application.routes.draw do
 
   resources :pagos do
     collection do
-      get 'index', action: :index
-      get 'show', action: :show
+      get %i[index show]
     end
   end
 

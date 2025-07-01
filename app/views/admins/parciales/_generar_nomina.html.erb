@@ -1,8 +1,8 @@
 <turbo-frame id="contenido">
-  <% if flash[:notice] %>
+  <% unless flash[:notice].eql?('') %>
     <div class="alert" style="color: green;"><%= flash[:notice] %></div>
   <% end %>
-  <% if flash[:alert] %>
+  <% unless flash[:alert].eql?('') %>
     <div class="alert" style="color: red;"><%= flash[:alert] %></div>
   <% end %>
   <%= form_with url: prenomina_admins_path,

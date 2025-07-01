@@ -3,15 +3,6 @@ import { Controller } from "@hotwired/stimulus"
 // Connects to data-controller="admin"
 export default class extends Controller {
   static targets = ["tipoNomina", "nominaEspecifica", "links"]
-  connect() {
-	  console.log("Hello")
-  }
-
-  cargarInfo(e){
-    const getValue = e.target.value
-    const displayRender = this.renderDoTarget
-    displayRender.innerHTML = `<%=${getValue}%>`
-  }
 
   nominaEspecifica(evento){
     const tipoNominaId = evento.target.value
