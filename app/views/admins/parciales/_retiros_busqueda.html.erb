@@ -1,3 +1,11 @@
 <%= turbo_frame_tag "retirados" do %>
+  
   <h1>NUEVOS RESULTADOS</h1>
+  <ul>
+    <% personas.each do |persona| %>
+      <li>
+        <span><%= persona.nombres %><span>  xxx   <%=persona.ce_trabajador%></span></span>
+      </li>
+    <% end %>
+  </ul>
 <% end %>

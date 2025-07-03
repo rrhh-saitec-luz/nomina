@@ -41,17 +41,23 @@ class AdminsController < ApplicationController
   end
 
   def retirar
+    resultado = buscar_retirados(params[:fe_inicio], params[:fe_fin])
     respond_to do |format|
       format.turbo_stream do
         render turbo_stream: turbo_stream.replace(
-          'retirados',
-          partial: 'admins/parciales/retiros_busqueda'
+          'retirados', partial: 'admins/parciales/retiros_busqueda', locals: { personas: resultado }
         )
       end
     end
   end
 
   private
+
+  def buscar_retirados(fe_inicial, fe_final)
+    inicio = Date.parse(fe_inicial)
+    final = Date.parse(fe_final)
+    Admon.where(fe_retiro: inicio..final)
+  end
 
   def procesar_registros(registros_filtrados, mes, year, nomina)
     if registros_filtrados.empty?
