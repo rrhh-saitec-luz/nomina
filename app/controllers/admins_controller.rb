@@ -36,7 +36,9 @@ class AdminsController < ApplicationController
            locals: { meses: MESES }
   end
 
-  def retiros; end
+  def retiros
+    render partial: 'admins/parciales/retiros'
+  end
 
   private
 
