@@ -1,14 +1,34 @@
-<%= content_tag :div, class: "container-fluid" do %>
-  <%= content_tag :div, class:"d-flex mt-3 gap-2" do %>
-    <%= content_tag :ul, class:"list-group", data: { controller: "admin"} do %>
-      <%= content_tag :li, class:"list-group-item", data: { admin_target: "links", action: "click->admin#menu" } do %>
-        <%= link_to "Generar nomina", generar_nomina_admins_path, data: { turbo_frame: "contenido" } %>
+<%= content_tag :div,
+                class: "container-fluid" do %>
+  <%= content_tag :div,
+                  class:"d-flex mt-3 gap-2" do %>
+    <%= content_tag :ul,
+                    class:"list-group",
+                    data: { controller: "admin"} do %>
+      <%= content_tag :li,
+                      class:"list-group-item",
+                      data: { admin_target: "links", action: "click->admin#menu" } do %>
+        <%= link_to "Generar nomina",
+                     generar_nomina_admins_path,
+                     data: { turbo_frame: "contenido" } %>
       <% end %>
-      <%= content_tag :li, class:"list-group-item", data: { admin_target: "links", action: "click->admin#menu" } do %>
-        <%= link_to "Actualizar fechas de prenomina", modificar_prenomina_admins_path, data: { turbo_frame: "contenido" } %>
+      <%= content_tag :li,
+                      class:"list-group-item",
+                      data: { admin_target: "links", action: "click->admin#menu" } do %>
+        <%= link_to "Actualizar fechas de prenomina",
+                     modificar_prenomina_admins_path,
+                     data: { turbo_frame: "contenido" } %>
+      <% end %>
+      <%= content_tag :li,
+                      class:"list-group-item",
+                      data: { admin_target: "links", action: "click->admin#menu" } do %>
+        <%= link_to "Retiros",
+                     retiros_admins_path,
+                     data: { turbo_frame: "contenido" } %>
       <% end %>
     <% end %>
-    <%= turbo_frame_tag "contenido", class:" container-fluid border border-primary rounded-3" do %>
+    <%= turbo_frame_tag "contenido",
+                        class:" container-fluid border border-primary rounded-3" do %>
       <p>Selecciona una opción para cargar contenido.</p>
     <% end %>
   <% end %>  
