@@ -40,7 +40,16 @@ class AdminsController < ApplicationController
     render partial: 'admins/parciales/retiros'
   end
 
-  def retirar; end
+  def retirar
+    respond_to do |format|
+      format.turbo_stream do
+        render turbo_stream: turbo_stream.replace(
+          'retirados',
+          partial: 'admins/parciales/retiros_busqueda'
+        )
+      end
+    end
+  end
 
   private
 
