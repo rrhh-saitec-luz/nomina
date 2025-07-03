@@ -1,3 +1,22 @@
 <turbo-frame id="contenido">
+  <%= form_with url: retirar_admins_path,
+                method: :post,
+                data: { turbo_stream: true },
+                class: "d-flex flex-column gap-3 mt-3 mb-3" do |form| %>
+    <%= content_tag :div do %>
+      <%= form.label "Fecha Inicio", class: "form-label" %>
+      <%= form.date_field :fe_inicio, class: "form-control" %>
+    <% end %>
+    <%= content_tag :div do %>
+      <%= form.label "Fecha final", class: "form-label" %>
+      <%= form.date_field :fe_fin, class: "form-control" %>
+    <% end %>
+    <%= content_tag :div, class: "row justify-content-center"  do %>
+      <%= form.submit "Buscar", class: "col-2 align-self-center btn btn-primary" %>
+    <% end %>
+  <% end %>
+  <%= turbo_frame_tag "retirados" do %>
     <h1>RETIROS</>
+  <% end %>
+  
 </turbo-frame>

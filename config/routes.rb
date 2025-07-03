@@ -23,9 +23,10 @@ Rails.application.routes.draw do
       get 'index', action: :index
       get 'generar_nomina', action: :generar_nomina
       get 'modificar_prenomina', action: :modificar_prenomina
+      get 'retiros', action: :retiros
       post 'prenomina', action: :prenomina
       post 'actualizar', action: :actualizar_prenomina
-      get 'retiros', action: :retiros
+      post :retirar
     end
   end
 

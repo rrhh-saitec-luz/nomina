@@ -22,7 +22,8 @@
       <%= content_tag :li,
                       class:"list-group-item",
                       data: { admin_target: "links", action: "click->admin#menu" } do %>
-        <%= link_to "Retiros", retiros_admins_path,
+        <%= link_to "Retiros",
+                     retiros_admins_path,
                      data: { turbo_frame: "contenido" } %>
       <% end %>
     <% end %>

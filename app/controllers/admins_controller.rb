@@ -40,6 +40,8 @@ class AdminsController < ApplicationController
     render partial: 'admins/parciales/retiros'
   end
 
+  def retirar; end
+
   private
 
   def procesar_registros(registros_filtrados, mes, year, nomina)
