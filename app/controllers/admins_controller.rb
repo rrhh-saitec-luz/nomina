@@ -36,6 +36,8 @@ class AdminsController < ApplicationController
            locals: { meses: MESES }
   end
 
+  def retiros; end
+
   private
 
   def procesar_registros(registros_filtrados, mes, year, nomina)
