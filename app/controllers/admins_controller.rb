@@ -51,7 +51,18 @@ class AdminsController < ApplicationController
     end
   end
 
-  def limpiar_prenomina; end
+  def limpiar_prenomina
+    datos = JSON.parse(params[:datos_personas])
+    datos.each do |persona|
+      registros = HistoricoPago.where(
+        CE_TRABAJADOR: persona['ce_trabajador'].to_i,
+        CO_UBICACION: persona['co_ubicacion'].to_i,
+        TIPOPERSONAL: persona['tipopersonal'].to_i
+      )
+      registros.destroy_all
+    end
+    render partial: 'admins/parciales/retiros'
+  end
 
   private
 

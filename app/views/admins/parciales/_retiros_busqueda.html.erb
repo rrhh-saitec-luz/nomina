@@ -1,10 +1,24 @@
 <%= turbo_frame_tag "retirados" do %>
-  <h3 class="text-center">Resultados</h3>
-  <%= content_tag :div, class:"border border-info rounded p-3 " do %>
-    <%= content_tag :div, class: "d-flex gap-3" do %>
-      <h4>Retiros encontrados <span class="badge bg-secondary"><%= personas.count %></span></h4>
-      <%= button_to "Limpiar prenomina", limpiar_admins_path %>
+  <% unless personas.empty? %>
+    <h3 class="text-center">Resultados</h3>
+    <%= content_tag :div, class:"border border-info rounded p-3 " do %>
+      <%= content_tag :div, class: "d-flex gap-3" do %>
+        <h4>Retiros encontrados <span class="badge bg-secondary"><%= personas.count %></span></h4>
+        <%= button_to "Limpiar prenomina",
+          limpiar_admins_path,
+          method: :delete,
+          params: {
+            datos_personas: personas.map { |p| {
+              ce_trabajador: p.ce_trabajador,
+              co_ubicacion: p.co_ubicacion,
+              tipopersonal: p.tipopersonal
+            }}.to_json
+          },
+          class: "btn btn-danger" %>
+      <% end %>
+      <%= render 'admins/parciales/retiros_tabla', personas: personas %>
     <% end %>
-    <%= render 'admins/parciales/retiros_tabla', personas: personas %>
+  <% else %>
+    <h4>Retiros encontrados <span class="badge bg-secondary"><%= personas.count %></span></h4>
   <% end %>
 <% end %>

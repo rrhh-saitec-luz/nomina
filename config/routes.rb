@@ -27,7 +27,7 @@ Rails.application.routes.draw do
       post 'prenomina', action: :prenomina
       post 'actualizar', action: :actualizar_prenomina
       post :retirar
-      post 'limpiar', action: :limpiar_prenomina
+      delete 'limpiar', action: :limpiar_prenomina
     end
   end
 
