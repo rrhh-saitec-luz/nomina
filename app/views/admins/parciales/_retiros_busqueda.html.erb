@@ -1,11 +1,10 @@
 <%= turbo_frame_tag "retirados" do %>
-  
-  <h1>NUEVOS RESULTADOS</h1>
-  <ol>
-    <% personas.each do |persona| %>
-      <li>
-        <span><%= persona.nombres %><span>---<%=persona.ce_trabajador%><span>---<%= persona.co_ubicacion %><span>---<%= persona.tipopersonal%></span></span></span></span>
-      </li>
+  <h3 class="text-center">Resultados</h3>
+  <%= content_tag :div, class:"border border-info rounded p-3 " do %>
+    <%= content_tag :div, class: "d-flex gap-3" do %>
+      <h4>Retiros encontrados <span class="badge bg-secondary"><%= personas.count %></span></h4>
+      <%= button_to "Limpiar prenomina", limpiar_admins_path %>
     <% end %>
-  </ol>
+    <%= render 'admins/parciales/retiros_tabla', personas: personas %>
+  <% end %>
 <% end %>

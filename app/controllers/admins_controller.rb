@@ -51,6 +51,8 @@ class AdminsController < ApplicationController
     end
   end
 
+  def limpiar_prenomina; end
+
   private
 
   def buscar_retirados(fe_inicial, fe_final)
