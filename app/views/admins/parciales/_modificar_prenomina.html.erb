@@ -23,7 +23,7 @@
       <%= form.label :year, "Nuevo año", class: "form-label" %>
       <%= form.number_field :year, class: "form-control", required: true %>
     <% end %>  
-    <%= content_tag :div do %>
+    <%= content_tag :div, class: "d-flex justify-content-center mb-3" do %>
       <%= form.submit "Actualizar", class:"btn btn-primary" %>
     <% end %>  
 
