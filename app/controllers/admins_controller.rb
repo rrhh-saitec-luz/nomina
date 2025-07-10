@@ -37,6 +37,8 @@ class AdminsController < ApplicationController
   end
 
   def retiros
+    flash[:notice] = ''
+    flash[:alert] = ''
     render partial: 'admins/parciales/retiros'
   end
 
@@ -53,6 +55,13 @@ class AdminsController < ApplicationController
 
   def limpiar_prenomina
     datos = JSON.parse(params[:datos_personas])
+    borrar_retirados(datos)
+    render partial: 'admins/parciales/retiros'
+  end
+
+  private
+
+  def borrar_retirados(datos)
     datos.each do |persona|
       registros = HistoricoPago.where(
         CE_TRABAJADOR: persona['ce_trabajador'].to_i,
@@ -61,10 +70,7 @@ class AdminsController < ApplicationController
       )
       registros.destroy_all
     end
-    render partial: 'admins/parciales/retiros'
   end
-
-  private
 
   def buscar_retirados(fe_inicial, fe_final)
     inicio = Date.parse(fe_inicial)
@@ -106,6 +112,6 @@ class AdminsController < ApplicationController
     Concepto.where(ANO: params[:year],
                    MES: params[:month],
                    TIPO_NOMINA: params[:tpn],
-                   TIPO_NOMINA_ESPECIFICA: params[:tpns])
+                   TIPO_NOMINA_ESPECIFICA: params[:tpns]).where.not(CO_CONCEPTO: 'X500')
   end
 end
