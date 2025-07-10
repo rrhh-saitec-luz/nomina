@@ -11,7 +11,7 @@
     data: {controller: "admin"}  do |form| %>
     <%= render "admins/parciales/gen_nom_meses", meses: @meses, years: @years, form: form %>
     <%= render "admins/parciales/gen_nom_nominas", nomina: @nomina, form: form %>
-    <%= content_tag :div, class:" d-flex align-self-end" do %>
+    <%= content_tag :div, class:" d-flex align-self-start" do %>
       <%= form.submit "Generar prenomina", class: "btn btn-primary" %>
     <% end %>
   <% end %>
