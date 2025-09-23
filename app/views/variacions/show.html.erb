@@ -1,12 +1,14 @@
 <div class="container-fluid">
-<div class = "container-fluid mt-3">
-  <%= render 'shared/mostrar_nombre', nombre: @trab.nombres %>
+  <div class="container-fluid mt-3 d-flex justify-content-between">
+    <%= render 'shared/mostrar_nombre', nombre: @trab.nombres %>
+    <div class="d-flex gap-3">
+      <%= link_to 'Crear variacion', new_variacion_path(id: @trab), class: "btn btn-secondary" %>
+      <%= link_to 'Ver variaciones', new_variacion_path(id: @trab), class: "btn btn-secondary" %>
+    </div>
+  </div>
+  <div class = "container-fluid mt-3">
+    <%= render 'tab_trabajadors/datos_cargo_trabajador' %>
+  </div>
 </div>
-<div class = "container-fluid mt-3">
-  <%= render 'tab_trabajadors/datos_cargo_trabajador' %>
-</div>
-<div>
-  <%= link_to 'Crear variacion', new_variacion_path(id: @trab) %>
-</ div>
 
 <h1>Hola variacion</h1>
