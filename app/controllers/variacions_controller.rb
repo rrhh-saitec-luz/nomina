@@ -35,6 +35,15 @@ class VariacionsController < ApplicationController
     end
   end
 
+  def historico_variaciones
+    datos = JSON.parse(params[:trabajador])
+    @hist = Variacion.where(
+      ce_trabajador: datos['ce_trabajador'],
+      co_ubicacion: datos['co_ubicacion'],
+      tipopersonal: datos['tipopersonal']
+    )
+  end
+
   private
 
   def ubicar_cargo(id)

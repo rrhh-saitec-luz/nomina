@@ -15,6 +15,7 @@ Rails.application.routes.draw do
   resources :variacions do
     collection do
       get :nomina_espc_tipos
+      get :historico_variaciones
     end
   end
 
