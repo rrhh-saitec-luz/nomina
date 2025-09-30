@@ -1,18 +1,5 @@
-<h1>Aqui veras las variaciones</h1>
-<%= @hist.count  %>
-<%= content_tag :div  do %>
-  <%= render 'listado_variaciones', variaciones: @hist %>
-  <%= content_tag :ul do %>
-    <% @hist.each do |variacion| %>
-      <%= content_tag :li do %>
-        <%= variacion.co_concepto %>
-        <%= variacion.descripcion_co %>
-        <% if variacion.status.eql?(false)%>
-          <%= content_tag :span do %>
-            Eliminar
-          <% end %>
-        <% end %>  
-      <% end %>
-    <% end %>
+<%= content_tag :div, class: "container pt-3" do %>
+  <%= content_tag :div do %>
+    <%= render 'listado_variaciones', variaciones: @hist %>
   <% end %>
 <% end %>
