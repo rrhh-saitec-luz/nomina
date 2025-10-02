@@ -5,8 +5,8 @@
       <th scope="col">#</th>
       <th scope="col">código</th>
       <th scope="col">Descripción</th>
-      <th scope="col">Modificar</th>
       <th scope="col">Eliminar</th>
+      <th scope="col">Modificar</th>
     </tr>
   </thead>
   <tbody>
@@ -16,8 +16,13 @@
       <td><%= variacion.co_concepto %></td>
       <td><%= variacion.descripcion_co %></td>
       <% if variacion.status.eql?(false) %>
-        <td><button type="button" class="btn btn-danger">Eliminar</button></td>
-        <td><button type="button" class="btn btn-primary">Actualizar</button></td>
+        <td>
+          <%= button_to "Eliminar",
+            { action: "destroy", id: variacion.id }, method: :delete, data: { confirm: "Seguro?" }, class: "btn btn-danger" %>
+        </td>
+        <td>
+          <%= link_to "Editar", edit_variacion_path(variacion), class: "btn btn-primary" %>
+        </td>
       <% else %>
         <td>---</td>
         <td>---</td>

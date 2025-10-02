@@ -18,6 +18,10 @@ class VariacionsController < ApplicationController
     @estatus = estatus(@trab)
   end
 
+  def edit
+    @variacion = Variacion.find(params[:id])
+  end
+
   def nomina_espc_tipos
     @nomina_especifica = NominaEspecifica.where(tipo_nomina: params[:tipo_nomina])
     respond_to do |format|
@@ -42,6 +46,13 @@ class VariacionsController < ApplicationController
       co_ubicacion: datos['co_ubicacion'],
       tipopersonal: datos['tipopersonal']
     )
+  end
+
+  def destroy
+    @elemento = Variacion.find(params[:id])
+    @elemento.destroy
+    redirect_to historico_variacions_path(trabajador: @elemento.to_json),
+                notice: 'El elemento fue eliminado exitosamente.'
   end
 
   private
