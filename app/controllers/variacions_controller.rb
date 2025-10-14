@@ -18,10 +18,6 @@ class VariacionsController < ApplicationController
     @estatus = estatus(@trab)
   end
 
-  def edit
-    @variacion = Variacion.find(params[:id])
-  end
-
   def nomina_espc_tipos
     @nomina_especifica = NominaEspecifica.where(tipo_nomina: params[:tipo_nomina])
     respond_to do |format|

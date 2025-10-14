@@ -6,7 +6,6 @@
       <th scope="col">código</th>
       <th scope="col">Descripción</th>
       <th scope="col">Eliminar</th>
-      <th scope="col">Modificar</th>
     </tr>
   </thead>
   <tbody>
@@ -20,11 +19,7 @@
           <%= button_to "Eliminar",
             { action: "destroy", id: variacion.id }, method: :delete, data: { confirm: "Seguro?" }, class: "btn btn-danger" %>
         </td>
-        <td>
-          <%= link_to "Editar", edit_variacion_path(variacion), class: "btn btn-primary" %>
-        </td>
       <% else %>
-        <td>---</td>
         <td>---</td>
       <% end %>
     </tr>
