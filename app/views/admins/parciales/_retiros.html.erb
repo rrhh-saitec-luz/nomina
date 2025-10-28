@@ -1,5 +1,7 @@
 <turbo-frame id="contenido">
   <% unless flash[:notice].eql?('') %>
+  <%= @activos.present? %>
+  <%= @prenomina.present? %>
     <div class="alert" style="color: green;"><%= flash[:notice] %></div>
   <% end %>
   <% unless flash[:alert].eql?('') %>

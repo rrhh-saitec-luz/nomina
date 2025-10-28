@@ -37,6 +37,8 @@ class AdminsController < ApplicationController
   end
 
   def retiros
+    @activos = Admon.where(estatus: %w[A P]).pluck(:ce_trabajador)
+    @prenomina = HistoricoPago.where(CE_TRABAJADOR: @activos)
     flash[:notice] = ''
     flash[:alert] = ''
     render partial: 'admins/parciales/retiros'
@@ -59,7 +61,29 @@ class AdminsController < ApplicationController
     render partial: 'admins/parciales/retiros'
   end
 
+  def depurar
+    cut = codigo_unico_trabajador
+    cuc = codigo_unico_concepto
+    @verificar_registros = buscar_cambios(cuc, cut)
+  end
+
   private
+
+  def codigo_unico_trabajador
+    Admon.where(estatus: %w[A P])
+         .map { |t| "#{t.ce_trabajador} #{t.co_ubicacion.strip} #{t.tipopersonal.strip}" }
+  end
+
+  def codigo_unico_concepto
+    hist_pago = HistoricoPago.select(:CE_TRABAJADOR, CO_UBICACION, TIPOPERSONAL)
+    hist_pago.map do |t|
+      "#{t.CE_TRABAJADOR} #{t.CO_UBICACION.strip} #{t.TIPOPERSONAL.strip}"
+    end.uniq
+  end
+
+  def buscar_cambios(conceptos, trabajadores)
+    conceptos.select { |t| t unless trabajadores.include?(t) }
+  end
 
   def borrar_retirados(datos)
     datos.each do |persona|
