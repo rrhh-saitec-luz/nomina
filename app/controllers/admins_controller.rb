@@ -36,71 +36,7 @@ class AdminsController < ApplicationController
            locals: { meses: MESES }
   end
 
-  def retiros
-    @activos = Admon.where(estatus: %w[A P]).pluck(:ce_trabajador)
-    @prenomina = HistoricoPago.where(CE_TRABAJADOR: @activos)
-    flash[:notice] = ''
-    flash[:alert] = ''
-    render partial: 'admins/parciales/retiros'
-  end
-
-  def retirar
-    resultado = buscar_retirados(params[:fe_inicio], params[:fe_fin])
-    respond_to do |format|
-      format.turbo_stream do
-        render turbo_stream: turbo_stream.replace(
-          'retirados', partial: 'admins/parciales/retiros_busqueda', locals: { personas: resultado }
-        )
-      end
-    end
-  end
-
-  def limpiar_prenomina
-    datos = JSON.parse(params[:datos_personas])
-    borrar_retirados(datos)
-    render partial: 'admins/parciales/retiros'
-  end
-
-  def depurar
-    cut = codigo_unico_trabajador
-    cuc = codigo_unico_concepto
-    @verificar_registros = buscar_cambios(cuc, cut)
-  end
-
   private
-
-  def codigo_unico_trabajador
-    Admon.where(estatus: %w[A P])
-         .map { |t| "#{t.ce_trabajador} #{t.co_ubicacion.strip} #{t.tipopersonal.strip}" }
-  end
-
-  def codigo_unico_concepto
-    hist_pago = HistoricoPago.select(:CE_TRABAJADOR, CO_UBICACION, TIPOPERSONAL)
-    hist_pago.map do |t|
-      "#{t.CE_TRABAJADOR} #{t.CO_UBICACION.strip} #{t.TIPOPERSONAL.strip}"
-    end.uniq
-  end
-
-  def buscar_cambios(conceptos, trabajadores)
-    conceptos.select { |t| t unless trabajadores.include?(t) }
-  end
-
-  def borrar_retirados(datos)
-    datos.each do |persona|
-      registros = HistoricoPago.where(
-        CE_TRABAJADOR: persona['ce_trabajador'].to_i,
-        CO_UBICACION: persona['co_ubicacion'].to_i,
-        TIPOPERSONAL: persona['tipopersonal'].to_i
-      )
-      registros.destroy_all
-    end
-  end
-
-  def buscar_retirados(fe_inicial, fe_final)
-    inicio = Date.parse(fe_inicial)
-    final = Date.parse(fe_final)
-    Admon.where(fe_retiro: inicio..final)
-  end
 
   def procesar_registros(registros_filtrados, mes, year, nomina)
     if registros_filtrados.empty?
