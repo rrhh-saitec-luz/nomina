@@ -51,6 +51,7 @@ PASO 10: Se filtran del arreglo repited los inactivos (nri) y activos (nra)
 		 nri = Admon.where(ce_trabajador: no_repited).where.not(estatus: %w[A P])
 
 PASO 11: Crear el arreglo de las cedulas de los nri para eliminar de HistoricoPago las coincidencias
+
 			nri_cedulas = nri.map {|t| t.ce_trabajador }
 			HistoricoPago.where(CE_TRABAJADOR: nri_cedulas).delete_all
 			
