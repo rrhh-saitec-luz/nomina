@@ -1,0 +1,64 @@
+PASO 1: Obtenemos todos los trabajadores activos del Admon.
+
+		a = Admon.where(estatus: %w[A P])
+			
+PASO 2: Crear un array con identificador único para los trabajadores tomando cedula, código de ubicación y 				tipo de personal
+
+		b = a.map { |t| "#{t.ce_trabajador} #{t.co_ubicacion.strip} #{t.tipopersonal.strip}" }
+
+PASO 3: Crear un array con los históricos de pagos, identificados por un código único, esto permitirá 					relacionar a los trabajadores activos con el histórico de pagos, ya que el identificador único debe 			ser igual en ambos arreglos.
+
+    c = HistoricoPago.select(:CE_TRABAJADOR, :CO_UBICACION, :TIPOPERSONAL)
+                     .map { |t| "#{t.CE_TRABAJADOR} #{t.CO_UBICACION.strip} #{t.TIPOPERSONAL.strip}"}.uniq
+
+PASO 4: Se cotejan ambos arreglos, obteniendo los elementos no comunes entre ambos;
+	    Si un elemento del arreglo de historico de pagos no se encuentra en el arreglo de trabajadores activos  		será seleccionado para identificar si será Eliminado o será actualizado.
+		
+                     d = c.select {|t| t unless b.include?(t)}
+                     
+PASO 5: Se crea una variable que almacenará un arreglo de las cedulas de los trabajadores que deben 					verificarse	si serán eliminados o actualizados.
+
+		splited_con = d.map {|r| r.split(" ")[0]}
+
+PASO 6: Declarar dos variables para verificar cuales trabajadores en el arreglo a verificar tienen más de una ubicación. NOTA: Esto es muy importante ya que existe la posibilidad de actualizar una ubicación y eliminar otra.
+
+					 repited = []
+					 no_repited = []
+					 
+PASO 7: Operar sobre la variable splited_con del PASO 6 para llenar los arreglos del PASO 7
+
+					splited_con.each do |t|
+					  if no_repited.include?(t)
+					    repited << t
+					  else
+					    no_repited << t
+					  end
+					end
+					
+PASO 8: Verificar del arreglo repited los trabajadores que estan activos
+
+				Admon.where(ce_trabajador: repited, estatus: %[A P])
+				
+NOTA: En éste caso en particular no obtuve repetidos activos por lo tanto se eliminará todos los repetidos de la tabla histórico.
+
+PASO 9: Eliminar todos los elementos en HistóricoPago por cada cedula en no repited.
+
+					HistoricoPago.where(CE_TRABAJADOR: repited).delete_all
+					
+PASO 10: Se filtran del arreglo repited los inactivos (nri) y activos (nra)
+		
+		 nra = Admon.where(ce_trabajador: no_repited).where(estatus: %w[A P])
+		 nri = Admon.where(ce_trabajador: no_repited).where.not(estatus: %w[A P])
+
+PASO 11: Crear el arreglo de las cedulas de los nri para eliminar de HistoricoPago las coincidencias
+			nri_cedulas = nri.map {|t| t.ce_trabajador }
+			HistoricoPago.where(CE_TRABAJADOR: nri_cedulas).delete_all
+			
+PASO 12: Actualizar HistoricoPagos con los datos del nra, ya que son los que presentan cambios.
+
+	nra.each do | worker |
+	  registro = HistoricoPago.where(CE_TRABAJADOR: worker.ce_trabajador)
+	  actualizar = registro.update(CO_UBICACION: worker.co_ubicacion, TIPOPERSONAL: worker.tipopersonal)
+	end
+
+PASO 13: Verificar, repetir los pasos del 1 al 4 esperando un arreglo vacío en el PASO 4
