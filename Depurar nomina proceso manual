@@ -1,4 +1,4 @@
-PASO 1: Obtenemos todos los trabajadores activos del Admon.
+ PASO 1: Obtenemos todos los trabajadores activos del Admon.
 
 		a = Admon.where(estatus: %w[A P])
 			

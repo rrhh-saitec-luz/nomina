@@ -1,0 +1,6 @@
+<turbo-frame id= 'contenido'>
+  <p><%= @depurar %></p>
+  <%= link_to 'Eliminar Inactivos',
+    eliminar_admins_path(id: @trab),
+    class: "btn btn-danger" %> 
+</turbo-frame>

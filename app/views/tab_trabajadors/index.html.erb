@@ -48,12 +48,7 @@
               <td>
                 <div class="d-flex flex-column gap-3">
                 <%= link_to 'Detalle de cargo', tab_trabajador_path(id: trabajador.id), class: 'd-flex flex-column' %>
-                <%= link_to 'Pagos trabajador', pago_path(
-                  CE_TRABAJADOR: trabajador.ce_trabajador,
-                  CO_UBICACION: trabajador.co_ubicacion,
-                  TIPOPERSONAL: trabajador.tipopersonal,
-                  id: trabajador.id 
-                ) %>
+                <%= link_to 'Pagos trabajador', pago_path(CE_TRABAJADOR: trabajador.ce_trabajador, CO_UBICACION: trabajador.co_ubicacion.strip, TIPOPERSONAL: trabajador.tipopersonal.strip, id: trabajador.id) %>
               <%= link_to 'Variaciones trabajador', variacion_path(
                   id: trabajador.id 
                 ) %>

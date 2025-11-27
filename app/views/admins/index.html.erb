@@ -19,6 +19,20 @@
                      modificar_prenomina_admins_path,
                      data: { turbo_frame: "contenido" } %>
       <% end %>
+      <%= content_tag :li,
+                      class:"list-group-item",
+                      data: { admin_target: "links", action: "click->admin#menu" } do %>
+        <%= link_to "Depurar Nomina",
+                     depurar_admins_path,
+                     data: { turbo_frame: "contenido" } %>
+      <% end %>
+      <%= content_tag :li,
+                      class:"list-group-item",
+                      data: { admin_target: "links", action: "click->admin#menu" } do %>
+        <%= link_to "Antiguedades",
+                     antiguedades_admins_path,
+                     data: { turbo_frame: "contenido" } %>
+      <% end %>
     <% end %>
     <%= turbo_frame_tag "contenido",
                         class:" container-fluid border border-primary rounded-3" do %>

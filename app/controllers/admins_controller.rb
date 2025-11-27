@@ -36,7 +36,42 @@ class AdminsController < ApplicationController
            locals: { meses: MESES }
   end
 
+  def depurar
+    render partial: 'admins/parciales/depurar'
+  end
+
+  def antiguedades
+    extract = 'EXTRACT(MONTH FROM fe_ingreso) = ?'
+    @cumplir_ant = Admon.where(extract, 11).where(estatus: %w[A])
+    render partial: 'admins/parciales/antiguedades'
+  end
+
+  def eliminar_inactivos
+    ti = inactivos
+    ca = cargos_en_nomina
+    borrar_inactivos(ti, ca)
+  end
+
+  def actualizar_activos
+  end
+
   private
+
+  def inactivos
+    Admon.where.not(edo_cargo: %w[A P])
+         .map { |t| [t.ce_trabajador, t.co_ubicacion.strip, t.tipopersonal.strip] }
+  end
+
+  def cargos_en_nomina
+    HistoricoPago.select(:CE_TRABAJADOR, :CO_UBICACION, :TIPOPERSONAL)
+                 .map { |c| [c.CE_TRABAJADOR, c.CO_UBICACION.strip, c.TIPOPERSONAL.strip] }.uniq
+  end
+
+  def borrar_inactivos(inactivos, cargos)
+    borrar = inactivos.select { |c| c if cargos.include?(c) }
+    borrar.map { |r| HistoricoPago.where(CE_TRABAJADOR: r[0], CO_UBICACION: r[1], TIPOPERSONAL: r[2]).delete_all }
+    render partial: 'admins/parciales/depurar'
+  end
 
   def procesar_registros(registros_filtrados, mes, year, nomina)
     if registros_filtrados.empty?
@@ -72,6 +107,6 @@ class AdminsController < ApplicationController
     Concepto.where(ANO: params[:year],
                    MES: params[:month],
                    TIPO_NOMINA: params[:tpn],
-                   TIPO_NOMINA_ESPECIFICA: params[:tpns]).where.not(CO_CONCEPTO: 'X500')
+                   TIPO_NOMINA_ESPECIFICA: params[:tpns]).where.not(CO_CONCEPTO: %w[X500 A029 A223 A436])
   end
 end

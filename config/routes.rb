@@ -26,6 +26,9 @@ Rails.application.routes.draw do
       get 'modificar_prenomina', action: :modificar_prenomina
       post 'prenomina', action: :prenomina
       post 'actualizar', action: :actualizar_prenomina
+      get 'depurar', action: :depurar
+      get 'eliminar', action: :eliminar_inactivos
+      get 'antiguedades'
     end
   end
 
