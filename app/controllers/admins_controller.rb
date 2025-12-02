@@ -53,9 +53,21 @@ class AdminsController < ApplicationController
   end
 
   def actualizar_activos
+    ta = activos
+    ca = cargos_en_nomina
+    actualizar(ta, ca)
   end
 
   private
+
+  def activos
+    Admon.where(edo_cargo: %w[A P])
+         .where.not(tipopersonal: '110205')
+         .map { |t| [t.ce_trabajador, t.co_ubicacion.strip, t.tipopersonal.strip] }
+  end
+
+  def actualizar(activos, cargos)
+  end
 
   def inactivos
     Admon.where.not(edo_cargo: %w[A P])

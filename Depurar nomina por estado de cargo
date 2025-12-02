@@ -77,9 +77,12 @@ borrar.map {  |r| HistoricoPago.where(
 
 
 ta = Admon.where(edo_cargo: %w[A P]).where.not(tipopersonal: "110205").map {|t| [t.ce_trabajador, t.co_ubicacion.strip, t.tipopersonal.strip]}
+
 ca = HistoricoPago.select(:CE_TRABAJADOR, :CO_UBICACION, :TIPOPERSONAL)
 				  .map {|c|[c.CE_TRABAJADOR, c.CO_UBICACION.strip, c.TIPOPERSONAL.strip]}.uniq
+				  
 actualizar = ta.select {|c| c unless ca.include?(c)}.uniq
+
 candidatos_actualizar = actualizar.map {|t| t.first }.uniq
 trab_cargo_multiple = []
 trab_cargo = []
