@@ -1,19 +1,20 @@
 <turbo-frame id="contenido">
-  <% unless flash[:notice].eql?('') %>
-    <div class="alert" style="color: green;"><%= flash[:notice]  %></div>
-  <% end %>
-  <% unless flash[:alert].eql?('') %>
-    <div class="alert" style="color: red;"><%= flash[:alert] %></div>
-  <% end %>
-  <%= form_with url: prenomina_admins_path,
-    method: :post,
-    class: "d-flex flex-column mt-3 gap-1 justify-content-center",
-    data: {controller: "admin"}  do |form| %>
-    <%= render "admins/parciales/gen_nom_meses", meses: @meses, years: @years, form: form %>
-    <%= render "admins/parciales/gen_nom_nominas", nomina: @nomina, form: form %>
-    <%= content_tag :div, class:" d-flex align-self-start" do %>
-      <%= form.submit "Generar prenomina", class: "btn btn-primary" %>
+    <% unless flash[:notice].eql?('') %>
+      <div class="alert" style="color: green;"><%= flash[:notice]  %></div>
     <% end %>
-  <% end %>
-  <%= render "admins/parciales/gen_nom_footer" %>
+    <% unless flash[:alert].eql?('') %>
+      <div class="alert" style="color: red;"><%= flash[:alert] %></div>
+    <% end %>
+    <%= form_with url: prenomina_admins_path,
+      method: :post,
+      class: "d-flex flex-column mt-3 gap-1 justify-content-center",
+      data: {controller: "admin"}  do |form| %>
+      <%= render "admins/parciales/gen_nom_meses",
+                meses: @meses, years: @years, form: form %>
+      <%= render "admins/parciales/gen_nom_nominas", nomina: @nomina, form: form %>
+      <%= content_tag :div, class:" d-flex align-self-start" do %>
+        <%= form.submit "Generar prenomina", class: "btn btn-primary" %>
+      <% end %>
+    <% end %>
+    <%= render "admins/parciales/gen_nom_footer" %>
 </turbo-frame>  

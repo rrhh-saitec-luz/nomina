@@ -7,12 +7,16 @@ class AdminsController < ApplicationController
   def index; end
 
   def generar_nomina
+    flash[:notice] = ''
+    flash[:alert] = ''
     @nomina = NominaTipo.all
     @meses = MESES
     @years = concepto_pluck(:ANO)
-    flash[:notice] = ''
-    flash[:alert] = ''
-    render partial: 'admins/parciales/generar_nomina'
+    if HistoricoPago.count.eql?(0)
+      render partial: 'admins/parciales/generar_nomina'
+    else
+      render partial: 'admins/parciales/eliminar_prenomina'
+    end
   end
 
   def prenomina
@@ -58,6 +62,11 @@ class AdminsController < ApplicationController
     actualizar(ta, ca)
   end
 
+  def destruir_prenomina
+    HistoricoPago.delete_all
+    generar_nomina
+  end
+
   private
 
   def activos
@@ -87,19 +96,18 @@ class AdminsController < ApplicationController
 
   def procesar_registros(registros_filtrados, mes, year, nomina)
     if registros_filtrados.empty?
-      lotes_vacios(mes, year, nomina)
+      lotes_vacios
     else
-      lotes(registros_filtrados, mes, year, nomina)
+      lotes(registros_filtrados)
     end
   end
 
-  def lotes_vacios(l_mes, l_year, l_nomina)
+  def lotes_vacios
     flash[:alert] = 'Busqueda sin resultados.'
-    render partial: 'admins/parciales/generar_nomina',
-           locals: { meses: l_mes, years: l_year, nomina: l_nomina }
+    generar_nomina
   end
 
-  def lotes(lote, l_mes, l_year, l_nomina)
+  def lotes(lote)
     lote.find_in_batches(batch_size: 1000) do |batch|
       nuevos_registros = batch.map do |registro|
         HistoricoPago.new(registro.attributes)
@@ -107,8 +115,7 @@ class AdminsController < ApplicationController
       HistoricoPago.import nuevos_registros, validate: false
     end
     flash[:notice] = 'Proceso finalizado correctamente.'
-    render partial: 'admins/parciales/generar_nomina',
-           locals: { meses: l_mes, years: l_year, nomina: l_nomina }
+    generar_nomina
   end
 
   def concepto_pluck(campo)
