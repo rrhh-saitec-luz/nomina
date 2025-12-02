@@ -24,7 +24,7 @@ class AdminsController < ApplicationController
     @nomina = NominaTipo.all
     @meses = MESES
     @years = concepto_pluck(:ANO)
-    procesar_registros(registros_filtrados, @meses, @years, @nomina)
+    procesar_registros(registros_filtrados)
   end
 
   def modificar_prenomina
@@ -94,7 +94,7 @@ class AdminsController < ApplicationController
     render partial: 'admins/parciales/depurar'
   end
 
-  def procesar_registros(registros_filtrados, mes, year, nomina)
+  def procesar_registros(registros_filtrados)
     if registros_filtrados.empty?
       lotes_vacios
     else

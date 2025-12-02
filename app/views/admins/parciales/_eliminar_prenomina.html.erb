@@ -1,7 +1,7 @@
 <turbo-frame id="contenido">
 <%= content_tag :div, class: "d-flex flex-column mt-3 gap-1 justify-content-cent      er" do %>             
 Ya generó una prenomina. ¿Desea Eliminarla?                                     
-<%= link_to 'Eliminar Prenomina',                                               
+<%= button_to 'Eliminar Prenomina',                                               
 destruir_prenomina_admins_path,                                               
 class: "btn btn-danger" %>                                                    
 <% end %>
