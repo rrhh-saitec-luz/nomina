@@ -1,10 +1,4 @@
 <turbo-frame id="contenido">
-  <% unless flash[:notice].eql?('') %>
-    <div class="alert" style="color: green;"><%= flash[:notice] %></div>
-  <% end %>
-  <% unless flash[:alert].eql?('') %>
-    <div class="alert" style="color: red;"><%= flash[:alert] %></div>
-  <% end %>
   <%= form_with url: actualizar_admins_path,
                 method: :post,
                 class: "d-flex flex-column mt-3 gap-3 justify-content-center"  do |form| %>

@@ -27,16 +27,20 @@ class AdminsController < ApplicationController
   end
 
   def modificar_prenomina
-    flash[:notice] = ''
-    flash[:alert] = ''
-    render partial: 'admins/parciales/modificar_prenomina', locals: { meses: MESES }
+    contador = Contador.where(nombre: 'depurar')
+    cont_val = contador.map(&:valor).first
+    if cont_val.eql?(1)
+      render partial: 'admins/parciales/modificar_prenomina', locals: { meses: MESES }
+    else
+      render partial: 'admins/parciales/otro_proceso'
+    end
   end
 
   def actualizar_prenomina
-    flash[:notice] = 'Proceso finalizado correctamente.'
     HistoricoPago.update_all(MES: params[:mes], ANO: params[:year], FE_NOMINA: params[:fecha])
-    render partial: 'admins/parciales/modificar_prenomina',
-           locals: { meses: MESES }
+    contador = Contador.where(nombre: 'depurar')
+    sumar_contador(contador)
+    modificar_prenomina
   end
 
   def depurar
@@ -74,9 +78,6 @@ class AdminsController < ApplicationController
     Admon.where(edo_cargo: %w[A P])
          .where.not(tipopersonal: '110205')
          .map { |t| [t.ce_trabajador, t.co_ubicacion.strip, t.tipopersonal.strip] }
-  end
-
-  def actualizar(activos, cargos)
   end
 
   def inactivos
