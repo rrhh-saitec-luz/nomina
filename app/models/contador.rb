@@ -1,0 +1,2 @@
+class Contador < ApplicationRecord
+end

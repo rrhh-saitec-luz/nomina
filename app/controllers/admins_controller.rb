@@ -7,12 +7,11 @@ class AdminsController < ApplicationController
   def index; end
 
   def generar_nomina
-    flash[:notice] = ''
-    flash[:alert] = ''
+    contador = Contador.where(nombre: 'depurar').map(&:valor).first
     @nomina = NominaTipo.all
     @meses = MESES
     @years = concepto_pluck(:ANO)
-    if HistoricoPago.count.eql?(0)
+    if contador.eql?(0)
       render partial: 'admins/parciales/generar_nomina'
     else
       render partial: 'admins/parciales/eliminar_prenomina'
@@ -64,6 +63,8 @@ class AdminsController < ApplicationController
 
   def destruir_prenomina
     HistoricoPago.delete_all
+    contador = Contador.where(nombre: 'depurar')
+    reiniciar_contador(contador)
     generar_nomina
   end
 
@@ -114,8 +115,18 @@ class AdminsController < ApplicationController
       end
       HistoricoPago.import nuevos_registros, validate: false
     end
-    flash[:notice] = 'Proceso finalizado correctamente.'
+    contador_nombre = Contador.where(nombre: 'depurar')
+    sumar_contador(contador_nombre)
     generar_nomina
+  end
+
+  def sumar_contador(contador)
+    nuevo_valor = contador.map { |val| val.valor + 1 }
+    contador.update(valor: nuevo_valor.first)
+  end
+
+  def reiniciar_contador(contador)
+    contador.update(valor: 0)
   end
 
   def concepto_pluck(campo)
