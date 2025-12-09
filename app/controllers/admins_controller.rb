@@ -7,11 +7,10 @@ class AdminsController < ApplicationController
   def index; end
 
   def generar_nomina
-    contador = contador_depurar.map(&:valor).first
     @nomina = NominaTipo.all
     @meses = MESES
     @years = concepto_pluck(:ANO)
-    if contador.eql?(0)
+    if contador_depurar.map(&:valor).first.eql?(0)
       render partial: 'admins/parciales/generar_nomina'
     else
       render partial: 'admins/parciales/eliminar_prenomina'
@@ -37,12 +36,13 @@ class AdminsController < ApplicationController
 
   def actualizar_prenomina
     HistoricoPago.update_all(MES: params[:mes], ANO: params[:year], FE_NOMINA: params[:fecha])
-    sumar_contador(contador_depurar)
+    sumar_contador(contador_depurar) if contador_depurar.map(&:valor).first.eql?(1)
     modificar_prenomina
   end
 
   def depurar
-    render partial: 'admins/parciales/depurar'
+    contador = contador_depurar.map(&:valor).first
+    render partial: 'admins/parciales/depurar', locals: { cont: contador }
   end
 
   def antiguedades
@@ -94,7 +94,8 @@ class AdminsController < ApplicationController
   def borrar_inactivos(inactivos, cargos)
     borrar = inactivos.select { |c| c if cargos.include?(c) }
     borrar.map { |r| HistoricoPago.where(CE_TRABAJADOR: r[0], CO_UBICACION: r[1], TIPOPERSONAL: r[2]).delete_all }
-    render partial: 'admins/parciales/depurar'
+    sumar_contador(contador_depurar)
+    depurar
   end
 
   def procesar_registros(registros_filtrados)
@@ -117,14 +118,13 @@ class AdminsController < ApplicationController
       end
       HistoricoPago.import nuevos_registros, validate: false
     end
-    contador_nombre = Contador.where(nombre: 'depurar')
-    sumar_contador(contador_nombre)
+    sumar_contador(contador_depurar)
     generar_nomina
   end
 
   def sumar_contador(contador)
     nuevo_valor = contador.map(&:valor).first
-    contador.update(valor: nuevo_valor + 1) if nuevo_valor.eql?(1)
+    contador.update(valor: nuevo_valor + 1)
   end
 
   def reiniciar_contador(contador)

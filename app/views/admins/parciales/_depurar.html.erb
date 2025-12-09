@@ -1,6 +1,12 @@
 <turbo-frame id= 'contenido'>
-  <p><%= @depurar %></p>
-  <%= link_to 'Eliminar Inactivos',
-    eliminar_admins_path(id: @trab),
-    class: "btn btn-danger" %> 
+  <% if cont.eql?(2) %> 
+    <%= button_to 'Eliminar Inactivos',
+      eliminar_inactivos_admins_path,
+      class: "btn btn-danger" %>
+  <% else %>
+    <%= button_to 'Eliminar Inactivos',
+      eliminar_inactivos_admins_path,
+      disabled: true,
+      class: "btn btn-danger" %>
+  <% end %>
 </turbo-frame>
