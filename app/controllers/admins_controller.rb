@@ -7,7 +7,7 @@ class AdminsController < ApplicationController
   def index; end
 
   def generar_nomina
-    contador = Contador.where(nombre: 'depurar').map(&:valor).first
+    contador = contador_depurar.map(&:valor).first
     @nomina = NominaTipo.all
     @meses = MESES
     @years = concepto_pluck(:ANO)
@@ -27,19 +27,17 @@ class AdminsController < ApplicationController
   end
 
   def modificar_prenomina
-    contador = Contador.where(nombre: 'depurar')
-    cont_val = contador.map(&:valor).first
+    cont_val = contador_depurar.map(&:valor).first
     if cont_val.eql?(1)
       render partial: 'admins/parciales/modificar_prenomina', locals: { meses: MESES }
     else
-      render partial: 'admins/parciales/otro_proceso'
+      render partial: 'admins/parciales/otro_proceso', locals: { meses: MESES, cont: cont_val }
     end
   end
 
   def actualizar_prenomina
     HistoricoPago.update_all(MES: params[:mes], ANO: params[:year], FE_NOMINA: params[:fecha])
-    contador = Contador.where(nombre: 'depurar')
-    sumar_contador(contador)
+    sumar_contador(contador_depurar)
     modificar_prenomina
   end
 
@@ -67,12 +65,15 @@ class AdminsController < ApplicationController
 
   def destruir_prenomina
     HistoricoPago.delete_all
-    contador = Contador.where(nombre: 'depurar')
-    reiniciar_contador(contador)
+    reiniciar_contador(contador_depurar)
     generar_nomina
   end
 
   private
+
+  def contador_depurar
+    Contador.where(nombre: 'depurar')
+  end
 
   def activos
     Admon.where(edo_cargo: %w[A P])
@@ -122,8 +123,8 @@ class AdminsController < ApplicationController
   end
 
   def sumar_contador(contador)
-    nuevo_valor = contador.map { |val| val.valor + 1 }
-    contador.update(valor: nuevo_valor.first)
+    nuevo_valor = contador.map(&:valor).first
+    contador.update(valor: nuevo_valor + 1) if nuevo_valor.eql?(1)
   end
 
   def reiniciar_contador(contador)
