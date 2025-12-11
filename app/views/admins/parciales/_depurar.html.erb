@@ -1,12 +1,14 @@
 <turbo-frame id= 'contenido'>
-  <% if cont.eql?(2) %> 
-    <%= button_to 'Eliminar Inactivos',
-      eliminar_inactivos_admins_path,
-      class: "btn btn-danger" %>
-  <% else %>
-    <%= button_to 'Eliminar Inactivos',
-      eliminar_inactivos_admins_path,
-      disabled: true,
-      class: "btn btn-danger" %>
+  <%= content_tag :div,
+                  class: "d-flex flex-column mt-3 gap-3 justify-content-center" do %>
+    <% cont > 2 and status = true or false %> 
+    <%= content_tag :ol do %>
+      <%= content_tag :li do %>
+        <%= button_to 'Eliminar Inactivos',
+                       eliminar_inactivos_admins_path,
+                       disabled: status,
+                       class: "btn btn-danger" %>
+      <% end %>
+    <% end %>
   <% end %>
 </turbo-frame>
