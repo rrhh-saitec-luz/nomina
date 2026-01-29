@@ -59,6 +59,8 @@ class AdminsController < ApplicationController
     trabajador_activo = activos
     cargo_activo = cargos_en_nomina
     actualizar_cargos(trabajador_activo, cargo_activo)
+    sumar_contador(contador_depurar)
+    depurar
   end
 
   def antiguedades
