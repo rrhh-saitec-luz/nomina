@@ -1,3 +1,5 @@
+
+DEPURAR INACTIVOS
 1.- Seleccionas los trabajadores inactivos, ti: trabajadores inactivos
 
 
@@ -29,12 +31,14 @@ borrar.map {  |r| HistoricoPago.where(
   		     						  CO_UBICACION: r[1],
   		     						  TIPOPERSONAL: r[2] )
   		       				   .delete_all }
-
   		       				   
+			
+ACTUALIZAR ACTIVOS CARGO UNICO
+
 5.- Buscamos trabajadores con cargo activo(ta)
 
+ta = Admon.where(edo_cargo: %w[A P]).where.not(tipopersonal: "110205").map {|t| [t.ce_trabajador, t.co_ubicacion.strip, t.tipopersonal.strip]}
 
-ta = Admon.where(edo_cargo: %w[A P]).map {|t| [t.ce_trabajador, t.co_ubicacion.strip, t.tipopersonal.strip]}
 
 
 6.- ejecutamos paso 2 nuevamente, para traer información actualizada.
@@ -43,50 +47,28 @@ ta = Admon.where(edo_cargo: %w[A P]).map {|t| [t.ce_trabajador, t.co_ubicacion.s
 ca = HistoricoPago.select(:CE_TRABAJADOR, :CO_UBICACION, :TIPOPERSONAL)
 				  .map {|c|[c.CE_TRABAJADOR, c.CO_UBICACION.strip, c.TIPOPERSONAL.strip]}.uniq
 				  
+				  
+				  
+7.- relacionamos ta con ca para saber cuales trabajadores activos no estan en ca eso significa que cambiaron y debemos actualizarlos				  
+ 
+actualizar = ta.select {|c| c unless ca.include?(c)}.uniq
 
-7.- relacionamos ta con ca para saber cuales trabajadores activos no estan en ca eso significa que cambiaron y debemos actualizarlos
 
-actualizar = ta.select {|c| c unless ca.include?(c)}
 
 8.-Obtenemos las cedulas de los trabajadores candidatos a ser actualizados
 
 candidatos_actualizar = actualizar.map {|t| t.first }.uniq
 
+9.- Declaramos donde almacenar los trabajadores que tienen cargos activos y cargos multiples
 
-9.- Se ejecuta una busqueda para obtener los cargos de los trabajadores, si tienen cargos unico o cargos multiples y esos cargos estan activos.
-
-10.- Retirar los docentes contratados libres, no estan incluidos en la nomina 1 1.
-
-re = Admon.where(ce_trabajador: trab_cargo_multiple, edo_cargo: %w[A P]).wh
-ere.not(tipopersonal: "110205").map {|t| t.ce_trabajador}
-
-  
-    
-
-ti = Admon.where.not(edo_cargo: %w[A P])
-		  .map {|t| [t.ce_trabajador, t.co_ubicacion.strip, t.tipopersonal.strip]}
-ca = HistoricoPago.select(:CE_TRABAJADOR, :CO_UBICACION, :TIPOPERSONAL)
-				  .map {|c|[c.CE_TRABAJADOR, c.CO_UBICACION.strip, c.TIPOPERSONAL.strip]}.uniq
-borrar = ti.select {|c| c if ca.include?(c)}
-borrar.map {  |r| HistoricoPago.where(
-  		     						  CE_TRABAJADOR: r[0],
-  		     						  CO_UBICACION: r[1],
-  		     						  TIPOPERSONAL: r[2] )
-  		       				   .delete_all }
-
-
-
-ta = Admon.where(edo_cargo: %w[A P]).where.not(tipopersonal: "110205").map {|t| [t.ce_trabajador, t.co_ubicacion.strip, t.tipopersonal.strip]}
-
-ca = HistoricoPago.select(:CE_TRABAJADOR, :CO_UBICACION, :TIPOPERSONAL)
-				  .map {|c|[c.CE_TRABAJADOR, c.CO_UBICACION.strip, c.TIPOPERSONAL.strip]}.uniq
-				  
-actualizar = ta.select {|c| c unless ca.include?(c)}.uniq
-
-candidatos_actualizar = actualizar.map {|t| t.first }.uniq
 trab_cargo_multiple = []
 trab_cargo = []
+
+10.- Se buscar los trabajadores activos sin considerar los docentes contratados estos últimos tienen otra nómina y se alnmacenan los trabajadores que poseen cargos multiples.
+
 cargos_activos = Admon.where(ce_trabajador: candidatos_actualizar, edo_cargo: %w[A P]).where.not(tipopersonal: "110205").map {|t| t.ce_trabajador }
+
+
 cargos_activos.each do |t|
   if trab_cargo.include?(t)
     trab_cargo_multiple << t
@@ -95,7 +77,11 @@ cargos_activos.each do |t|
     trab_cargo << t
   end
 end
-trab_cargo_unico =  trab_cargo.select {|t| t unless trab_cargo_multiple.include?(t) }
+
+
+11.- Ahora se buscan los trbajadores con cargos únicos y los actualizamos.
+
+trab_cargo_unico =  trab_cargo.select { |t| t unless trab_cargo_multiple.include?(t) }
 trab_cargo_unico.each do |t|
   actualizables = Admon.where(ce_trabajador: t, edo_cargo: %w[A P]).where.not(tipopersonal: "110205")
   actualizables.each do | worker |
@@ -106,4 +92,4 @@ trab_cargo_unico.each do |t|
   end
 end
 
-generar un codigo para verificar los trabajadores
+generar un codigo para verificar los trabajadores cargos multiples
