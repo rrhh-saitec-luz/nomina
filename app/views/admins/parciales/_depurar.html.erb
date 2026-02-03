@@ -16,7 +16,9 @@
       <% end %>
       <% cont.eql?(4) and mostrar = "" or mostrar = "d-none" %> 
       <%= content_tag :li, class: mostrar do %>
-        <p>hi</p>
+        <%= content_tag :div, class: "alert alert-warning" do %>
+          Debe Verificar cargos multiple
+        <% end %>
       <% end %>
     <% end %>
   <% end %>
