@@ -37,6 +37,7 @@ class AdminsController < ApplicationController
 
   def destruir_prenomina
     HistoricoPago.delete_all
+    Multiple.delete_all
     reiniciar_contador(contador_depurar)
     generar_nomina
   end
@@ -63,6 +64,10 @@ class AdminsController < ApplicationController
     depurar
   end
 
+  def verificar_cargos_multiples
+    @multiples = Multiple.all.map(&:ce_trabajador)
+  end
+
   def antiguedades
     extract = 'EXTRACT(MONTH FROM fe_ingreso) = ?'
     @cumplir_ant = Admon.where(extract, 11).where(estatus: %w[A])
@@ -87,12 +92,9 @@ class AdminsController < ApplicationController
     trab_cargo_multiple = []
     trab_cargo = []
     vca.each do |t|
-      if trab_cargo.include?(t)
-        trab_cargo_multiple << t
-      else
-        trab_cargo << t
-      end
+      trab_cargo.include?(t) and trab_cargo_multiple << t or trab_cargo << t
     end
+    crear_cargos_multiples(trab_cargo_multiple.uniq)
     actualizar_trabajador_cargo_unico(trab_cargo, trab_cargo_multiple.uniq)
   end
 
@@ -125,15 +127,11 @@ class AdminsController < ApplicationController
 
   def procesar_registros(registros_filtrados)
     if registros_filtrados.empty?
-      lotes_vacios
+      flash[:alert] = 'Busqueda sin resultados.'
+      generar_nomina
     else
       lotes(registros_filtrados)
     end
-  end
-
-  def lotes_vacios
-    flash[:alert] = 'Busqueda sin resultados.'
-    generar_nomina
   end
 
   def lotes(lote)

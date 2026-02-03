@@ -64,4 +64,8 @@ module AdminConcerns
   def contador_depurar
     Contador.where(nombre: 'depurar')
   end
+
+  def crear_cargos_multiples(cargos_multiples)
+    cargos_multiples.each { |t| Multiple.create(ce_trabajador: t) }
+  end
 end

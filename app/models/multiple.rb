@@ -1,0 +1,2 @@
+class Multiple < ApplicationRecord
+end
