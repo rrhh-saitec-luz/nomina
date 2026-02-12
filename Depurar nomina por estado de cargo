@@ -1,5 +1,6 @@
 
-DEPURAR INACTIVOS
+--------------------------------------DEPURAR INACTIVOS---------------------------------------------------
+
 1.- Seleccionas los trabajadores inactivos, ti: trabajadores inactivos
 
 
@@ -33,7 +34,7 @@ borrar.map {  |r| HistoricoPago.where(
   		       				   .delete_all }
   		       				   
 			
-ACTUALIZAR ACTIVOS CARGO UNICO
+--------------------------------ACTUALIZAR ACTIVOS CARGO UNICO-----------------------------------------------
 
 5.- Buscamos trabajadores con cargo activo(ta)
 
@@ -93,3 +94,34 @@ trab_cargo_unico.each do |t|
 end
 
 generar un codigo para verificar los trabajadores cargos multiples
+
+
+-------------------------------------VERIFICANDO CARGOS MULTIPLES--------------------------------------------
+
+1.- Obtenemos un array con las cedulas a verificar
+
+multiples = Multiple.all.map(&:ce_trabajador)
+ 
+2.- Obtenemos una consulta con todos los cargos, ahora se debe unificar los cargos por cedula                                   
+
+nomina_actual = Admon.where(ce_trabajador: [multiples])
+					 .pluck(:ce_trabjador, :nombres, :co_ubicacion, tipopersonal)
+
+3.- Unificamos los cargos por cedulas de identidad, creando un hash @cargos_trabajador, sera una variable global que igualaremos a al metodo colectar_cargos en admins_concerns pasando la variable nomina_actual
+
+@cargos_trabajador = colectar_cargos(nomina_actual)
+
+4.- el metodo colectar_cargos debe devolver un hash tranformando los valores que se desean
+
+def colectar_cargos(cargos)
+  coleccion = {}
+  cargos.each do |t|
+    if coleccion.key?(t[0])
+      coleccion[t[0]][:cargos] << [t[2], t[3]]
+    else
+      coleccion[t[0]] = { cedula: t[0], nombre: t[1], cargos: [[t[2], t[3]]] }
+    end
+  end
+  coleccion
+end
+ 

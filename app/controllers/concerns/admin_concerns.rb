@@ -44,7 +44,21 @@ module AdminConcerns
     Concepto.where(ANO: params[:year],
                    MES: params[:month],
                    TIPO_NOMINA: params[:tpn],
-                   TIPO_NOMINA_ESPECIFICA: params[:tpns]).where.not(CO_CONCEPTO: %w[X500 A029 A223 A436])
+                   TIPO_NOMINA_ESPECIFICA: params[:tpns])
+            .where.not(CO_CONCEPTO: %w[X500 A029 A223 A436])
+  end
+
+  # Metodo para crear el hash de los cargos por trabajador
+  def colectar_cargos(cargos)
+    coleccion = {}
+    cargos.each do |t|
+      if coleccion.key?(t[0])
+        coleccion[t[0]][:cargos] << [t[2], t[3]]
+      else
+        coleccion[t[0]] = { cedula: t[0], nombre: t[1], cargos: [[t[2], t[3]]] }
+      end
+    end
+    coleccion
   end
 
   # Métodos auxiliares
