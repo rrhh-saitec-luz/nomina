@@ -1,66 +1,11 @@
 <turbo-frame id="contenido">
-  <%= @cargos_trabajador %>
-
-  <% i = 1 %>
   <% if cont.eql?(4) %>
     <%= content_tag :div, 
                     class: "d-flex flex-column mt-3 gap-3 justify-content-center" do %>
       <% if @cargos_trabajador.empty? %>
         <div>Cargos no encontrados</div>
       <% else %>
-
-
-        <%= content_tag :table, class:" table table-info" do %>
-            <%= content_tag :thead do %>
-              <%= content_tag :tr do %>
-                <%= content_tag :th, scope: "col" do %>#<% end %>
-                <%= content_tag :th, scope: "col" do %>Cedula<% end %>
-                <%= content_tag :th, scope: "col" do %>nombre<% end %>
-                <%= content_tag :th, scope: "col" do %>cargos<% end %>
-              <% end %>
-            <% end %>
-            <%= content_tag :tbody do %>
-              <% @cargos_trabajador.each do |id, info|%>
-                <%= content_tag :tr do %>
-                  <%=  content_tag :th, scope: "row" do %>
-                    <%= i %> 
-                  <% end %>
-                  <%= content_tag :td do %>
-                    <%= info[:cedula] %>
-                  <% end %>
-                  <%= content_tag :td do %>
-                    <%= info[:nombre] %>
-                  <% end %>
-                  <%= content_tag :td do %>
-                    <%= content_tag :table, class:" table table-info" do %>
-                      <%= content_tag :thead do %>
-                        <%= content_tag :th, scope: "col" do %>codigo ubicacion<% end %>
-                        <%= content_tag :th, scope: "col" do %>Tipo personal<% end %>
-                      <% end %>
-                      <%= content_tag :tbody do %>
-                        <% info[:cargos].each do |cargo|%>
-                          <%= content_tag :tr do %>
-                            <%= content_tag :td do %>
-                              <%= cargo.first %> 
-                            <% end %>
-                            <%= content_tag :td do %>
-                              <%= cargo.last %> 
-                            <% end %>
-                          <% end %>
-                        <% end %>
-                      <% end %>
-                    <% end %>
-                  <% end %>
-                  <% i += 1 %>
-                <% end %>
-              <% end %>
-            <% end %>
-
-
-
-
-
-        <% end %>
+        <%= render "admins/parciales/multiples_tabla_a" %>  
       <% end %>
     <% end %>
   <% else %>

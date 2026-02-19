@@ -48,7 +48,7 @@ module AdminConcerns
             .where.not(CO_CONCEPTO: %w[X500 A029 A223 A436])
   end
 
-  # Metodo para crear el hash de los cargos por trabajador
+  # Auxiliares para método: verificar_cargos_multiples
   def colectar_cargos(cargos)
     coleccion = {}
     cargos.each do |t|
@@ -59,6 +59,28 @@ module AdminConcerns
       end
     end
     coleccion
+  end
+
+  def colectar_cargos_prenomina(cargos)
+    coleccion = {}
+    cargos.each do |t|
+      if coleccion.key?(t[0])
+        coleccion[t[0]][:cargos] << [t[1], t[2]]
+      else
+        coleccion[t[0]] = { cedula: t[0], cargos: [[t[1], t[2]]] }
+      end
+    end
+    coleccion
+  end
+
+  def buscar_nomina_actual(multiples)
+    Admon.where(ce_trabajador: [multiples])
+         .pluck(:ce_trabajador, :nombres, :co_ubicacion, :tipopersonal)
+  end
+
+  def buscar_prenomina_actual(multiples)
+    HistoricoPago.where(CE_TRABAJADOR: [multiples])
+                 .pluck(:CE_TRABAJADOR, :CO_UBICACION, :TIPOPERSONAL).uniq
   end
 
   # Métodos auxiliares

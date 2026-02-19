@@ -1,0 +1,30 @@
+<%= content_tag :table, class:" table table-info" do %>
+  <%= content_tag :div, class: "d-flex justify-content-center" do %>
+    Cargos en sistema
+  <% end %>
+  <%= content_tag :thead do %>
+    <%= content_tag :th, scope: "col" do %>codigo ubicacion<% end %>
+    <%= content_tag :th, scope: "col" do %>Tipo personal<% end %>
+  <% end %>
+  <%= content_tag :tbody do %>
+    <% cargos.each do |cargo|%>
+      <%= content_tag :tr do %>
+        <%= content_tag :td do %>
+          <%= cargo.first %> 
+        <% end %>
+        <%= content_tag :td do %>
+          <%= cargo.last %> 
+        <% end %>
+      <% end %>
+    <% end %>
+  <% end %>
+<% end %>
+<%= content_tag :table, class:" table table-info" do %>
+  <%= content_tag :div, class: "d-flex justify-content-center" do %>
+    Cargos en prenomina
+  <% end %>
+  <%= content_tag :thead do %>
+    <%= content_tag :th, scope: "col" do %>codigo ubicacion<% end %>
+    <%= content_tag :th, scope: "col" do %>Tipo personal<% end %>
+  <% end %>
+<% end %>

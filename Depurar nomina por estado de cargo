@@ -105,7 +105,7 @@ multiples = Multiple.all.map(&:ce_trabajador)
 2.- Obtenemos una consulta con todos los cargos, ahora se debe unificar los cargos por cedula                                   
 
 nomina_actual = Admon.where(ce_trabajador: [multiples])
-					 .pluck(:ce_trabjador, :nombres, :co_ubicacion, tipopersonal)
+					 .pluck(:ce_trabjador, :nombres, :co_ubicacion, :tipopersonal)
 
 3.- Unificamos los cargos por cedulas de identidad, creando un hash @cargos_trabajador, sera una variable global que igualaremos a al metodo colectar_cargos en admins_concerns pasando la variable nomina_actual
 
@@ -120,6 +120,31 @@ def colectar_cargos(cargos)
       coleccion[t[0]][:cargos] << [t[2], t[3]]
     else
       coleccion[t[0]] = { cedula: t[0], nombre: t[1], cargos: [[t[2], t[3]]] }
+    end
+  end
+  coleccion
+end
+
+---------------------------------VERIFICAR CARGOS MULTIPLES EN LA PRENOMINA--------------------------------
+
+1.- Utilizamos la misma variable multiples para llamar un metodo que mostrará los cargos multiples del trabjador en la prenomina
+
+multiples = Multiple.all.map(&:ce_trabajador)
+
+2.- obtenemos la prenomina_actual será parecido a nomina_actual, con la distinción que en la prenomina (HistoricoPago) no existe la columna nombres, pero buscaremos por cedula, y obtendremos co_ubicacion y tipopersonal y devolveremos un hash
+
+prenomina_actual = HistoricoPago.where(CE_TRABAJADOR: [multiples])
+                                .pluck(:CE_TRABAJADOR, :CO_UBICACION, :TIPOPERSONAL).uniq
+
+3.- Una ves obtenido la prenomina actual transformamos el elemento prenomina_actual en un hash al igual que hicimos con el metodo colectar_cargos de la prenomina con las variante correspondientes
+
+def colectar_cargos_prenomina(cargos)
+  coleccion = {}
+  cargos.each do |t|
+    if coleccion.key?(t[0])
+      coleccion[t[0]][:cargos] << [t[1], t[2]]
+    else
+      coleccion[t[0]] = { cedula: t[0], cargos: [[t[1], t[2]]] }
     end
   end
   coleccion

@@ -67,11 +67,11 @@ class AdminsController < ApplicationController
   def verificar_cargos_multiples
     contador = contador_depurar.map(&:valor).first
     multiples = Multiple.all.map(&:ce_trabajador).uniq
-    nomina_actual = Admon.where(ce_trabajador: [multiples])
-                         .pluck(:ce_trabajador, :nombres, :co_ubicacion, :tipopersonal)
+    nomina_actual = buscar_nomina_actual(multiples)
+    @prenomina_actual = buscar_prenomina_actual(multiples)
     @cargos_trabajador = colectar_cargos(nomina_actual)
-    render partial: 'admins/parciales/multiples',
-           locals: { cont: contador, mul: multiples }
+    
+    render partial: 'admins/parciales/multiples', locals: { cont: contador }
   end
 
   def antiguedades
