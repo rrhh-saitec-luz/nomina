@@ -32,6 +32,7 @@ Rails.application.routes.draw do
       post 'destruir_prenomina'
       get 'antiguedades'
       get 'vcm', action: :verificar_cargos_multiples
+      get 'detalles', action: :detalles
     end
   end
 

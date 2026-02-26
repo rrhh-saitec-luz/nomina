@@ -15,7 +15,10 @@
         <%= content_tag :td do %><%= info[:cedula] %><% end %>
         <%= content_tag :td do %><%= info[:nombre] %><% end %>
         <%= content_tag :td do %>
-          <%= render "admins/parciales/multiples_tabla_b", cargos: info[:cargos] %>
+          <%= render "admins/parciales/multiples_tabla_b",
+              cargos: info[:cargos].sort,
+              cedula: info[:cedula],
+              cargos_prenomina: @cargos_prenomina %>
         <% end %>
         <% i += 1 %>
       <% end %>

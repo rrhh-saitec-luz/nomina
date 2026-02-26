@@ -5,6 +5,7 @@
   <%= content_tag :thead do %>
     <%= content_tag :th, scope: "col" do %>codigo ubicacion<% end %>
     <%= content_tag :th, scope: "col" do %>Tipo personal<% end %>
+    <%= content_tag :th, scope: "col" do %>Detalles <% end %>
   <% end %>
   <%= content_tag :tbody do %>
     <% cargos.each do |cargo|%>
@@ -15,16 +16,47 @@
         <%= content_tag :td do %>
           <%= cargo.last %> 
         <% end %>
+        <%= content_tag :td do %>
+          <% button_to "Detalles",
+                        detalles_admins_path,
+                        method: :get,
+                        class: "btn btn-primary",
+                        params: {personal: cargo.last,
+                                 ubicacion: cargo.first,
+                                 cedula: cedula},
+                        data: {turbo_frame: "remote_modal",
+                               action: "click->modal#cerrar"}%> 
+        <% end %>
       <% end %>
     <% end %>
   <% end %>
 <% end %>
 <%= content_tag :table, class:" table table-info" do %>
   <%= content_tag :div, class: "d-flex justify-content-center" do %>
-    Cargos en prenomina
   <% end %>
   <%= content_tag :thead do %>
     <%= content_tag :th, scope: "col" do %>codigo ubicacion<% end %>
     <%= content_tag :th, scope: "col" do %>Tipo personal<% end %>
+    <%= content_tag :th, scope: "col" do %>Detalles <% end %>
+  <% end %>
+  <%= content_tag :div, class: "d-flex justify-content-center" do %>
+    Cargos en prenomina
+  <% end %>
+  <% cargos_prenomina.each do |id, info| %>
+    <%= content_tag :tbody do %>
+      <% info[:cargos].sort.each do |cargo|%>
+        <%= content_tag :tr do %>
+          <%= content_tag :td do %>
+            <%= cargo.first %> 
+          <% end %>
+          <%= content_tag :td do %>
+            <%= cargo.last %> 
+          <% end %>
+          <%= content_tag :td do %>
+            <%= render "admins/parciales/multiples_tabla_detalles" %>  
+          <% end %>
+        <% end %>
+      <% end %>
+    <% end %>
   <% end %>
 <% end %>
