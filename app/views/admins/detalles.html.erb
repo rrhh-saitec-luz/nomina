@@ -9,25 +9,7 @@
       </div>
       <div class="modal-body">
         <% if @tipo.eql?(1) %>
-          <%= content_tag :ul do %>
-            <%= content_tag :li, class: "d-flex" do %>
-              <h5 class="me-2">Cedula:</h5><%= @detallado.ce_trabajador %>
-            <% end %>
-            <%= content_tag :li, class: "d-flex" do %>
-              <h5 class="me-2">Nombres:</h5><%= @detallado.nombres %>
-            <% end %>
-            <%= content_tag :li, class: "d-flex gap-2" do %>
-              <h5>Ubicación:</h5><div><%= @detallado.co_ubicacion %></div>
-              <h5>Tipo personal:</h5><%= @detallado.tipopersonal %>
-            <% end %>
-            <%= content_tag :li, class: "d-flex" do %>
-              <h5 class="me-2">Estado cargo:</h5><%= @detallado.edo_cargo %>
-            <% end %>
-            <%= content_tag :li, class: "d-flex" do %>
-              <h5 class="me-2">Estado trabajador:</h5><%= @detallado.estatus %>
-            <% end %>
-            ...
-          <% end %>
+          <%= render "admins/parciales/modal_detalle_cargos_sistema", detallado: @detallado %>
         <% else %>
           Soy 2
         <% end %>
