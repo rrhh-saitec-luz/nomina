@@ -1,0 +1,17 @@
+<turbo-frame id="contenido">
+  <% if cont.eql?(4) %>
+    <%= content_tag :div, 
+                    class: "d-flex flex-column mt-3 gap-3 justify-content-center" do %>
+      <% if @cargos_trabajador.empty? %>
+        <div>Cargos no encontrados</div>
+      <% else %>
+        <%= render "admins/parciales/multiples_tabla_a" %>  
+      <% end %>
+    <% end %>
+  <% else %>
+    <%= content_tag :h1 do %>
+      "Hola Mundo"
+    <% end %>
+  <% end %>
+</turbo-frame>
+

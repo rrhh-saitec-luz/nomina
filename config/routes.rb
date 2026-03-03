@@ -28,8 +28,11 @@ Rails.application.routes.draw do
       post 'actualizar', action: :actualizar_prenomina
       get 'depurar', action: :depurar
       post 'eliminar_inactivos', action: :eliminar_inactivos
+      post 'actualizar_activos', action: :actualizar_activos
       post 'destruir_prenomina'
       get 'antiguedades'
+      get 'vcm', action: :verificar_cargos_multiples
+      get 'detalles', action: :detalles
     end
   end
 

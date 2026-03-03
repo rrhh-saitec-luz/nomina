@@ -1,13 +1,24 @@
 <turbo-frame id= 'contenido'>
   <%= content_tag :div,
                   class: "d-flex flex-column mt-3 gap-3 justify-content-center" do %>
-    <% cont > 2 and status = true or false %> 
     <%= content_tag :ol do %>
       <%= content_tag :li do %>
-        <%= button_to 'Eliminar Inactivos',
+      <%= button_to 'Eliminar Inactivos',
                        eliminar_inactivos_admins_path,
-                       disabled: status,
+                       disabled: !(cont.eql?(2)),
                        class: "btn btn-danger" %>
+      <% end %>
+      <%= content_tag :li do %>
+        <%= button_to 'Actualizar Activos',
+                       actualizar_activos_admins_path,
+                       disabled: !(cont.eql?(3)),
+                       class: "btn btn-danger" %>
+      <% end %>
+      <% cont.eql?(4) and mostrar = "" or mostrar = "d-none" %> 
+      <%= content_tag :li, class: mostrar do %>
+        <%= content_tag :div, class: "alert alert-warning" do %>
+          Debe Verificar cargos multiple
+        <% end %>
       <% end %>
     <% end %>
   <% end %>

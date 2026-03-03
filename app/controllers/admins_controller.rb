@@ -4,6 +4,7 @@ require 'activerecord-import'
 # Todas las opciones de administrador
 class AdminsController < ApplicationController
   include Constantes
+  include AdminConcerns
   def index; end
 
   def generar_nomina
@@ -34,15 +35,50 @@ class AdminsController < ApplicationController
     end
   end
 
-  def actualizar_prenomina
-    HistoricoPago.update_all(MES: params[:mes], ANO: params[:year], FE_NOMINA: params[:fecha])
-    sumar_contador(contador_depurar) if contador_depurar.map(&:valor).first.eql?(1)
-    modificar_prenomina
+  def destruir_prenomina
+    HistoricoPago.delete_all
+    Multiple.delete_all
+    reiniciar_contador(contador_depurar)
+    generar_nomina
   end
 
+  # Metodo para renderizar vista de depurar nomina
   def depurar
     contador = contador_depurar.map(&:valor).first
     render partial: 'admins/parciales/depurar', locals: { cont: contador }
+  end
+
+  # Método para eliminar trabajadores inactivos en la nomina
+  def eliminar_inactivos
+    trabajador_inactivo = inactivos
+    cargos_activos = cargos_en_nomina
+    borrar_inactivos(trabajador_inactivo, cargos_activos)
+  end
+
+  # Métodos para actualizar trabajadores activos en la prenomina
+  def actualizar_activos
+    trabajador_activo = activos
+    cargo_activo = cargos_en_nomina
+    actualizar_cargos(trabajador_activo, cargo_activo)
+    sumar_contador(contador_depurar)
+    depurar
+  end
+
+  def verificar_cargos_multiples
+    contador = contador_depurar.map(&:valor).first
+    multiples = Multiple.all.map(&:ce_trabajador).uniq
+    @nomina_actual = buscar_nomina_actual(multiples)
+    prenomina_actual = buscar_prenomina_actual(multiples)
+    @cargos_trabajador = colectar_cargos(@nomina_actual)
+    @cargos_prenomina = colectar_cargos_prenomina(prenomina_actual)
+    render partial: 'admins/parciales/multiples', locals: { cont: contador }
+  end
+
+  def detalles
+    @detallado = Admon.where(co_ubicacion: params[:ubicacion],
+                             tipopersonal: params[:personal],
+                             ce_trabajador: params[:cedula]).first
+    @tipo = params[:tipo].to_i
   end
 
   def antiguedades
@@ -51,44 +87,46 @@ class AdminsController < ApplicationController
     render partial: 'admins/parciales/antiguedades'
   end
 
-  def eliminar_inactivos
-    ti = inactivos
-    ca = cargos_en_nomina
-    borrar_inactivos(ti, ca)
-  end
-
-  def actualizar_activos
-    ta = activos
-    ca = cargos_en_nomina
-    actualizar(ta, ca)
-  end
-
-  def destruir_prenomina
-    HistoricoPago.delete_all
-    reiniciar_contador(contador_depurar)
-    generar_nomina
-  end
-
   private
 
-  def contador_depurar
-    Contador.where(nombre: 'depurar')
+  def actualizar_cargos(trab_act, cargos_act)
+    actualizar = trab_act.select { |c| c unless cargos_act.include?(c) }.uniq
+    candidatos_actualizar = actualizar.map(&:first).uniq
+    verificar_cargos_activos = verif_cargos(candidatos_actualizar)
+    car_mul_car(verificar_cargos_activos)
   end
 
-  def activos
-    Admon.where(edo_cargo: %w[A P])
-         .where.not(tipopersonal: '110205')
-         .map { |t| [t.ce_trabajador, t.co_ubicacion.strip, t.tipopersonal.strip] }
+  def verif_cargos(candidatos_actualizar)
+    Admon.where(ce_trabajador: candidatos_actualizar, edo_cargo: %w[A P])
+         .where.not(tipopersonal: '110205').map(&:ce_trabajador)
   end
 
-  def inactivos
-    Admon.where.not(edo_cargo: %w[A P])
-         .map { |t| [t.ce_trabajador, t.co_ubicacion.strip, t.tipopersonal.strip] }
+  def car_mul_car(vca)
+    trab_cargo_multiple = []
+    trab_cargo = []
+    vca.each do |t|
+      trab_cargo.include?(t) and trab_cargo_multiple << t or trab_cargo << t
+    end
+    crear_cargos_multiples(trab_cargo_multiple.uniq)
+    actualizar_trabajador_cargo_unico(trab_cargo, trab_cargo_multiple.uniq)
   end
 
-  def cargos_en_nomina
-    HistoricoPago.select(:CE_TRABAJADOR, :CO_UBICACION, :TIPOPERSONAL)
-                 .map { |c| [c.CE_TRABAJADOR, c.CO_UBICACION.strip, c.TIPOPERSONAL.strip] }.uniq
+  def actualizar_trabajador_cargo_unico(trc, trcm)
+    trcu = trc.select { |t| t unless trcm.include?(t) }
+    actualiza_trcu(trcu)
+  end
+
+  def actualiza_trcu(trcu)
+    trcu.each do |t|
+      actualizables = Admon.where(ce_trabajador: t, edo_cargo: %w[A P])
+                           .where.not(tipopersonal: '110205')
+      actualizables.each do |worker|
+        HistoricoPago.where(CE_TRABAJADOR: worker.ce_trabajador)
+                     .update(CO_UBICACION: worker.co_ubicacion,
+                             TIPOPERSONAL: worker.tipopersonal,
+                             DESCRIPCION_TP: worker.descripcion_tp)
+      end
+    end
   end
 
   def borrar_inactivos(inactivos, cargos)
@@ -98,17 +136,15 @@ class AdminsController < ApplicationController
     depurar
   end
 
+  # metodos para procesar o crear la prenomina
+
   def procesar_registros(registros_filtrados)
     if registros_filtrados.empty?
-      lotes_vacios
+      flash[:alert] = 'Busqueda sin resultados.'
+      generar_nomina
     else
       lotes(registros_filtrados)
     end
-  end
-
-  def lotes_vacios
-    flash[:alert] = 'Busqueda sin resultados.'
-    generar_nomina
   end
 
   def lotes(lote)
@@ -120,25 +156,5 @@ class AdminsController < ApplicationController
     end
     sumar_contador(contador_depurar)
     generar_nomina
-  end
-
-  def sumar_contador(contador)
-    nuevo_valor = contador.map(&:valor).first
-    contador.update(valor: nuevo_valor + 1)
-  end
-
-  def reiniciar_contador(contador)
-    contador.update(valor: 0)
-  end
-
-  def concepto_pluck(campo)
-    Concepto.all.select(campo).distinct.pluck(campo)
-  end
-
-  def prenomina_params
-    Concepto.where(ANO: params[:year],
-                   MES: params[:month],
-                   TIPO_NOMINA: params[:tpn],
-                   TIPO_NOMINA_ESPECIFICA: params[:tpns]).where.not(CO_CONCEPTO: %w[X500 A029 A223 A436])
   end
 end
