@@ -21,9 +21,10 @@
                         detalles_admins_path,
                         method: :get,
                         class: "btn btn-primary",
-                        params: {personal: cargo.last,
-                                 ubicacion: cargo.first,
-                                 cedula: cedula},
+                        params: { personal: cargo.last,
+                                  ubicacion: cargo.first,
+                                  tipo: 1,
+                                  cedula: cedula },
                         data: {turbo_frame: "remote_modal",
                                action: "click->modal#cerrar"}%> 
         <% end %>
@@ -53,7 +54,15 @@
             <%= cargo.last %> 
           <% end %>
           <%= content_tag :td do %>
-            <%= render "admins/parciales/multiples_tabla_detalles" %>  
+          <% button_to "Detalles",
+                        detalles_admins_path,
+                        method: :get,
+                        class: "btn btn-primary",
+                        params: { personal: cargo.last,
+                                  ubicacion: cargo.first,
+                                  cedula: cedula },
+                        data: {turbo_frame: "remote_modal",
+                               action: "click->modal#cerrar"}%> 
           <% end %>
         <% end %>
       <% end %>

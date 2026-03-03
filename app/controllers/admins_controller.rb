@@ -78,6 +78,7 @@ class AdminsController < ApplicationController
     @detallado = Admon.where(co_ubicacion: params[:ubicacion],
                              tipopersonal: params[:personal],
                              ce_trabajador: params[:cedula]).first
+    @tipo = params[:tipo].to_i
   end
 
   def antiguedades
