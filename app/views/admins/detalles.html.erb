@@ -11,7 +11,7 @@
         <% if @tipo.eql?(1) %>
           <%= render "admins/parciales/modal_detalle_cargos_sistema", detallado: @detallado %>
         <% else %>
-          Soy 2
+          <%= render "admins/parciales/modal_detalle_cargos_prenomina", detallado: @detallado %>
         <% end %>
       </div>
       <div class="modal-footer">
