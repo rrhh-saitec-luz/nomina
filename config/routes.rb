@@ -33,6 +33,7 @@ Rails.application.routes.draw do
       get 'antiguedades'
       get 'vcm', action: :verificar_cargos_multiples
       get 'detalles', action: :detalles
+      patch 'editar_prenomina', action: :editar_prenomina
     end
   end
 

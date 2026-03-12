@@ -1,4 +1,40 @@
 <%= render "admins/parciales/modal_detalle_cargos_sistema", detallado: detallado %>
-<p>Nueva ubicacion</p>
-<p>Nuevo tipo personal</p>
-<p> soy 2 </p>
+<%= form_with url: editar_prenomina_admins_path, method: :patch do |f| %> 
+  <%= content_tag :div,
+                  class: "container d-flex flex-column justify-content-center" do %>
+    <%= content_tag :div, class: "mb-3" do %>
+      <%= content_tag :label,
+                      :nueva_ubicacion,
+                      class: "form-label" do %> Nueva ubicacion <% end %>
+      <%= f.text_field :nueva_ubicacion,
+                        value: detallado.co_ubicacion,
+                        class: "form-control" %>
+    <% end %>
+    <%= content_tag :div, class: "mb-3" do %>
+      <%= content_tag :label,
+                      :nuevo_tipo,
+                      class: "form-label" do %> Nuevo tipo de personal <% end %>
+      <%= f.text_field :nuevo_tipo,
+                       value: detallado.tipopersonal,
+                       class: "form-control" %>
+    <% end %>
+    <%= content_tag :div, class: "mb-3" do %>
+      <%= content_tag :label,
+                      :cedula,
+                      class: "form-label" do %> cedula: <% end %>
+      <%= f.text_field :cedula,
+                       class: "form-control",
+                       value: detallado.ce_trabajador,
+                       aria_label: "readonly input example",
+                       readonly: true %>
+    <% end %>
+    <%= f.hidden_field :ubicacion,
+                       value: detallado.co_ubicacion %>
+    <%= f.hidden_field :tipo,
+                       value: detallado.tipopersonal %>
+    <%= f.submit "Actualizar",
+                  class: "btn btn-primary",
+                  data: { bs_dismiss: "modal",
+                          turbo_confirm: "¿Estás seguroi de estos cambios?" } %>
+  <% end %>
+<% end %>

@@ -104,4 +104,25 @@ module AdminConcerns
   def crear_cargos_multiples(cargos_multiples)
     cargos_multiples.each { |t| Multiple.create(ce_trabajador: t) }
   end
+
+  def buscar_en_admon
+    Admon.find_by(co_ubicacion: params[:ubicacion],
+                  tipopersonal: params[:personal],
+                  ce_trabajador: params[:cedula])
+  end
+
+  # Este método solo devolverá el primer elemento encontrado
+  def buscar_en_historico
+    HistoricoPago.find_by(CO_UBICACION: params[:ubicacion],
+                          TIPOPERSONAL: params[:personal],
+                          CE_TRABAJADOR: params[:cedula])
+  end
+
+  # Éste método devolverá todos los elementos encontrados
+  # Importante para actualizar por lotes
+  def buscar_en_historico_todos
+    HistoricoPago.where(CO_UBICACION: params[:ubicacion],
+                        TIPOPERSONAL: params[:tipo],
+                        CE_TRABAJADOR: params[:cedula])
+  end
 end

@@ -75,10 +75,26 @@ class AdminsController < ApplicationController
   end
 
   def detalles
-    @detallado = Admon.where(co_ubicacion: params[:ubicacion],
-                             tipopersonal: params[:personal],
-                             ce_trabajador: params[:cedula]).first
     @tipo = params[:tipo].to_i
+    @nombre = Admon.where(ce_trabajador: params[:cedula]).first.nombres
+    @detallado = if @tipo.eql?(1)
+                   buscar_en_admon
+                 else
+                   buscar_en_historico
+                 end
+  end
+
+  def editar_prenomina
+    conceptos = buscar_en_historico_todos
+    conceptos.update_all(CO_UBICACION: params[:nueva_ubicacion],
+                         TIPOPERSONAL: params[:nuevo_tipo])
+    multiples = Multiple.all.map(&:ce_trabajador).uniq
+    prenomina_actual = buscar_prenomina_actual(multiples)
+    @cargos_prenomina = colectar_cargos_prenomina(prenomina_actual)
+    respond_to do |format|
+      format.turbo_stream
+      format.html { redirect_to vcm_admins_path }
+    end
   end
 
   def antiguedades

@@ -1,0 +1,5 @@
+<%= turbo_stream.replace "pts" do %>
+  <div id= "pts">
+  <h1><%= @text %></h1>
+  </div>
+<% end %>
