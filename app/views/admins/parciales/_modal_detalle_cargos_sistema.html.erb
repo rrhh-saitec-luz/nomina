@@ -1,11 +1,11 @@
-<%= content_tag :ul, id: "tb_test" do %>
+<%= content_tag :ul do %>
   <%= content_tag :li, class: "d-flex" do %>
     <h5 class="me-2">Cedula:</h5><%= detallado.ce_trabajador %>
   <% end %>
   <%= content_tag :li, class: "d-flex" do %>
     <h5 class="me-2">Nombres:</h5><%= @nombre %>
   <% end %>
-  <%= content_tag :li, id: "prueba_turbo", class: "d-flex gap-2" do %>
+  <%= content_tag :li, class: "d-flex gap-2" do %>
     <h5>Ubicación:</h5><div><%= detallado.co_ubicacion %></div>
     <h5>Tipo personal:</h5><%= detallado.tipopersonal %>
   <% end %>

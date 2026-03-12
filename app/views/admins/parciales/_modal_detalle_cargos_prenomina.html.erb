@@ -34,7 +34,7 @@
                        value: detallado.tipopersonal %>
     <%= f.submit "Actualizar",
                   class: "btn btn-primary",
-                  data: { bs_dismiss: "modal",
-                          turbo_confirm: "¿Estás seguroi de estos cambios?" } %>
+                  data: { action: "click->modal#cerrar",
+                          turbo_confirm: "¿Estás seguro de estos cambios?" } %>
   <% end %>
 <% end %>
