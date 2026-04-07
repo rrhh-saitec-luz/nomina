@@ -149,4 +149,46 @@ def colectar_cargos_prenomina(cargos)
   end
   coleccion
 end
- 
+
+
+---------------------------------------------CALCULO DE ANTIGUEDADES------------------------------------------
+
+
+----> Buscamos los trabajadores que deben estar cobrando antiguedades, se creará el método,
+----> activos_sin_jubilados_o_pensionados
+
+
+  def activos_sin_jubilados_o_pensionados
+    Admon.where(edo_cargo: %w[A])
+	     .where.not(tipopersonal: '110205')
+	     .where(" \"tipopersonal\" NOT LIKE '___8%' AND \"tipopersonal\" NOT LIKE '___9%' ")
+  end
+     
+------------------------> obtebemos los trabajadores activos
+
+# where(edo_cargo: %w[A])
+
+------------------------> filtramos éste tipo de personal ya que pertenecen a otra nómina
+
+# where.not(tipopersonal: '110205')
+
+-----éste código filtra empleados para garantizar solo los trabajadares que generan antiguedad
+---> debido a convención los trabajadores cuyo 4to. digito en tipopersonal sean 8 o 9 no la generan antiguedad
+
+# where(" \"tipopersonal\" NOT LIKE '___8%' AND \"tipopersonal\" NOT LIKE '___9%' ")
+
+
+----------------------------SE BUSCAN LAS ASIGNACIONES POR CADA TRABAJADOR Y SE SUMAN-------------------------
+
+### Una vez  obtenidas las personas que generan antiguedades buscamos en HistoricoPago los conceptos de cada
+### uno, estos conceptos se filtraran ya que solo requerimos los que tienen INDICE_CONCEPTO igual a "A"
+
+HistoricoPago.where(ce_trabajador: b.ce_trabajador,
+ 					co_ubicacion: b.co_ubicacion,
+ 					tipopersonal:  b.tipopersonal,
+ 					INDICE_CONCEPTO: "A")
+ 			 .map {|e| e.MO_CONCEP}.sum
+
+
+
+

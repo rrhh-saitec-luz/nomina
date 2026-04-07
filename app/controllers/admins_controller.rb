@@ -1,10 +1,13 @@
 # Frozen_string_literal: true
 
 require 'activerecord-import'
+require 'date'
+
 # Todas las opciones de administrador
 class AdminsController < ApplicationController
   include Constantes
   include AdminConcerns
+  include AdminComplementoConcerns
   def index; end
 
   def generar_nomina
@@ -98,9 +101,19 @@ class AdminsController < ApplicationController
   end
 
   def antiguedades
-    extract = 'EXTRACT(MONTH FROM fe_ingreso) = ?'
-    @cumplir_ant = Admon.where(extract, 11).where(estatus: %w[A])
+    @personal = activos_sin_jubilados_o_pensionados
+    @fa = FACTOR_DE_ANTIGUEDAD
     render partial: 'admins/parciales/antiguedades'
+  end
+
+  def suma_de_asignaciones
+    personas = params[:pesonas]
+    f_nomina = params[:fe_nomina].beginning_of_month
+    personas.each do |persona|
+      f_ingreso = persona.fe_ingreso.beginning_of_month
+      tiempo_de_servicio = calculo_de_tiempo_de_servicio(f_nomina, f_ingreso)
+      asignaciones = suma_de_asignaciones(persona.ce_trabajador, persona.co_ubicacion, persona.tipopersonal)
+    end
   end
 
   private
