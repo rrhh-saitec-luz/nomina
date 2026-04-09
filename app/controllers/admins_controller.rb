@@ -103,20 +103,29 @@ class AdminsController < ApplicationController
   def antiguedades
     @personal = activos_sin_jubilados_o_pensionados
     @fa = FACTOR_DE_ANTIGUEDAD
+    @contador = contador_depurar.map(&:valor).first
     render partial: 'admins/parciales/antiguedades'
   end
 
   def suma_de_asignaciones
     personas = params[:pesonas]
     f_nomina = params[:fe_nomina].beginning_of_month
-    personas.each do |persona|
-      f_ingreso = persona.fe_ingreso.beginning_of_month
-      tiempo_de_servicio = calculo_de_tiempo_de_servicio(f_nomina, f_ingreso)
-      asignaciones = suma_de_asignaciones(persona.ce_trabajador, persona.co_ubicacion, persona.tipopersonal)
-    end
+    procesar_asignaciones(personas, f_nomina)
   end
 
   private
+
+  def procesar_asignaciones(personas, f_nomina)
+    idx = IDX[:a]
+    personas.map do |persona|
+      f_ingreso = persona.fe_ingreso.beginning_of_month
+      servicio = tds(f_nomina, f_ingreso)
+      asignaciones = sda(persona.ce_trabajador,
+                         persona.co_ubicacion,
+                         persona.tipopersonal,
+                         idx)
+    end
+  end
 
   def actualizar_cargos(trab_act, cargos_act)
     actualizar = trab_act.select { |c| c unless cargos_act.include?(c) }.uniq

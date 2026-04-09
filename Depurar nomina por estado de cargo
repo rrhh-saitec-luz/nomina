@@ -183,12 +183,27 @@ end
 ### Una vez  obtenidas las personas que generan antiguedades buscamos en HistoricoPago los conceptos de cada
 ### uno, estos conceptos se filtraran ya que solo requerimos los que tienen INDICE_CONCEPTO igual a "A"
 
-HistoricoPago.where(ce_trabajador: b.ce_trabajador,
- 					co_ubicacion: b.co_ubicacion,
- 					tipopersonal:  b.tipopersonal,
- 					INDICE_CONCEPTO: "A")
- 			 .map {|e| e.MO_CONCEP}.sum
+def sda(cedula, ubicacion, tipo, idx)                                               
+  asignaciones = HistoricoPago.where(CE_TRABAJADOR: cedula,
+                                     CO_UBICACION: ubicacion,                       
+                                     TIPOPERSONAL: tipo,
+                                     INDICE_CONCEPTO: idx)                          
+                                    .map(&:MO_CONCEP).sum                              
+  (asignaciones * FACTOR_ANTIGUEDAD).round(2)                                       
+end
 
+--------------------------------------INSERTAR NUEVOS DATOS-------------------------------------------------
+datos = @elementos.map do |el|
+  el.attributes
+    .slice("nombre", "codigo", "categoria_id") # Solo los campos que coinciden en AMBAS tablas
+    .merge(
+      "resultado_calculado" => el.hacer_calculo, # El campo nuevo que mencionaste
+      "created_at" => Time.current,
+      "updated_at" => Time.current
+    )
+end
 
+# Insertamos en la OTRA tabla
+Resultado.insert_all(datos)
 
 

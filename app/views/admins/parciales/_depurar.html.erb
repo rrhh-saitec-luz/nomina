@@ -14,7 +14,7 @@
                        disabled: !(cont.eql?(3)),
                        class: "btn btn-danger" %>
       <% end %>
-      <% cont.eql?(4) and mostrar = "" or mostrar = "d-none" %> 
+      <% cont >= 4 and mostrar = "" or mostrar = "d-none" %> 
       <%= content_tag :li, class: mostrar do %>
         <%= content_tag :div, class: "alert alert-warning" do %>
           Debe Verificar cargos multiple
