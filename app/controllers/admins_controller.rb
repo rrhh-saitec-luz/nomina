@@ -117,13 +117,61 @@ class AdminsController < ApplicationController
 
   def procesar_asignaciones(personas, f_nomina)
     idx = IDX[:a]
-    personas.map do |persona|
-      f_ingreso = persona.fe_ingreso.beginning_of_month
-      servicio = tds(f_nomina, f_ingreso)
-      asignaciones = sda(persona.ce_trabajador,
-                         persona.co_ubicacion,
-                         persona.tipopersonal,
-                         idx)
+    procesar_personal_pa(personas, f_nomina, idx)
+  end
+
+  def procesar_personal(personas, f_nomina, idx)
+    datos_para_historico = personas.map do |persona|
+      preparar_registro_historico(persona, f_nomina, idx)
+    end
+    HistoricoPago.insert_all(datos_para_historico)
+  end
+
+  def preparar_registo_historico(persona, f_nomina, idx)
+    f_ingreso = persona.fe_ingreso.beginning_of_month
+    ahora = Time.current
+    concepto = ca_concepto(persona.tp)
+    servicio = tds(f_nomina, f_ingreso)
+    monto = sda(persona.ce_trabajador, persona.co_ubicacion,
+                persona.tipopersonal, idx, servicio)
+    persona.slice(:ce_trabajador, :co_ubicacion, :tipopersonal, :descripcion_tp)
+           .merge(atributos_calculados(concepto, f_nomina, idx, servicio, monto,
+                                       ahora))
+  end
+
+  # rubocop:disable Metrics/MethodLength
+  def atributos_calculados(concepto, f_nomina, idx, servicio, monto)
+    {
+      ce_beneficiario: '',
+      co_concepto: concepto.first,
+      descripcion_co: concepto.last,
+      in_nomina: persona.tp.to_s,
+      indic_pago: INDP,
+      estatus_concepto: ESTATUS,
+      fe_nomina: f_nomina,
+      fe_activa: f_nomina,
+      status_deduccion: DEDUCCION,
+      mo_concep: monto,
+      mo_saldo: servicio,
+      status_deduc: '',
+      tipo_nomina: TIPO,
+      tipo_nomina_especifica: TIPO,
+      ano: f_nomina.year,
+      mes: f_nomina.month,
+      indice_concepto: idx,
+      created_at: ahora,
+      updated_at: ahora
+    }
+  end
+  # rubocop:enable Metrics/MethodLength
+
+  def codigo_concepto(ptp)
+    if ptp.eql?(1)
+      ['A223', 'PRIMA POR ANTIGUEDAD DOCENTE']
+    elsif ptp.eql?(2)
+      ['A029', 'PRIMA POR ANTIGUEDAD ADMINISTRATIVO']
+    else
+      ['A436', 'PRIMA POR ANTIGUEDAD OBRERO']
     end
   end
 

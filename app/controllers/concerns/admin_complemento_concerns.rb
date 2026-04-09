@@ -8,6 +8,10 @@ module AdminComplementoConcerns
 
   FACTOR_DE_ANTIGUEDAD = 0.02
   IDXS = { a: 'A' }.freeze
+  INDP = 'M'
+  ESTATUS = '0'
+  DEDUCCION = 0
+  TIPO = 1
 
   def activos_sin_jubilados_o_pensionados
     Admon.where(edo_cargo: %w[A])
@@ -23,12 +27,12 @@ module AdminComplementoConcerns
   end
 
   # Suma De Asignaciones (SDA)
-  def sda(cedula, ubicacion, tipo, idx)
+  def sda(cedula, ubicacion, tipo, idx, servicio)
     asignaciones = HistoricoPago.where(CE_TRABAJADOR: cedula,
                                        CO_UBICACION: ubicacion,
                                        TIPOPERSONAL: tipo,
                                        INDICE_CONCEPTO: idx)
                                 .map(&:MONTO_CONCEP).sum
-    (asignaciones * FACTOR_ANTIGUEDAD).round(2)
+    (asignaciones * FACTOR_ANTIGUEDAD * servicio).round(2)
   end
 end
