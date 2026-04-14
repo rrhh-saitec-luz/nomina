@@ -120,12 +120,33 @@ class AdminsController < ApplicationController
   end
 
   def procesar_personal_pa(personas, f_nomina, idx)
-    personas.in_batches(of: 1000) do |batch|
-      datos_para_historico = batch.map do |persona|
-        preparar_registro_historico(persona, f_nomina, idx)
-      end
-      HistoricoPago.insert_all(datos_para_historico)
+    total = personas.count
+    procesados = 0
+    personas.in_batches(of: 100) do |batch|
+      datos = batch.map { |p| preparar_registro_historico(p, f_nomina, idx) }
+      HistoricoPago.insert_all(datos)
+      procesados += batch.size
+      porcentaje = ((procesados.to_f / total) * 100).round
+      barra_progreso(porcentaje, procesados, total)
     end
+    barra_progreso_mensaje_final
+  end
+
+  def barra_progreso(porcentaje, procesados, total)
+    Turbo::StreamsChannel.broadcast_replace_to(
+      'nomina_channel',
+      target: 'progreso_nomina',
+      partial: 'admins/parciales/barra_progreso',
+      locals: { porcentaje:, procesados:, total: }
+    )
+  end
+
+  def barra_progreso_mensaje_final
+    Turbo::StreamsChannel.broadcast_replace_to(
+      'nomina_channel',
+      target: 'progreso_nomina',
+      partial: 'admins/parciales/barra_progreso_mensaje_final'
+    )
   end
 
   def preparar_registro_historico(persona, f_nomina, idx)
