@@ -7,7 +7,7 @@ class HistoricoPago < ApplicationRecord
   alias_attribute :co_concepto, :CO_CONCEPTO
   alias_attribute :descripcion_co, :DESCRIPCION_CO
   alias_attribute :in_nomina, :IN_NOMINA
-  alias_attribute :indipago, :INDICPAGO
+  alias_attribute :indicpago, :INDICPAGO
   alias_attribute :estatus_concepto, :ESTATUS_CONCEPTO
   alias_attribute :fe_nomina, :FE_NOMINA
   alias_attribute :fe_efectiva, :FE_EFECTIVA

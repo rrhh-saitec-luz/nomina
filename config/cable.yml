@@ -1,6 +1,8 @@
 development:
-  adapter: async
-
+  adapter: redis
+  url: redis://localhost:6379/1
+  channel_prefix: nomina_development
+    
 test:
   adapter: test
 

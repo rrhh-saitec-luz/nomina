@@ -101,55 +101,57 @@ class AdminsController < ApplicationController
   end
 
   def antiguedades
-    @personal = activos_sin_jubilados_o_pensionados
     @fa = FACTOR_DE_ANTIGUEDAD
     @contador = contador_depurar.map(&:valor).first
     render partial: 'admins/parciales/antiguedades'
   end
 
   def suma_de_asignaciones
-    personas = params[:pesonas]
-    f_nomina = params[:fe_nomina].beginning_of_month
+    personas = activos_sin_jubilados_o_pensionados
+    f_nomina = params[:fe_nomina].to_date.beginning_of_month
     procesar_asignaciones(personas, f_nomina)
   end
 
   private
 
   def procesar_asignaciones(personas, f_nomina)
-    idx = IDX[:a]
+    idx = IDXS[:a]
     procesar_personal_pa(personas, f_nomina, idx)
   end
 
-  def procesar_personal(personas, f_nomina, idx)
-    datos_para_historico = personas.map do |persona|
-      preparar_registro_historico(persona, f_nomina, idx)
+  def procesar_personal_pa(personas, f_nomina, idx)
+    personas.in_batches(of: 1000) do |batch|
+      datos_para_historico = batch.map do |persona|
+        preparar_registro_historico(persona, f_nomina, idx)
+      end
+      HistoricoPago.insert_all(datos_para_historico)
     end
-    HistoricoPago.insert_all(datos_para_historico)
   end
 
-  def preparar_registo_historico(persona, f_nomina, idx)
+  def preparar_registro_historico(persona, f_nomina, idx)
     f_ingreso = persona.fe_ingreso.beginning_of_month
     ahora = Time.current
-    concepto = ca_concepto(persona.tp)
+    tipo = persona.tp
+    concepto = codigo_concepto(persona.tp)
     servicio = tds(f_nomina, f_ingreso)
     monto = sda(persona.ce_trabajador, persona.co_ubicacion,
                 persona.tipopersonal, idx, servicio)
     persona.slice(:ce_trabajador, :co_ubicacion, :tipopersonal, :descripcion_tp)
            .merge(atributos_calculados(concepto, f_nomina, idx, servicio, monto,
-                                       ahora))
+                                       ahora, tipo))
   end
 
-  # rubocop:disable Metrics/MethodLength
-  def atributos_calculados(concepto, f_nomina, idx, servicio, monto)
+  # rubocop:disable Metrics/MethodLength, Metrics/ParameterLists
+  def atributos_calculados(concepto, f_nomina, idx, servicio, monto, ahora, tipo)
     {
       ce_beneficiario: '',
       co_concepto: concepto.first,
       descripcion_co: concepto.last,
-      in_nomina: persona.tp.to_s,
-      indic_pago: INDP,
+      in_nomina: tipo.to_s,
+      indicpago: INDP,
       estatus_concepto: ESTATUS,
       fe_nomina: f_nomina,
-      fe_activa: f_nomina,
+      fe_efectiva: f_nomina,
       status_deduccion: DEDUCCION,
       mo_concep: monto,
       mo_saldo: servicio,
@@ -163,12 +165,12 @@ class AdminsController < ApplicationController
       updated_at: ahora
     }
   end
-  # rubocop:enable Metrics/MethodLength
+  # rubocop:enable Metrics/MethodLength, Metrics/ParameterLists
 
-  def codigo_concepto(ptp)
-    if ptp.eql?(1)
+  def codigo_concepto(persona_tp)
+    if persona_tp.eql?(1)
       ['A223', 'PRIMA POR ANTIGUEDAD DOCENTE']
-    elsif ptp.eql?(2)
+    elsif persona_tp.eql?(2)
       ['A029', 'PRIMA POR ANTIGUEDAD ADMINISTRATIVO']
     else
       ['A436', 'PRIMA POR ANTIGUEDAD OBRERO']

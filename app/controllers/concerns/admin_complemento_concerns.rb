@@ -32,7 +32,7 @@ module AdminComplementoConcerns
                                        CO_UBICACION: ubicacion,
                                        TIPOPERSONAL: tipo,
                                        INDICE_CONCEPTO: idx)
-                                .map(&:MONTO_CONCEP).sum
-    (asignaciones * FACTOR_ANTIGUEDAD * servicio).round(2)
+                                .map(&:MO_CONCEP).sum
+    (asignaciones * FACTOR_DE_ANTIGUEDAD * servicio).round(2)
   end
 end

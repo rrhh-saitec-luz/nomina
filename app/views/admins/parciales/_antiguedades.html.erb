@@ -3,9 +3,8 @@
     <%= form_with url: suma_asigna_admins_path,
                   class: "d-flex flex-column mt-3 gap-3 justify-content-center" do |form|  %>
       <h5 class= "text-center"> Ingrese fecha de la nomina </h5>
-      <%= form.hidden_field :personas,  value: @personal %>
       <%= form.label :fe_nomina, "Fecha nomina" %>
-      <%= fore.date_field :fe_nomina, require: true %>
+      <%= form.date_field :fe_nomina, require: true %>
       <%= form.submit "Calcular", class: "btn btn-primary" %>
     <% end %>
   <% else %>
