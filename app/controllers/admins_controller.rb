@@ -116,20 +116,36 @@ class AdminsController < ApplicationController
 
   def procesar_asignaciones(personas, f_nomina)
     idx = IDXS[:a]
-    procesar_personal_pa(personas, f_nomina, idx)
+    fecha_limite = f_nomina - 1.year
+    personas_aptas = personas.where('fe_ingreso <= ?', fecha_limite)
+    total = personas_aptas.count
+    procesar_personal_pa(personas_aptas, f_nomina, idx, total)
   end
 
-  def procesar_personal_pa(personas, f_nomina, idx)
-    total = personas.count
+  def procesar_personal_pa(personas, f_nomina, idx, total)
     procesados = 0
+    ahora = Time.current
     personas.in_batches(of: 100) do |batch|
-      datos = batch.map { |p| preparar_registro_historico(p, f_nomina, idx) }
-      HistoricoPago.insert_all(datos)
+      datos = batch.filter_map { |p| preparar_registro_historico(p, f_nomina, idx, ahora) }
+      HistoricoPago.insert_all(datos) if datos.any?
       procesados += batch.size
       porcentaje = ((procesados.to_f / total) * 100).round
       barra_progreso(porcentaje, procesados, total)
     end
     barra_progreso_mensaje_final
+  end
+
+  def preparar_registro_historico(persona, f_nomina, idx, ahora)
+    f_ingreso = persona.fe_ingreso.beginning_of_month
+    servicio = tds(f_nomina, f_ingreso)
+    monto = sda(persona.ce_trabajador, persona.co_ubicacion,
+                persona.tipopersonal, idx, servicio)
+    return nil if monto.zero?
+
+    tipo = persona.tp
+    concepto = codigo_concepto(persona.tp)
+    persona.slice(:ce_trabajador, :co_ubicacion, :tipopersonal, :descripcion_tp)
+           .merge(atributos_calculados(concepto, f_nomina, idx, servicio, monto, ahora, tipo))
   end
 
   def barra_progreso(porcentaje, procesados, total)
@@ -147,19 +163,6 @@ class AdminsController < ApplicationController
       target: 'progreso_nomina',
       partial: 'admins/parciales/barra_progreso_mensaje_final'
     )
-  end
-
-  def preparar_registro_historico(persona, f_nomina, idx)
-    f_ingreso = persona.fe_ingreso.beginning_of_month
-    ahora = Time.current
-    tipo = persona.tp
-    concepto = codigo_concepto(persona.tp)
-    servicio = tds(f_nomina, f_ingreso)
-    monto = sda(persona.ce_trabajador, persona.co_ubicacion,
-                persona.tipopersonal, idx, servicio)
-    persona.slice(:ce_trabajador, :co_ubicacion, :tipopersonal, :descripcion_tp)
-           .merge(atributos_calculados(concepto, f_nomina, idx, servicio, monto,
-                                       ahora, tipo))
   end
 
   # rubocop:disable Metrics/MethodLength, Metrics/ParameterLists

@@ -22,7 +22,7 @@ module AdminComplementoConcerns
   # Tiempo De Servicio (TDS)
   def tds(nomina, ingreso)
     tiempo = nomina.year - ingreso.year
-    tiempo -= 1 if nomina.month < ingreso.month
+    tiempo -= 1 if nomina.month < ingreso.month || (nomina.month == ingreso.month && nomina.day < ingreso.day)
     tiempo
   end
 
