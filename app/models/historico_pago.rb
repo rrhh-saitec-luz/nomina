@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class HistoricoPago < ApplicationRecord
   alias_attribute :ce_trabajador, :CE_TRABAJADOR
   alias_attribute :co_ubicacion, :CO_UBICACION
@@ -36,22 +38,21 @@ class HistoricoPago < ApplicationRecord
     end
   end
 
-  def self.sincronizar_cargos_multiples
-    transaction do
-      datos_externos_multiples.each do |ad|
-        actualizados = where(ce_trabajador: ad.ce_trabajador, co_ubicacion: ad.co_ubicacion)
-                       .where('tipopersonal IS DISTINCT FROM ?', ad.tipopersonal)
-                       .update_all(tipopersonal: ad.tipopersonal, descripcion_tp: ad.descripcion_tp)
-        next if actualizados.positive?
+  def self.detectar_inconsistencias_multiples
+    datos_externos_multiples.each do |ad|
+      existe = where(
+        '"CE_TRABAJADOR" = ? AND "CO_UBICACION" = ? AND "TIPOPERSONAL" = ?',
+        ad.ce_trabajador, ad.co_ubicacion, ad.tipopersonal
+      ).exists?
+      next if existe
 
-        SincronizacionError.find_or_create_by!(
-          cedula: ad.ce_trabajador,
-          co_ubicacion: ad.co_ubicacion,
-          resuelto: false
-        ) do |error|
-          error.tipo_personal = ad.tipopersonal
-          error.mensaje = 'Ubicación cambió o registro no existe en Histórico'
-        end
+      SyncError.find_or_create_by!(
+        ce_trabajador: ad.ce_trabajador,
+        co_ubicacion: ad.co_ubicacion,
+        tipo_personal: ad.tipopersonal,
+        resuelto: false
+      ) do |error|
+        error.mensaje = 'Cargo múltiple no encontrado en Histórico: verificar ubicación o jubilación'
       end
     end
   end
@@ -76,6 +77,9 @@ class HistoricoPago < ApplicationRecord
          .where.not(tipopersonal: '110205')
          .group(:ce_trabajador, :co_ubicacion)
          .having('COUNT(*) > 1')
-         .select(:ce_trabajador, :co_ubicacion, :tipopersonal, :descripcion_tp)
+         .select(:ce_trabajador,
+                 :co_ubicacion,
+                 'MAX(tipopersonal) AS tipopersonal',
+                 'MAX(descripcion_tp) AS descripcion_tp')
   end
 end
