@@ -36,6 +36,26 @@ class HistoricoPago < ApplicationRecord
     end
   end
 
+  def self.sincronizar_cargos_multiples
+    transaction do
+      datos_externos_multiples.each do |ad|
+        actualizados = where(ce_trabajador: ad.ce_trabajador, co_ubicacion: ad.co_ubicacion)
+                       .where('tipopersonal IS DISTINCT FROM ?', ad.tipopersonal)
+                       .update_all(tipopersonal: ad.tipopersonal, descripcion_tp: ad.descripcion_tp)
+        next if actualizados.positive?
+
+        SincronizacionError.find_or_create_by!(
+          cedula: ad.ce_trabajador,
+          co_ubicacion: ad.co_ubicacion,
+          resuelto: false
+        ) do |error|
+          error.tipo_personal = ad.tipopersonal
+          error.mensaje = 'Ubicación cambió o registro no existe en Histórico'
+        end
+      end
+    end
+  end
+
   private
 
   def self.datos_externos
@@ -51,4 +71,11 @@ class HistoricoPago < ApplicationRecord
          )
   end
 
+  def self.datos_externos_multiples
+    Admon.where(edo_cargo: %w[A P])
+         .where.not(tipopersonal: '110205')
+         .group(:ce_trabajador, :co_ubicacion)
+         .having('COUNT(*) > 1')
+         .select(:ce_trabajador, :co_ubicacion, :tipopersonal, :descripcion_tp)
+  end
 end
