@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2026_02_03_132937) do
+ActiveRecord::Schema[7.1].define(version: 2026_04_30_124949) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -50,6 +50,7 @@ ActiveRecord::Schema[7.1].define(version: 2026_02_03_132937) do
     t.string "INDICE_CONCEPTO"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["CE_TRABAJADOR"], name: "index_hp_on_ce_trabajador"
   end
 
   create_table "multiples", force: :cascade do |t|

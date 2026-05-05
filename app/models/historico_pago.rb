@@ -20,4 +20,35 @@ class HistoricoPago < ApplicationRecord
   alias_attribute :ano, :ANO
   alias_attribute :mes, :MES
   alias_attribute :indice_concepto, :INDICE_CONCEPTO
+
+  def self.sincronizar_cargos_unicos
+    transaction do
+      datos_externos.each do |ad|
+        cambios = { 'CO_UBICACION' => ad.co_ubicacion,
+                    'TIPOPERSONAL' => ad.tipopersonal,
+                    'DESCRIPCION_TP' => ad.descripcion_tp }
+
+        where('CE_TRABAJADOR' => ad.ce_trabajador)
+          .where('("CO_UBICACION" IS DISTINCT FROM ? OR "TIPOPERSONAL" IS DISTINCT FROM ?)',
+                 ad.co_ubicacion,
+                 ad.tipopersonal).update_all(cambios)
+      end
+    end
+  end
+
+  private
+
+  def self.datos_externos
+    Admon.where(edo_cargo: %w[A P])
+         .where.not(tipopersonal: '110205')
+         .group(:ce_trabajador)
+         .having('COUNT(*) = 1')
+         .select(
+           :ce_trabajador,
+           'MAX(co_ubicacion) AS co_ubicacion',
+           'MAX(tipopersonal) AS tipopersonal',
+           'MAX(descripcion_tp) AS descripcion_tp'
+         )
+  end
+
 end
