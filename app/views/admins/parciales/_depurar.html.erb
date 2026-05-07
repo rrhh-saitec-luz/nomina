@@ -3,7 +3,12 @@
                   class: "d-flex flex-column mt-3 gap-3 justify-content-center" do %>
     <%= content_tag :ol do %>
       <%= content_tag :li do %>
-      <%= button_to 'Eliminar Inactivos',
+        <%= button_to 'Sincronizar cargos',
+                       sincronizar_admins_path,
+                       disabled: !(cont.eql?(2)),
+                       class: "btn btn-warning" %>
+
+        <%= button_to 'Eliminar Inactivos',
                        eliminar_inactivos_admins_path,
                        disabled: !(cont.eql?(2)),
                        class: "btn btn-danger" %>

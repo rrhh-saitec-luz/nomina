@@ -45,6 +45,10 @@ class AdminsController < ApplicationController
     generar_nomina
   end
 
+  def sincronizar
+    HistoricoPago.sincronizar_cargos_unicos
+  end
+
   # Metodo para renderizar vista de depurar nomina
   def depurar
     contador = contador_depurar.map(&:valor).first
