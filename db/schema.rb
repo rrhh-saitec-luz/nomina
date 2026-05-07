@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2026_05_05_132436) do
+ActiveRecord::Schema[7.1].define(version: 2026_05_05_155244) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -51,6 +51,8 @@ ActiveRecord::Schema[7.1].define(version: 2026_05_05_132436) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["CE_TRABAJADOR"], name: "index_hp_on_ce_trabajador"
+    t.index ["CO_UBICACION"], name: "index_hp_on_co_ubicacion"
+    t.index ["TIPOPERSONAL"], name: "index_hp_on_tipopersonal"
   end
 
   create_table "multiples", force: :cascade do |t|
