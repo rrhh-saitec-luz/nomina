@@ -1,30 +1,51 @@
 <turbo-frame id= 'contenido'>
+  <%= turbo_stream_from 'nomina_channel' %>
   <%= content_tag :div,
                   class: "d-flex flex-column mt-3 gap-3 justify-content-center" do %>
     <%= content_tag :ol do %>
-      <%= content_tag :li do %>
-        <%= button_to 'Sincronizar cargos',
-                       sincronizar_admins_path,
-                       disabled: !(cont.eql?(2)),
-                       class: "btn btn-warning" %>
+      <%if cont >= 2 %>
+      <%= content_tag :li, id: "contenedor_boton_sincronizar" do %>
+        <div class="d-flex flex-row gap-2">
+          <%= button_to 'Sincronizar cargos',
+                        sincronizar_admins_path,
+                        disabled: !(cont.eql?(2)),
+                        class: "btn btn-warning",
+                        data: {
+                               disable_with: "Procesando...",
+                               turbo_submits_with: "Enviando..."
+                        } %>
 
+          <div id="progreso_cargos_unicos" class= "align-self-center">
+            <% if cont > 2 %>
+              <% mensaje = "✅" %>
+            <% end %>
+            <%= mensaje %>
+          </div>
+        </div>
+      <% end %>
+      <% end %>
+      <% if cont >= 3 %>
+      <%= content_tag :li, id: "eliminar_inactivos" do %>
         <%= button_to 'Eliminar Inactivos',
                        eliminar_inactivos_admins_path,
-                       disabled: !(cont.eql?(2)),
-                       class: "btn btn-danger" %>
-      <% end %>
-      <%= content_tag :li do %>
-        <%= button_to 'Actualizar Activos',
-                       actualizar_activos_admins_path,
                        disabled: !(cont.eql?(3)),
                        class: "btn btn-danger" %>
       <% end %>
+      <% elsif cont >= 4 %>
+      <%= content_tag :li do %>
+        <%= button_to 'Actualizar Activos',
+                       actualizar_activos_admins_path,
+                       disabled: !(cont.eql?(4)),
+                       class: "btn btn-danger" %>
+        <% end %>
+      <% else %>
       <% cont >= 4 and mostrar = "" or mostrar = "d-none" %> 
       <%= content_tag :li, class: mostrar do %>
         <%= content_tag :div, class: "alert alert-warning" do %>
           Debe Verificar cargos multiple
         <% end %>
       <% end %>
+    <% end %>
     <% end %>
   <% end %>
 </turbo-frame>

@@ -24,16 +24,23 @@ class HistoricoPago < ApplicationRecord
   alias_attribute :indice_concepto, :INDICE_CONCEPTO
 
   def self.sincronizar_cargos_unicos
-    transaction do
-      datos_externos.each do |ad|
-        cambios = { 'CO_UBICACION' => ad.co_ubicacion,
-                    'TIPOPERSONAL' => ad.tipopersonal,
-                    'DESCRIPCION_TP' => ad.descripcion_tp }
+    registros = datos_externos.to_a
+    total = registros.size
+    registros.each_with_index do |ad, index|
+      cambios = {
+        'CO_UBICACION' => ad.co_ubicacion,
+        'TIPOPERSONAL' => ad.tipopersonal,
+        'DESCRIPCION_TP' => ad.descripcion_tp
+      }
+      where('CE_TRABAJADOR' => ad.ce_trabajador)
+        .where('("CO_UBICACION" IS DISTINCT FROM ? OR "TIPOPERSONAL" IS DISTINCT FROM ?)',
+               ad.co_ubicacion, ad.tipopersonal)
+        .update_all(cambios)
 
-        where('CE_TRABAJADOR' => ad.ce_trabajador)
-          .where('("CO_UBICACION" IS DISTINCT FROM ? OR "TIPOPERSONAL" IS DISTINCT FROM ?)',
-                 ad.co_ubicacion,
-                 ad.tipopersonal).update_all(cambios)
+      procesados = index + 1
+      if (procesados % 5).zero? || (procesados == total)
+        porcentaje = ((procesados.to_f / total) * 100).round
+        barra_progreso_cargos(porcentaje, procesados, total)
       end
     end
   end
@@ -81,5 +88,23 @@ class HistoricoPago < ApplicationRecord
                  :co_ubicacion,
                  'MAX(tipopersonal) AS tipopersonal',
                  'MAX(descripcion_tp) AS descripcion_tp')
+  end
+
+  def self.barra_progreso_cargos(porcentaje, procesados, total)
+    Turbo::StreamsChannel.broadcast_replace_to(
+      'nomina_channel', # Puedes usar el mismo canal o crear 'cargos_channel'
+      target: 'progreso_cargos_unicos',
+      partial: 'admins/parciales/barra_progreso_cargos',
+      locals: { porcentaje: porcentaje, procesados: procesados, total: total }
+    )
+  end
+
+  # El método que te faltaba: Mensaje de éxito final
+  def self.barra_progreso_cargos_final
+    Turbo::StreamsChannel.broadcast_replace_to(
+      'nomina_channel',
+      target: 'progreso_cargos_unicos',
+      partial: 'admins/parciales/barra_progreso_mensaje_final'
+    )
   end
 end

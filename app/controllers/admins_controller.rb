@@ -46,7 +46,19 @@ class AdminsController < ApplicationController
   end
 
   def sincronizar
-    HistoricoPago.sincronizar_cargos_unicos
+    SincronizacionJob.perform_later(:unicos)
+    respond_to do |format|
+      format.turbo_stream do
+        render turbo_stream: [
+          turbo_stream.replace('contenedor_boton_sincronizar',
+                               partial: 'admins/parciales/boton_deshabilitado'),
+          turbo_stream.replace('progreso_nomina',
+                               partial: 'admins/parciales/barra_progreso',
+                               locals: { porcentaje: 0, procesados: 0, total: 100 })
+        ]
+      end
+      format.html { redirect_to admins_path, notice: 'Sincronización iniciada...' }
+    end
   end
 
   # Metodo para renderizar vista de depurar nomina
