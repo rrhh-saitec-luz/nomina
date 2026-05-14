@@ -2,29 +2,50 @@
   <%= turbo_stream_from 'nomina_channel' %>
   <%= content_tag :div,
                   class: "d-flex flex-column mt-3 gap-3 justify-content-center" do %>
-    <%= content_tag :ol do %>
+    <%= content_tag :ol, class: "d-flex flex-column gap-2" do %>
       <%if cont >= 2 %>
-      <%= content_tag :li, id: "contenedor_boton_sincronizar" do %>
-        <div class="d-flex flex-row gap-2">
-          <%= button_to 'Sincronizar cargos',
-                        sincronizar_admins_path,
-                        disabled: !(cont.eql?(2)),
-                        class: "btn btn-warning",
-                        data: {
-                               disable_with: "Procesando...",
-                               turbo_submits_with: "Enviando..."
-                        } %>
-
-          <div id="progreso_cargos_unicos" class= "align-self-center">
-            <% if cont > 2 %>
-              <% mensaje = "✅" %>
-            <% end %>
-            <%= mensaje %>
+        <%= content_tag :li, id: "contenedor_boton_unicos" do %>
+          <div class="d-flex flex-row gap-2">
+            <%= button_to 'Sincronizar cargos únicos',
+                          sincronizar_admins_path(tipo: 'unicos'),
+                          disabled: !(cont.eql?(2)),
+                          class: "btn btn-warning",
+                          data: {
+                                 disable_with: "Procesando...",
+                                 turbo_submits_with: "Enviando..."
+                          } %>
+  
+            <div id="progreso_cargos_unicos" class= "align-self-center">
+              <% if cont > 2 %>
+                <% mensaje = "✅" %>
+              <% end %>
+              <%= mensaje %>
+            </div>
           </div>
-        </div>
-      <% end %>
+        <% end %>
       <% end %>
       <% if cont >= 3 %>
+        <%= content_tag :li, id: "contenedor_boton_multiples" do %>
+          <div class="d-flex flex-row gap-2">
+            <%= button_to 'Detectar inconsistencias',
+                          sincronizar_admins_path(tipo: 'multiple'),
+                          disabled: !(cont.eql?(3)),
+                          class: "btn btn-warning",
+                          data: {
+                                 disable_with: "Procesando...",
+                                 turbo_submits_with: "Enviando..."
+                          } %>
+  
+            <div id="progreso_cargos_multiples" class= "align-self-center">
+              <% if cont > 3 %>
+                <% mensaje = "✅" %>
+              <% end %>
+              <%= mensaje %>
+            </div>
+          </div>
+        <% end %>
+      <% end %>
+      <% if cont >= 4 %>
       <%= content_tag :li, id: "eliminar_inactivos" do %>
         <%= button_to 'Eliminar Inactivos',
                        eliminar_inactivos_admins_path,
@@ -39,7 +60,7 @@
                        class: "btn btn-danger" %>
         <% end %>
       <% else %>
-      <% cont >= 4 and mostrar = "" or mostrar = "d-none" %> 
+      <% cont >= 5 and mostrar = "" or mostrar = "d-none" %> 
       <%= content_tag :li, class: mostrar do %>
         <%= content_tag :div, class: "alert alert-warning" do %>
           Debe Verificar cargos multiple

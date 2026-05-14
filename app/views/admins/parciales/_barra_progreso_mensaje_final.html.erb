@@ -1,3 +1,10 @@
-<div id='progreso_nomina' class='align-self-center text-center'>
-  ✅
-</div>
+<%= content_tag :div, id: "progreso_cargos_#{tipo}", class: "d-flex flex-row gap-2 align-self-center" do %>
+  <div>
+    ✅
+  </div>
+  <div>
+    <% if tipo == :unicos %>
+      <%= link_to("Siguiente paso", depurar_admins_path) %>
+    <% end %>
+  </div>
+<% end %>

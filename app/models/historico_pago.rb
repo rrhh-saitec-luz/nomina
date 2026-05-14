@@ -23,7 +23,7 @@ class HistoricoPago < ApplicationRecord
   alias_attribute :mes, :MES
   alias_attribute :indice_concepto, :INDICE_CONCEPTO
 
-  def self.sincronizar_cargos_unicos
+  def self.sincronizar_cargos_unicos(tipo)
     registros = datos_externos.to_a
     total = registros.size
     registros.each_with_index do |ad, index|
@@ -40,12 +40,12 @@ class HistoricoPago < ApplicationRecord
       procesados = index + 1
       if (procesados % 5).zero? || (procesados == total)
         porcentaje = ((procesados.to_f / total) * 100).round
-        barra_progreso_cargos(porcentaje, procesados, total)
+        barra_progreso_cargos(porcentaje, procesados, total, tipo)
       end
     end
   end
 
-  def self.detectar_inconsistencias_multiples
+  def self.detectar_inconsistencias_multiples(tipo)
     datos_externos_multiples.each do |ad|
       existe = where(
         '"CE_TRABAJADOR" = ? AND "CO_UBICACION" = ? AND "TIPOPERSONAL" = ?',
@@ -90,21 +90,22 @@ class HistoricoPago < ApplicationRecord
                  'MAX(descripcion_tp) AS descripcion_tp')
   end
 
-  def self.barra_progreso_cargos(porcentaje, procesados, total)
+  def self.barra_progreso_cargos(porcentaje, procesados, total, tipo)
     Turbo::StreamsChannel.broadcast_replace_to(
       'nomina_channel', # Puedes usar el mismo canal o crear 'cargos_channel'
-      target: 'progreso_cargos_unicos',
+      target: "progreso_cargos_#{tipo}",
       partial: 'admins/parciales/barra_progreso_cargos',
-      locals: { porcentaje: porcentaje, procesados: procesados, total: total }
+      locals: { porcentaje: porcentaje, procesados: procesados, total: total, tipo: tipo }
     )
   end
 
   # El método que te faltaba: Mensaje de éxito final
-  def self.barra_progreso_cargos_final
+  def self.barra_progreso_cargos_final(tipo)
     Turbo::StreamsChannel.broadcast_replace_to(
       'nomina_channel',
-      target: 'progreso_cargos_unicos',
-      partial: 'admins/parciales/barra_progreso_mensaje_final'
+      target: "progreso_cargos_#{tipo}",
+      partial: 'admins/parciales/barra_progreso_mensaje_final',
+      locals: {tipo: tipo}
     )
   end
 end

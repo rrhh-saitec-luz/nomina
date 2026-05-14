@@ -5,12 +5,12 @@ class SincronizacionJob < ApplicationJob
     cont = Contador.find(1)
     begin
       if tipo == :unicos
-        HistoricoPago.sincronizar_cargos_unicos
+        HistoricoPago.sincronizar_cargos_unicos(tipo)
       else
-        HistoricoPago.detectar_inconsistencias_multiples
+        HistoricoPago.detectar_inconsistencias_multiples(tipo)
       end
-      HistoricoPago.barra_progreso_cargos_final
-      cont.update!(valor: 3)
+      HistoricoPago.barra_progreso_cargos_final(tipo)
+      tipo == :unicos ? cont.update!(valor: 3) : cont.update!(4)
 
     rescue => e
       cont.update(valor: 2)

@@ -1,6 +1,13 @@
-<li id='contenedor_boton_sincronizar'>
-  <div class="d-flex flex-row">
-    <button class='btn btn-warning' disabled>Sincronizar cargos</button>
-    <div id="progreso_cargos_unicos" class="align-self-center"></div>
+<%= content_tag :li, id: "contenedor_boton_#{tipo}" do %>
+  <% tipo_boton = tipo == :unicos ? "Sincronizar cargos únicos" : "Detectar inconsistencias"%>
+  
+  <div class="d-flex flex-row gap-2">
+    <button class='btn btn-warning' disabled>
+      <%= tipo_boton %>
+    </button>
+    <%= content_tag :div,
+                    id: "progreso_cargos_#{tipo}",
+                    class: "align-self-center" do %>
+    <% end %>
   </div>
-</li>
+<% end %>

@@ -46,18 +46,21 @@ class AdminsController < ApplicationController
   end
 
   def sincronizar
-    SincronizacionJob.perform_later(:unicos)
+    tipo = params[:tipo] == 'multiple' ? :multiple : :unicos
+    SincronizacionJob.perform_later(tipo)
     respond_to do |format|
       format.turbo_stream do
         render turbo_stream: [
-          turbo_stream.replace('contenedor_boton_sincronizar',
-                               partial: 'admins/parciales/boton_deshabilitado'),
-          turbo_stream.replace('progreso_nomina',
-                               partial: 'admins/parciales/barra_progreso',
-                               locals: { porcentaje: 0, procesados: 0, total: 100 })
+          turbo_stream.replace("contenedor_boton_#{tipo}",
+                               partial: 'admins/parciales/boton_deshabilitado',
+                               locals: { tipo: tipo }),
+
+          turbo_stream.replace("progreso_cargos_#{tipo}",
+                               partial: 'admins/parciales/barra_progreso_cargos',
+                               locals: { porcentaje: 0, procesados: 0, total: 100, tipo: tipo })
         ]
       end
-      format.html { redirect_to admins_path, notice: 'Sincronización iniciada...' }
+      format.html { redirect_to admins_path, notice: 'Sincronización de cargos #{unicos} iniciada...' }
     end
   end
 
