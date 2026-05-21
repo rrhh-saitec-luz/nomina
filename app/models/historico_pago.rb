@@ -46,7 +46,13 @@ class HistoricoPago < ApplicationRecord
   end
 
   def self.detectar_inconsistencias_multiples(tipo)
-    datos_externos_multiples.each do |ad|
+    registros = datos_externos_multiples.to_a
+    total = registros.size
+    if total.zero?
+      barra_progreso_cargos(100, 0, 0, tipo)
+      return
+    end
+    registros.each_with_index do |ad, index|
       existe = where(
         '"CE_TRABAJADOR" = ? AND "CO_UBICACION" = ? AND "TIPOPERSONAL" = ?',
         ad.ce_trabajador, ad.co_ubicacion, ad.tipopersonal
@@ -61,10 +67,13 @@ class HistoricoPago < ApplicationRecord
       ) do |error|
         error.mensaje = 'Cargo múltiple no encontrado en Histórico: verificar ubicación o jubilación'
       end
+      procesados = index + 1
+      if (procesados % 5).zero? || (procesados == total)
+        porcentaje = ((procesados.to_f / total) * 100).round
+        barra_progreso_cargos(porcentaje, procesados, total, tipo)
+      end
     end
   end
-
-  private
 
   def self.datos_externos
     Admon.where(edo_cargo: %w[A P])

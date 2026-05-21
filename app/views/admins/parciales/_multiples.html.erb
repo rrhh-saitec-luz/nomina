@@ -1,17 +1,67 @@
 <turbo-frame id="contenido">
-  <% if cont.eql?(4) %>
-    <%= content_tag :div, 
-                    class: "d-flex flex-column mt-3 gap-3 justify-content-center" do %>
-      <% if @cargos_trabajador.empty? %>
-        <div>Cargos no encontrados</div>
-      <% else %>
-        <%= render "admins/parciales/multiples_tabla_a" %>  
-      <% end %>
+  <div id="progreso_cargos_multiple" class="container mt-4">
+  <h3 class="mb-4 text-warning">⚠️ Conciliación Manual de Cargos Múltiples</h3>
+
+  <% if @datos_locales.any? || @datos_externos.any? %>
+    <% (@datos_locales.keys | @datos_externos.keys).each do |cedula| %>
+      <%# Aplicamos .uniq por los campos clave para limpiar los conceptos repetidos en la vista %>
+      <% locales = (@datos_locales[cedula] || []).uniq { |l| [l.co_ubicacion, l.tipopersonal] } %>
+      <% externos = @datos_externos[cedula] || [] %>
+
+      <div class="card mb-4 border-warning shadow-sm">
+        <div class="card-header bg-dark text-white d-flex justify-content-between align-items-center">
+          <span class="fs-5">🪪 Cédula Trabajador: <strong><%= cedula %></strong></span>
+          <span class="badge bg-danger"><%= externos.size %> cargos en origen</span>
+        </div>
+
+        <div class="card-body bg-light">
+          <div class="row text-center fw-bold mb-2">
+            <div class="col-md-5 text-primary">📂 Cargos Actuales (HistoricoPago)</div>
+            <div class="col-md-2 text-muted">🔄 VS</div>
+            <div class="col-md-5 text-success">🌐 Origen Externo (Admon)</div>
+          </div>
+
+          <div class="row align-items-center">
+            <!-- COLUMNA IZQUIERDA: Cargos Locales Únicos -->
+            <div class="col-md-5 border-end">
+              <% if locales.any? %>
+                <% locales.each do |local| %>
+                  <div class="p-2 mb-2 bg-white rounded border border-primary-subtle shadow-sm">
+                    <p class="mb-1">📍 <strong>Ubicación:</strong> <%= local.co_ubicacion %></p>
+                    <p class="mb-0">🪪 <strong>Tipo Personal:</strong> <%= local.tipopersonal %></p>
+                  </div>
+                <% end %>
+              <% else %>
+                <div class="text-muted text-center p-3">No hay registros locales activos.</div>
+              <% end %>
+            </div>
+
+            <!-- COLUMNA CENTRAL: Acción -->
+            <div class="col-md-2 text-center">
+              <%= link_to depurar_admins_path, class: "btn btn-sm btn-primary w-100 mb-2" do %>
+                ✏️ Resolver
+              <% end %>
+            </div>
+
+            <!-- COLUMNA DERECHA: Datos en Admon -->
+            <div class="col-md-5 border-start">
+              <% externos.each do |ext| %>
+                <div class="p-2 mb-2 bg-white rounded border border-success-subtle shadow-sm">
+                  <p class="mb-1">📍 <strong>Ubicación:</strong> <%= ext.co_ubicacion %></p>
+                  <p class="mb-1">🪪 <strong>Tipo Personal:</strong> <%= ext.tipopersonal %></p>
+                  <small class="text-muted d-block"><%= ext.descripcion_tp %></small>
+                </div>
+              <% end %>
+            </div>
+          </div>
+        </div>
+      </div>
     <% end %>
   <% else %>
-    <%= content_tag :h1 do %>
-       No se encontraron cargos multiples
-    <% end %>
+    <div class="alert alert-success text-center">
+      🎉 No hay inconsistencias múltiples pendientes por resolver.
+    </div>
   <% end %>
+</div>
 </turbo-frame>
 

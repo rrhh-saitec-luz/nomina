@@ -10,10 +10,10 @@ class SincronizacionJob < ApplicationJob
         HistoricoPago.detectar_inconsistencias_multiples(tipo)
       end
       HistoricoPago.barra_progreso_cargos_final(tipo)
-      tipo == :unicos ? cont.update!(valor: 3) : cont.update!(4)
+      tipo == :unicos ? cont.update!(valor: 3) : cont.update!(valor: 4)
 
     rescue => e
-      cont.update(valor: 2)
+      cont.update(valor: 3)
       Rails.logger.error "FALLÓ Sincronización: #{e.message}"
     end
   end

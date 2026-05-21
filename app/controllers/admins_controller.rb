@@ -87,13 +87,15 @@ class AdminsController < ApplicationController
   end
 
   def verificar_cargos_multiples
-    contador = contador_depurar.map(&:valor).first
-    multiples = Multiple.all.map(&:ce_trabajador).uniq
-    @nomina_actual = buscar_nomina_actual(multiples)
-    prenomina_actual = buscar_prenomina_actual(multiples)
-    @cargos_trabajador = colectar_cargos(@nomina_actual)
-    @cargos_prenomina = colectar_cargos_prenomina(prenomina_actual)
-    render partial: 'admins/parciales/multiples', locals: { cont: contador }
+    cedulas_con_error = SyncError.pluck(:ce_trabajador)
+    @datos_locales  = HistoricoPago.where(ce_trabajador: cedulas_con_error)
+                                   .select(:ce_trabajador, :co_ubicacion, :tipopersonal)
+                                   .distinct
+                                   .group_by(&:ce_trabajador)
+    @datos_externos = Admon.where(ce_trabajador: cedulas_con_error, edo_cargo: %w[A P])
+                           .where.not(tipopersonal: '110205')
+                           .group_by(&:ce_trabajador)
+    render partial: 'admins/parciales/multiples'
   end
 
   def detalles
