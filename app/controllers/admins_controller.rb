@@ -98,6 +98,48 @@ class AdminsController < ApplicationController
     render partial: 'admins/parciales/multiples'
   end
 
+  def editar_cargo_multiple
+    @cedula = params[:cedula]
+    @co_ubicacion_actual = params[:co_ubicacion_actual]
+    @tipopersonal_actual = params[:tipopersonal_actual]
+    @cargo_muestra = HistoricoPago.find_by(
+      ce_trabajador: @cedula,
+      co_ubicacion: @co_ubicacion_actual,
+      tipopersonal: @tipopersonal_actual
+    )
+
+    if @cargo_muestra.nil?
+      redirect_to depurar_admins_path, alert: 'No se encontraron registros locales para este cargo.'
+    end
+  end
+
+  def actualizar_cargo_multiple
+    @cedula = params[:cedula]
+    @co_ubicacion_actual = params[:co_ubicacion_actual]
+    @tipopersonal_actual = params[:tipopersonal_actual]
+
+    # Capturamos el lote de todos los conceptos del trabajador en ese cargo específico
+    @conceptos = HistoricoPago.where(
+      ce_trabajador: @cedula,
+      co_ubicacion: @co_ubicacion_actual,
+      tipopersonal: @tipopersonal_actual
+    )
+
+    # Ejecutamos la actualización masiva de la llave compuesta
+    if @conceptos.update_all(
+         co_ubicacion: params[:nuevo_co_ubicacion],
+         tipopersonal: params[:nuevo_tipopersonal]
+       )
+      respond_to do |format|
+        # Redirección con estatus :see_other para que Turbo actualice el frame de la tabla
+        format.html { redirect_to depurar_admins_path, status: :see_other, notice: "Cargo y conceptos actualizados con éxito." }
+      end
+    else
+      flash.now[:alert] = "No se pudieron actualizar los registros."
+      render :editar_cargo_multiple, status: :unprocessable_entity
+    end
+  end
+
   def detalles
     @tipo = params[:tipo].to_i
     @nombre = Admon.where(ce_trabajador: params[:cedula]).first.nombres

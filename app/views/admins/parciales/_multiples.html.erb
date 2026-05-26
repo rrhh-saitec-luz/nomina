@@ -22,27 +22,28 @@
           </div>
 
           <div class="row align-items-center">
-            <!-- COLUMNA IZQUIERDA: Cargos Locales Únicos -->
-            <div class="col-md-5 border-end">
-              <% if locales.any? %>
-                <% locales.each do |local| %>
-                  <div class="p-2 mb-2 bg-white rounded border border-primary-subtle shadow-sm">
-                    <p class="mb-1">📍 <strong>Ubicación:</strong> <%= local.co_ubicacion %></p>
-                    <p class="mb-0">🪪 <strong>Tipo Personal:</strong> <%= local.tipopersonal %></p>
-                  </div>
-                <% end %>
-              <% else %>
-                <div class="text-muted text-center p-3">No hay registros locales activos.</div>
-              <% end %>
-            </div>
-
-            <!-- COLUMNA CENTRAL: Acción -->
-            <div class="col-md-2 text-center">
-              <%= link_to depurar_admins_path, class: "btn btn-sm btn-primary w-100 mb-2" do %>
-                ✏️ Resolver
-              <% end %>
-            </div>
-
+ <!-- COLUMNA IZQUIERDA: Cargos Locales Únicos (Ahora col-md-6) -->
+<div class="col-md-6 border-end">
+  <% if locales.any? %>
+    <% locales.each do |local| %>
+      <div class="p-3 mb-2 bg-white rounded border border-primary-subtle shadow-sm d-flex justify-content-between align-items-center">
+        <div>
+          <p class="mb-1">📍 <strong>Ubicación:</strong> <%= local.co_ubicacion %></p>
+          <p class="mb-0">🪪 <strong>Tipo Personal:</strong> <%= local.tipopersonal %></p>
+        </div>
+        
+      <%= link_to editar_cargo_multiple_admins_path(
+      cedula: local.ce_trabajador, 
+      co_ubicacion_actual: local.co_ubicacion, 
+      tipopersonal_actual: local.tipopersonal
+    ), class: "btn btn-sm btn-outline-primary" do %>
+  ✏️ Editar
+<% end %></div>
+    <% end %>
+  <% else %>
+    <div class="text-muted text-center p-3">No hay registros locales activos.</div>
+  <% end %>
+</div>
             <!-- COLUMNA DERECHA: Datos en Admon -->
             <div class="col-md-5 border-start">
               <% externos.each do |ext| %>

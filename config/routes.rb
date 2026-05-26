@@ -28,6 +28,8 @@ Rails.application.routes.draw do
       get 'antiguedades'
       get 'vcm', action: :verificar_cargos_multiples
       get 'detalles', action: :detalles
+      get 'editar_cargo_multiple', action: :editar_cargo_multiple
+      patch 'actualizar_cargo_multiple', action: :actualizar_cargo_multiple
       post 'prenomina', action: :prenomina
       post 'actualizar', action: :actualizar_prenomina
       post 'eliminar_inactivos', action: :eliminar_inactivos

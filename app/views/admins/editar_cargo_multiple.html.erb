@@ -1,0 +1,41 @@
+<%= turbo_frame_tag "contenido" do %>
+  <div class="container mt-4 mb-4">
+    <div class="card border-primary shadow-sm mx-auto">
+      <div class="card-header bg-primary text-white">
+        <h5 class="mb-0">✏️ Conciliación: Editar Cargo Local</h5>
+        <small class="text-white-50">Cédula Trabajador: <%= @cedula %></small>
+      </div>
+      
+      <div class="card-body bg-light">
+        <%= form_with(url: actualizar_cargo_multiple_admins_path, method: :patch) do %>
+          
+          <!-- Enviamos los identificadores originales ocultos para armar el WHERE -->
+          <%= hidden_field_tag :cedula, @cedula %>
+          <%= hidden_field_tag :co_ubicacion_actual, @co_ubicacion_actual %>
+          <%= hidden_field_tag :tipopersonal_actual, @tipopersonal_actual %>
+
+          <div class="alert alert-warning py-2 small shadow-sm mb-3">
+            ⚠️ <strong>Atención:</strong> Esta acción modificará simultáneamente 
+            todos los conceptos del histórico asociados a esta ubicación y tipo de personal.
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label fw-bold">📍 Nuevo Código de Ubicación</label>
+            <%= text_field_tag :nuevo_co_ubicacion, @cargo_muestra.co_ubicacion, class: "form-control" %>
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label fw-bold">🪪 Nuevo Tipo de Personal</label>
+            <%= text_field_tag :nuevo_tipopersonal, @cargo_muestra.tipopersonal, class: "form-control" %>
+          </div>
+
+          <div class="d-flex justify-content-end gap-2 mt-4">
+            <%= link_to "Cancelar", depurar_admins_path, class: "btn btn-secondary" %>
+            <%= submit_tag "Actualizar Cargo en Bloque", class: "btn btn-success" %>
+          </div>
+
+        <% end %>
+      </div>
+    </div>
+  </div>
+<% end %>
