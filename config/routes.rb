@@ -32,7 +32,7 @@ Rails.application.routes.draw do
       patch 'actualizar_cargo_multiple', action: :actualizar_cargo_multiple
       post 'prenomina', action: :prenomina
       post 'actualizar', action: :actualizar_prenomina
-      post 'eliminar_inactivos', action: :eliminar_inactivos
+      post 'depurar_inactivos', action: :depurar_inactivos
       post 'actualizar_activos', action: :actualizar_activos
       post 'destruir_prenomina'
       post 'suma_asigna', action: :suma_de_asignaciones

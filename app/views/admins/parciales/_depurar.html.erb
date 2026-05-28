@@ -47,12 +47,35 @@
         <% end %>
       <% end %>
       <% if cont >= 4 %>
-      <%= content_tag :li, id: "eliminar_inactivos" do %>
-        <%= button_to 'Eliminar Inactivos',
-                       eliminar_inactivos_admins_path,
-                       disabled: !(cont.eql?(3)),
-                       class: "btn btn-danger" %>
-      <% end %>
+
+
+
+
+<%= content_tag :li, id: "contenedor_boton_inactivos" do %>
+    <div class="d-flex flex-row gap-2">
+      <%= button_to 'Depurar trabajadores inactivos',
+                    sincronizar_admins_path(tipo: 'inactivos'),
+                    disabled: !(cont.eql?(4)),
+                    class: "btn btn-danger",
+                    data: {
+                           confirm: "¿Está seguro de que desea eliminar todos los registros inactivos? Esta acción no se puede deshacer.",
+                           disable_with: "Procesando...",
+                           turbo_submits_with: "Enviando..."
+                    } %>
+                                                                                  
+      <div id="progreso_cargos_inactivos" class="align-self-center">
+        <% if cont > 4 %>
+          <% mensaje = "✅ Depuración completada" %>
+        <% end %>
+        <%= mensaje %>
+      </div>
+    </div>
+  <% end %>
+
+
+
+
+
       <% elsif cont >= 4 %>
       <%= content_tag :li do %>
         <%= button_to 'Actualizar Activos',

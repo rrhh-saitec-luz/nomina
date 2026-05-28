@@ -71,11 +71,33 @@ class AdminsController < ApplicationController
   end
 
   # Método para eliminar trabajadores inactivos en la nomina
-  def eliminar_inactivos
-    trabajador_inactivo = inactivos
-    cargos_activos = cargos_en_nomina
-    borrar_inactivos(trabajador_inactivo, cargos_activos)
+    def depurar_inactivos
+  total_eliminados = 0
+
+  # Ajusta los nombres de las tablas y campos según tu modelo real
+  # Reutilizamos la lógica de lotes para no saturar la memoria
+  Admon.where.not(edo_cargo: ['A', 'P']).find_in_batches(batch_size: 500) do |batch|
+    # Extraemos las tripletas del lote actual de Admon
+    tripletas = batch.map { |a| [a.ce_trabajador, a.co_ubicacion, a.tipopersonal] }
+
+    # Buscamos y eliminamos los registros correspondientes en HistoricoPago
+    # Nota: Si usas Rails 6 o superior, puedes usar delete_by
+    eliminados_en_lote = HistoricoPago.where(
+      [:CE_TRABAJADOR, :CO_UBICACION, :TIPOPERSONAL] => tripletas
+    ).delete_all
+
+    total_eliminados += eliminados_en_lote
   end
+
+  respond_to do |format|
+    format.turbo_stream {
+      render turbo_stream: [
+        turbo_stream.replace("modulo_depuracion", partial: "admins/modulo_depuracion_completado")
+      ]
+    }
+    format.html { redirect_to admins_path, notice: "Depuración exitosa: Se eliminaron #{total_eliminados} registros." }
+  end
+end
 
   # Métodos para actualizar trabajadores activos en la prenomina
   def actualizar_activos
@@ -132,10 +154,10 @@ class AdminsController < ApplicationController
        )
       respond_to do |format|
         # Redirección con estatus :see_other para que Turbo actualice el frame de la tabla
-        format.html { redirect_to depurar_admins_path, status: :see_other, notice: "Cargo y conceptos actualizados con éxito." }
+        format.html { redirect_to depurar_admins_path, status: :see_other, notice: 'Cargo y conceptos actualizados con éxito.' }
       end
     else
-      flash.now[:alert] = "No se pudieron actualizar los registros."
+      flash.now[:alert] = 'No se pudieron actualizar los registros.'
       render :editar_cargo_multiple, status: :unprocessable_entity
     end
   end

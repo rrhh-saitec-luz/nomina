@@ -18,7 +18,7 @@ module AdminConcerns
 
   def inactivos
     Admon.where.not(edo_cargo: %w[A P])
-         .map { |t| [t.ce_trabajador, t.co_ubicacion.strip, t.tipopersonal.strip] }
+         .pluck(:ce_trabajador, :co_ubicacion, :tipopersonal)
   end
 
   # Métodos para actualizar la prenomina
