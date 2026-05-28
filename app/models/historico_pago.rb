@@ -75,6 +75,24 @@ class HistoricoPago < ApplicationRecord
     end
   end
 
+  def self.depurar_trabajadores_inactivos(tipo)
+    query_inactivos = Admon.where.not(edo_cargo: ['A', 'P'])
+
+    total_registros = query_inactivos.count
+    batch_size = 500
+    total_pasos = total_registros.zero? ? 1 : (total_registros.to_f / batch_size).ceil
+    paso_actual = 0
+    query_inactivos.find_in_batches(batch_size: batch_size) do |batch|
+      paso_actual += 1
+      tripletas = batch.map { |a| [a.ce_trabajador, a.co_ubicacion, a.tipopersonal] }
+      self.where([:ce_trabajador, :co_ubicacion, :tipopersonal] => tripletas).delete_all
+
+      porcentaje = ((paso_actual.to_f / total_pasos) * 100).round
+      barra_progreso_cargos(porcentaje, paso_actual, total_pasos, tipo)
+    end
+  end
+
+
   def self.datos_externos
     Admon.where(edo_cargo: %w[A P])
          .where.not(tipopersonal: '110205')

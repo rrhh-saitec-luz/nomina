@@ -2,6 +2,11 @@
   <%= turbo_stream_from 'nomina_channel' %>
   <%= content_tag :div,
                   class: "d-flex flex-column mt-3 gap-3 justify-content-center" do %>
+      <% if cont < 2 %>
+        <h5 class="col-md-5">
+          Aún no existe una nomia para depurar
+        </h5>
+      <% end %>
     <%= content_tag :ol, class: "d-flex flex-column gap-2" do %>
       <%if cont >= 2 %>
         <%= content_tag :li, id: "contenedor_boton_unicos" do %>
@@ -17,7 +22,7 @@
   
             <div id="progreso_cargos_unicos" class= "align-self-center">
               <% if cont > 2 %>
-                <% mensaje = "✅" %>
+                <% mensaje = "✅ Sincronizacion Exitosa" %>
               <% end %>
               <%= mensaje %>
             </div>
@@ -47,50 +52,33 @@
         <% end %>
       <% end %>
       <% if cont >= 4 %>
-
-
-
-
-<%= content_tag :li, id: "contenedor_boton_inactivos" do %>
-    <div class="d-flex flex-row gap-2">
-      <%= button_to 'Depurar trabajadores inactivos',
-                    sincronizar_admins_path(tipo: 'inactivos'),
-                    disabled: !(cont.eql?(4)),
-                    class: "btn btn-danger",
-                    data: {
-                           confirm: "¿Está seguro de que desea eliminar todos los registros inactivos? Esta acción no se puede deshacer.",
-                           disable_with: "Procesando...",
-                           turbo_submits_with: "Enviando..."
-                    } %>
-                                                                                  
-      <div id="progreso_cargos_inactivos" class="align-self-center">
-        <% if cont > 4 %>
-          <% mensaje = "✅ Depuración completada" %>
+        <%= content_tag :li, id: "contenedor_boton_inactivos" do %>
+          <div class="d-flex flex-row gap-2">
+            <%= button_to 'Depurar trabajadores inactivos',
+                          sincronizar_admins_path(tipo: 'inactivos'),
+                          disabled: !(cont.eql?(4)),
+                          class: "btn btn-danger",
+                          data: {
+                                 confirm: "¿Está seguro de que desea eliminar todos los registros inactivos? Esta acción no se puede deshacer.",
+                                 disable_with: "Procesando...",
+                                 turbo_submits_with: "Enviando..."
+                          } %>
+            <div id="progreso_cargos_inactivos" class="align-self-center">
+              <% if cont > 4 %>
+                <% mensaje = "✅ Depuración completada" %>
+              <% end %>
+              <%= mensaje %>
+            </div>
+          </div>
         <% end %>
-        <%= mensaje %>
-      </div>
-    </div>
-  <% end %>
-
-
-
-
-
-      <% elsif cont >= 4 %>
-      <%= content_tag :li do %>
-        <%= button_to 'Actualizar Activos',
-                       actualizar_activos_admins_path,
-                       disabled: !(cont.eql?(4)),
-                       class: "btn btn-danger" %>
-        <% end %>
-      <% else %>
-      <% cont >= 5 and mostrar = "" or mostrar = "d-none" %> 
-      <%= content_tag :li, class: mostrar do %>
-        <%= content_tag :div, class: "alert alert-warning" do %>
-          Debe Verificar cargos multiple
-        <% end %>
+      <% end%>
+      <% if cont >= 5 %>
+        <div class="d-flex justify-content-center">
+        <h5 class="col-md-5 text-success text-center">
+         Depuración Terminada 
+        </h5>
+        </div>
       <% end %>
-    <% end %>
     <% end %>
   <% end %>
 </turbo-frame>

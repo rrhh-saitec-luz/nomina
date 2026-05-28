@@ -1,13 +1,27 @@
 <%= content_tag :li, id: "contenedor_boton_#{tipo}" do %>
-  <% tipo_boton = tipo == :unicos ? "Sincronizar cargos únicos" : "Detectar inconsistencias"%>
-  
+  <% 
+    # Asignamos el texto y estilo según el tipo de proceso
+    case tipo
+    when :unicos
+      tipo_boton = "Sincronizar cargos únicos"
+      clase_color = "btn-warning"
+    when :multiple
+      tipo_boton = "Detectar inconsistencias"
+      clase_color = "btn-warning"
+    when :inactivos
+      tipo_boton = "Depurar trabajadores inactivos"
+      clase_color = "btn-danger"
+    end
+  %>
+
   <div class="d-flex flex-row gap-2">
-    <button class='btn btn-warning' disabled>
+    <button class="btn <%= clase_color %>" disabled>
       <%= tipo_boton %>
     </button>
-    <%= content_tag :div,
-                    id: "progreso_cargos_#{tipo}",
-                    class: "align-self-center" do %>
+    
+    <%= content_tag :div, id: "progreso_cargos_#{tipo}", class: "align-self-center" do %>
+      <%# Este contenedor se llenará dinámicamente mediante Turbo Streams %>
     <% end %>
   </div>
 <% end %>
+
