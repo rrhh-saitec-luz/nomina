@@ -135,4 +135,38 @@ class HistoricoPago < ApplicationRecord
       locals: {tipo: tipo}
     )
   end
+  def self.generar_prenomina_en_segundo_plano(filtros)
+    filtros = filtros.with_indifferent_access
+    query_conceptos = Concepto.where(ANO: filtros[:year], MES: filtros[:month], TIPO_NOMINA: filtros[:tpn], TIPO_NOMINA_ESPECIFICA: filtros[:tpns]).where.not(CO_CONCEPTO: %w[X500 A029 A223 A436])
+
+  total_registros = query_conceptos.count
+  return if total_registros.zero?
+
+  batch_size = 1000
+  registros_procesados = 0
+
+  query_conceptos.find_in_batches(batch_size: batch_size) do |batch|
+    nuevos_registros = batch.map { |registro| self.new(registro.attributes) }
+    self.import nuevos_registros, validate: false
+
+    registros_procesados += batch.size
+    porcentaje = ((registros_procesados.to_f / total_registros) * 100).round
+
+    # Transmisión en vivo de la barra (Contenedor 2)
+    Turbo::StreamsChannel.broadcast_replace_to(
+      'nomina_channel',
+      target: 'progreso_cargos_creacion',
+      partial: 'admins/parciales/barra_progreso_creacion',
+      locals: { porcentaje: porcentaje, procesados: registros_procesados, total: total_registros }
+    )
+  end
+
+  # 🔥 AQUÍ CORREGIMOS: Solo cuando el bucle "find_in_batches" termina por completo,
+  # enviamos la orden de bloquear el formulario (Contenedor 1)
+  Turbo::StreamsChannel.broadcast_replace_to(
+    'nomina_channel',
+    target: 'contenido_formulario_nomina',
+    partial: 'admins/parciales/eliminar_prenomina'
+  )
+end
 end

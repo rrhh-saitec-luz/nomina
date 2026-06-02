@@ -14,7 +14,8 @@ class AdminsController < ApplicationController
     @nomina = NominaTipo.all
     @meses = MESES
     @years = concepto_pluck(:ANO)
-    if contador_depurar.map(&:valor).first.eql?(0)
+    @contador = contador_depurar
+    if contador_depurar.valor.eql?(0)
       render partial: 'admins/parciales/generar_nomina'
     else
       render partial: 'admins/parciales/eliminar_prenomina'
@@ -22,15 +23,41 @@ class AdminsController < ApplicationController
   end
 
   def prenomina
-    registros_filtrados = prenomina_params
-    @nomina = NominaTipo.all
-    @meses = MESES
-    @years = concepto_pluck(:ANO)
-    procesar_registros(registros_filtrados)
+    filtros = {
+      year: params[:year],
+      month: params[:month],
+      tpn: params[:tpn],
+      tpns: params[:tpns]
+    }
+
+    hay_registros = Concepto.where(ANO: filtros[:year],
+                                   MES: filtros[:month],
+                                   TIPO_NOMINA: filtros[:tpn],
+                                   TIPO_NOMINA_ESPECIFICA: filtros[:tpns])
+                            .where.not(CO_CONCEPTO: %w[X500 A029 A223 A436])
+                            .exists?
+
+    if !hay_registros
+      respond_to do |format|
+        format.html { redirect_to admins_path, alert: 'Búsqueda sin resultados.' }
+      end
+    else
+      CreacionPrenominaJob.perform_later(filtros)
+      respond_to do |format|
+        format.turbo_stream do
+          render turbo_stream: turbo_stream.replace(
+            'progreso_cargos_creacion',
+            partial: 'admins/parciales/barra_progreso_creacion',
+            locals: { porcentaje: 0, procesados: 0, total: 100 }
+          )
+        end
+        format.html { redirect_to admins_path, notice: 'El proceso de generación ha iniciado en segundo plano.' }
+      end
+    end
   end
 
   def modificar_prenomina
-    cont_val = contador_depurar.map(&:valor).first
+    cont_val = contador_depurar.valor
     if cont_val.eql?(1)
       render partial: 'admins/parciales/modificar_prenomina', locals: { meses: MESES }
     else
@@ -70,7 +97,7 @@ class AdminsController < ApplicationController
 
   # Metodo para renderizar vista de depurar nomina
   def depurar
-    contador = contador_depurar.map(&:valor).first
+    contador = contador_depurar.valor
     render partial: 'admins/parciales/depurar', locals: { cont: contador }
   end
 
@@ -306,27 +333,5 @@ class AdminsController < ApplicationController
     borrar.map { |r| HistoricoPago.where(CE_TRABAJADOR: r[0], CO_UBICACION: r[1], TIPOPERSONAL: r[2]).delete_all }
     sumar_contador(contador_depurar)
     depurar
-  end
-
-  # metodos para procesar o crear la prenomina
-
-  def procesar_registros(registros_filtrados)
-    if registros_filtrados.empty?
-      flash[:alert] = 'Busqueda sin resultados.'
-      generar_nomina
-    else
-      lotes(registros_filtrados)
-    end
-  end
-
-  def lotes(lote)
-    lote.find_in_batches(batch_size: 1000) do |batch|
-      nuevos_registros = batch.map do |registro|
-        HistoricoPago.new(registro.attributes)
-      end
-      HistoricoPago.import nuevos_registros, validate: false
-    end
-    sumar_contador(contador_depurar)
-    generar_nomina
   end
 end

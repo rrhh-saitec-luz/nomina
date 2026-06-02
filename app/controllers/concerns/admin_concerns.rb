@@ -27,7 +27,7 @@ module AdminConcerns
     year = params[:year]
     fecha = params[:fecha]
     update_prenomina(mes, year, fecha)
-    sumar_contador(contador_depurar) if contador_depurar.map(&:valor).first.eql?(1)
+    contador_depurar.update(valor: 2)
     modificar_prenomina
   end
 
@@ -98,7 +98,7 @@ module AdminConcerns
   end
 
   def contador_depurar
-    Contador.where(nombre: 'depurar')
+    Contador.find_by(nombre: 'depurar')
   end
 
   def crear_cargos_multiples(cargos_multiples)

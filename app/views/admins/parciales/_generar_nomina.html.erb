@@ -1,14 +1,29 @@
-<turbo-frame id="contenido">
-    <%= form_with url: prenomina_admins_path,
-      method: :post,
-      class: "d-flex flex-column mt-3 gap-1 justify-content-center",
-      data: {controller: "admin"}  do |form| %>
-      <%= render "admins/parciales/gen_nom_meses",
-                meses: @meses, years: @years, form: form %>
-      <%= render "admins/parciales/gen_nom_nominas", nomina: @nomina, form: form %>
-      <%= content_tag :div, class:" d-flex align-self-start" do %>
-        <%= form.submit "Generar prenomina", class: "btn btn-primary" %>
-      <% end %>
-    <% end %>
-    <%= render "admins/parciales/gen_nom_footer" %>
-</turbo-frame>  
+<turbo-frame id="contenido">                                                          
+  <%= turbo_stream_from 'nomina_channel' %>
+  <div id="contenido_formulario_nomina">
+  <% if @contador.valor >= 1 %>
+    <%= render "admins/parciales/eliminar_prenomina" %>
+  <% else %>
+  <%= form_with url: prenomina_admins_path,                                         
+                method: :post,                                                                  
+                class: "d-flex flex-column mt-3 gap-3 justify-content-center",                  
+                data: { controller: "admin" } do |form| %>                                       
+    
+    <%= render "admins/parciales/gen_nom_meses", meses: @meses, years: @years, form: form %>                           
+    <%= render "admins/parciales/gen_nom_nominas", nomina: @nomina, form: form %>   
+
+    <div class="d-flex align-self-start gap-3 w-100 align-items-center">                    
+      <%= form.submit "Generar prenomina", 
+                      class: "btn btn-primary", 
+                      data: { 
+                        disable_with: "Procesando...", 
+                        turbo_submits_with: "Enviando..." 
+                      } %>                
+      <div id="progreso_cargos_creacion" class="align-self-center flex-grow-1"></div>
+    </div>                                                                       
+  <% end %>                                                                           
+  
+  <%= render "admins/parciales/gen_nom_footer" %>
+<% end %>
+</div>
+</turbo-frame>
