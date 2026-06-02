@@ -189,7 +189,7 @@ class AdminsController < ApplicationController
 
   def antiguedades
     @fa = FACTOR_DE_ANTIGUEDAD
-    @contador = contador_depurar.map(&:valor).first
+    @contador = contador_depurar.valor
     render partial: 'admins/parciales/antiguedades'
   end
 
