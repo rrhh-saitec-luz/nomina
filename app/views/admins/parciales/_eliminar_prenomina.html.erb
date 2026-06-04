@@ -1,9 +1,10 @@
 <turbo-frame id="contenido">
-<%= content_tag :div, class: "d-flex flex-column mt-3 gap-1 justify-content-cent      er" do %>             
-Ya generó una prenomina. ¿Desea Eliminarla?                                     
-<%= button_to 'Eliminar Prenomina',                                               
-destruir_prenomina_admins_path,                                               
-class: "btn btn-danger" %>                                                    
-<% end %>
-
+  <%= content_tag :h5, class: "d-flex flex-column mt-3 gap-1 text-center" do %>
+    Ya generó una prenomina. ¿Desea Eliminarla?                                     
+  <% end %>
+  <div class="d-flex flex-colum justify-content-center">
+    <%= button_to 'Eliminar Prenomina',                                               
+    destruir_prenomina_admins_path,                                               
+    class: "btn btn-danger" %>
+  </div>   
 </turbo-frame>

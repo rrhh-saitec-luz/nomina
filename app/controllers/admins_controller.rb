@@ -194,22 +194,23 @@ class AdminsController < ApplicationController
   end
 
   def suma_de_asignaciones
+    contador = contador_depurar.update(valor: 6)
     personas = activos_sin_jubilados_o_pensionados
     f_nomina = params[:fe_nomina].to_date.beginning_of_month
-    procesar_asignaciones(personas, f_nomina)
+    procesar_asignaciones(personas, f_nomina, contador)
   end
 
   private
 
-  def procesar_asignaciones(personas, f_nomina)
+  def procesar_asignaciones(personas, f_nomina, contador)
     idx = IDXS[:a]
     fecha_limite = f_nomina - 1.year
     personas_aptas = personas.where('fe_ingreso <= ?', fecha_limite)
     total = personas_aptas.count
-    procesar_personal_pa(personas_aptas, f_nomina, idx, total)
+    procesar_personal_pa(personas_aptas, f_nomina, idx, total, contador)
   end
 
-  def procesar_personal_pa(personas, f_nomina, idx, total)
+  def procesar_personal_pa(personas, f_nomina, idx, total, contador)
     procesados = 0
     ahora = Time.current
     personas.in_batches(of: 100) do |batch|
@@ -219,7 +220,7 @@ class AdminsController < ApplicationController
       porcentaje = ((procesados.to_f / total) * 100).round
       barra_progreso(porcentaje, procesados, total)
     end
-    barra_progreso_mensaje_final
+    barra_progreso_mensaje_final(contador)
   end
 
   def preparar_registro_historico(persona, f_nomina, idx, ahora)
@@ -244,11 +245,12 @@ class AdminsController < ApplicationController
     )
   end
 
-  def barra_progreso_mensaje_final
+  def barra_progreso_mensaje_final(contador)
     Turbo::StreamsChannel.broadcast_replace_to(
       'nomina_channel',
-      target: 'progreso_nomina',
-      partial: 'admins/parciales/barra_progreso_mensaje_final'
+      target: 'contenido',
+      partial: 'admins/parciales/barra_progreso_antiguedades_mensaje_final',
+      lacals: { contador: }
     )
   end
 

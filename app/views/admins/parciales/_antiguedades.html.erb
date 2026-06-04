@@ -1,31 +1,33 @@
 <turbo-frame id="contenido">
-  <% if @contador.eql?(4) %>
-    <%# Suscripción al canal de Redis %>
-<%= turbo_stream_from "nomina_channel" %>
+  <%= turbo_stream_from "nomina_channel" %>
+  <% if @contador.eql?(5) %>
+    <div class="card p-4 shadow-sm">
+      <%= form_with url: suma_asigna_admins_path, method: :post do |f| %>
+        <h5 class="text-center">Generar Antiguedades del Personal</h5>
+        <div class="mb-3">
+          <%= f.label :fe_nomina, "Seleccione Fecha", class: "form-label" %>
+          <%= f.date_field :fe_nomina, class: "form-control", required: true %>
+        </div>
 
-<div class="card p-4 shadow-sm">
-  <%= form_with url: suma_asigna_admins_path, method: :post do |f| %>
-    <h5 class="text-center">Generar Antiguedades del Personal</h5>
-    <div class="mb-3">
-      <%= f.label :fe_nomina, "Seleccione Fecha", class: "form-label" %>
-      <%= f.date_field :fe_nomina, class: "form-control", required: true %>
+        <%= f.submit "Iniciar Cálculo",
+                     class: "btn btn-primary w-100",
+                     data: { turbo_submits_with: "Preparando..." } %>
+      <% end %>
+
+      <hr>
+
+      <div id="progreso_nomina">
+        <p class="text-muted text-center small">Esperando inicio de proceso...</p>
+      </div>
     </div>
-
-    <%= f.submit "Iniciar Cálculo",
-        class: "btn btn-primary w-100",
-        data: { turbo_submits_with: "Preparando..." } %>
-  <% end %>
-
-  <hr>
-
-  <%# Este es el contenedor que escuchará las actualizaciones %>
-  <div id="progreso_nomina">
-    <p class="text-muted text-center small">Esperando inicio de proceso...</p>
-  </div>
-</div>
+  <% elsif @contador > 5 %>
+    <%= content_tag :h1 do %>
+      "BOTON ELIMINAR ANTIGUEDADES"
+    <% end %>
   <% else %>
     <%= content_tag :h1 do %>
       "Hola Mundo"
     <% end %>
+   
   <% end %>
 </turbo-frame>
