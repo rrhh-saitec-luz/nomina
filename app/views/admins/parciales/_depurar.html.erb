@@ -1,12 +1,24 @@
 <turbo-frame id= 'contenido'>
   <%= turbo_stream_from 'nomina_channel' %>
   <%= content_tag :div,
-                  class: "d-flex flex-column mt-3 gap-3 justify-content-center" do %>
-      <% if cont < 2 %>
-        <h5 class="text-center">
-          Aún no existe una nomina para depurar
+                  class: "d-flex flex-column mt-3 justify-content-center" do %>
+    <% if cont < 2 %>
+      <h5 class="text-center">
+        Aún no existe una nomina para depurar
+      </h5>
+    <% elsif cont >= 5 %>
+      <div class="d-flex justify-content-center">
+        <h5 class="col-md-5 text-success text-center">
+          Depuración Terminada 
         </h5>
-      <% end %>
+      </div>
+    <% else %>
+      <div class="d-flex justify-content-center">
+        <h5 class="col-md-5 text-success text-center">
+          Depuración en paso: <%= cont - 1 %> 
+        </h5>
+      </div>
+    <% end %>
     <%= content_tag :ol, class: "d-flex flex-column gap-2" do %>
       <%if cont >= 2 %>
         <%= content_tag :li, id: "contenedor_boton_unicos" do %>
@@ -72,13 +84,6 @@
           </div>
         <% end %>
       <% end%>
-      <% if cont >= 5 %>
-        <div class="d-flex justify-content-center">
-        <h5 class="col-md-5 text-success text-center">
-         Depuración Terminada 
-        </h5>
-        </div>
-      <% end %>
     <% end %>
   <% end %>
 </turbo-frame>

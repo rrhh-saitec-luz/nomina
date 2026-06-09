@@ -188,29 +188,43 @@ class AdminsController < ApplicationController
   end
 
   def antiguedades
+    @fecha = HistoricoPago.first.FE_NOMINA
     @fa = FACTOR_DE_ANTIGUEDAD
     @contador = contador_depurar.valor
     render partial: 'admins/parciales/antiguedades'
   end
 
   def suma_de_asignaciones
-    contador = contador_depurar.update(valor: 6)
     personas = activos_sin_jubilados_o_pensionados
     f_nomina = params[:fe_nomina].to_date.beginning_of_month
-    procesar_asignaciones(personas, f_nomina, contador)
+    procesar_asignaciones(personas, f_nomina)
+  end
+
+  def eliminar_antiguedades
+    contador_depurar.update(valor: 5)
+    HistoricoPago.delete_by(CO_CONCEPTO: %w[A223 A029 A436])
+    antiguedades
+  end
+
+  def editar_fecha_antiguedades
+    antiguedades = HistoricoPago.where(CO_CONCEPTO: %w[A223 A029 A436])
+    nueva_fecha = params[:nueva_fecha]
+    antiguedades.update_all(nueva_fecha)
   end
 
   private
 
-  def procesar_asignaciones(personas, f_nomina, contador)
+  def procesar_asignaciones(personas, f_nomina)
     idx = IDXS[:a]
     fecha_limite = f_nomina - 1.year
     personas_aptas = personas.where('fe_ingreso <= ?', fecha_limite)
     total = personas_aptas.count
-    procesar_personal_pa(personas_aptas, f_nomina, idx, total, contador)
+    procesar_personal_pa(personas_aptas, f_nomina, idx, total)
+    contador_depurar.update(valor: 6)
+    head :ok
   end
 
-  def procesar_personal_pa(personas, f_nomina, idx, total, contador)
+  def procesar_personal_pa(personas, f_nomina, idx, total)
     procesados = 0
     ahora = Time.current
     personas.in_batches(of: 100) do |batch|
@@ -220,7 +234,7 @@ class AdminsController < ApplicationController
       porcentaje = ((procesados.to_f / total) * 100).round
       barra_progreso(porcentaje, procesados, total)
     end
-    barra_progreso_mensaje_final(contador)
+    barra_progreso_mensaje_final
   end
 
   def preparar_registro_historico(persona, f_nomina, idx, ahora)
@@ -245,12 +259,11 @@ class AdminsController < ApplicationController
     )
   end
 
-  def barra_progreso_mensaje_final(contador)
+  def barra_progreso_mensaje_final
     Turbo::StreamsChannel.broadcast_replace_to(
       'nomina_channel',
       target: 'contenido',
       partial: 'admins/parciales/barra_progreso_antiguedades_mensaje_final',
-      lacals: { contador: }
     )
   end
 

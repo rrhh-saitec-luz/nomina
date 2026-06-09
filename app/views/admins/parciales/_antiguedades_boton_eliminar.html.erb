@@ -1,0 +1,13 @@
+<%= content_tag :h5,
+                class: "d-flex flex-column mt-3 justify-content-center text-success text-center" do %>
+  Ya usted generó las antiguedades
+<% end %>
+<%= content_tag :ol,
+                class: "d-flex flex-column gap-3 justify-content-center" do %>
+  <li>
+    <%= button_to "Eliminar antiguedades",
+                   eliminar_antiguedades_admins_path,
+                   method: :delete,
+                   class: "btn btn-danger" %>
+  </li>
+<% end %>

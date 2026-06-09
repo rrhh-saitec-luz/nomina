@@ -1,12 +1,17 @@
 <turbo-frame id="contenido">
   <%= turbo_stream_from "nomina_channel" %>
   <% if @contador.eql?(5) %>
+     
     <div class="card p-4 shadow-sm">
       <%= form_with url: suma_asigna_admins_path, method: :post do |f| %>
         <h5 class="text-center">Generar Antiguedades del Personal</h5>
         <div class="mb-3">
-          <%= f.label :fe_nomina, "Seleccione Fecha", class: "form-label" %>
-          <%= f.date_field :fe_nomina, class: "form-control", required: true %>
+          <%= f.label :fe_nomina, "Fecha Nomina", class: "form-label" %>
+          <%= f.date_field :fe_nomina,
+                           value: @fecha,
+                           class: "form-control",
+                           readonly: true,
+                           required: true %>
         </div>
 
         <%= f.submit "Iniciar Cálculo",
@@ -20,14 +25,12 @@
         <p class="text-muted text-center small">Esperando inicio de proceso...</p>
       </div>
     </div>
-  <% elsif @contador > 5 %>
-    <%= content_tag :h1 do %>
-      "BOTON ELIMINAR ANTIGUEDADES"
-    <% end %>
+  <% elsif @contador.eql?(6) %>
+    <%= render "admins/parciales/antiguedades_boton_eliminar" %>
   <% else %>
+    <%= @contador.inspect %>
     <%= content_tag :h1 do %>
       "Hola Mundo"
     <% end %>
-   
   <% end %>
 </turbo-frame>

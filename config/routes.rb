@@ -37,6 +37,8 @@ Rails.application.routes.draw do
       post 'destruir_prenomina'
       post 'suma_asigna', action: :suma_de_asignaciones
       post :sincronizar
+      delete :eliminar_antiguedades 
+      patch :editar_fecha_antiguedades
       patch 'editar_prenomina', action: :editar_prenomina
     end
   end

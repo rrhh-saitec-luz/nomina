@@ -1,9 +1,4 @@
 <turbo-frame id="contenido" class="container-fluid border border-primary rounded-3">
   <%= turbo_stream_from "nomina_channel" %>
-  <%= content_tag :div,
-                  class: "d-flex flex-column mt-3 gap-3 justify-content-center" do %>
-    <%= content_tag :h1 do %>
-      "BOTON ELIMINAR ANTIGUEDADES"
-    <% end %>
-  <% end %>
+    <%= render "admins/parciales/antiguedades_boton_eliminar" %>
 </turbo-frame>
