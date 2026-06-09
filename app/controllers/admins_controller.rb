@@ -188,7 +188,7 @@ class AdminsController < ApplicationController
   end
 
   def antiguedades
-    @fecha = HistoricoPago.first.FE_NOMINA
+    @fecha = HistoricoPago.first&.FE_NOMINA
     @fa = FACTOR_DE_ANTIGUEDAD
     @contador = contador_depurar.valor
     render partial: 'admins/parciales/antiguedades'

@@ -1,24 +1,8 @@
 <turbo-frame id="contenido">
-  <%= form_with url: actualizar_admins_path,
-                method: :post,
-                class: "d-flex flex-column mt-3 gap-3 justify-content-center"  do |form| %>
-    <%= content_tag :div do %>
-      <%= form.label :fecha, "Nueva fecha", class: "form-label" %>
-      <%= form.date_field :fecha, class: "form-control", required: true %>
-    <% end %>  
-    <%= content_tag :div do %>
-      <%= form.label :mes, "Nuevo mes", class: "form-label" %>
-      <%= form.select :mes, options_for_select(
-                      [["Seleccione mes", nil, {selected: true, disabled: true}]] + meses.map { |val, mes| [mes,val] }),
-                      { required: true },
-                      class: "form-select" %>
-    <% end %>  
-    <%= content_tag :div do %>
-      <%= form.label :year, "Nuevo año", class: "form-label" %>
-      <%= form.number_field :year, class: "form-control", required: true %>
-    <% end %>  
-    <%= content_tag :div, class: "d-flex justify-content-center mb-3" do %>
-      <%= form.submit "Actualizar", class:"btn btn-primary" %>
-    <% end %>  
-  <% end %>
+  <div class="d-flex justify-content-center mt-3">
+    <h5 class="col-md-5 text-success text-center">
+      Actualizar fecha de nomina
+    </h5>
+  </div>
+  <%= render "admins/parciales/modificar_prenomina_forma", meses: meses %>
 </turbo-frame>

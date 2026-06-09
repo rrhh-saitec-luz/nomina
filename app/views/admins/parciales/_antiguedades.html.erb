@@ -1,36 +1,35 @@
 <turbo-frame id="contenido">
   <%= turbo_stream_from "nomina_channel" %>
-  <% if @contador.eql?(5) %>
-     
-    <div class="card p-4 shadow-sm">
-      <%= form_with url: suma_asigna_admins_path, method: :post do |f| %>
-        <h5 class="text-center">Generar Antiguedades del Personal</h5>
-        <div class="mb-3">
-          <%= f.label :fe_nomina, "Fecha Nomina", class: "form-label" %>
-          <%= f.date_field :fe_nomina,
-                           value: @fecha,
-                           class: "form-control",
-                           readonly: true,
-                           required: true %>
-        </div>
-
-        <%= f.submit "Iniciar Cálculo",
-                     class: "btn btn-primary w-100",
-                     data: { turbo_submits_with: "Preparando..." } %>
-      <% end %>
-
-      <hr>
-
-      <div id="progreso_nomina">
-        <p class="text-muted text-center small">Esperando inicio de proceso...</p>
-      </div>
-    </div>
-  <% elsif @contador.eql?(6) %>
-    <%= render "admins/parciales/antiguedades_boton_eliminar" %>
+  <% if @fecha.nil? %>
+    <%= render "admins/parciales/no_opciones_disponibles" %>
   <% else %>
-    <%= @contador.inspect %>
-    <%= content_tag :h1 do %>
-      "Hola Mundo"
+    <% if @contador.eql?(5) %>
+      <div class="card p-4 shadow-sm">
+        <%= form_with url: suma_asigna_admins_path, method: :post do |f| %>
+          <h5 class="text-center">Generar Antiguedades del Personal</h5>
+          <div class="mb-3">
+            <%= f.label :fe_nomina, "Fecha Nomina", class: "form-label" %>
+            <%= f.date_field :fe_nomina,
+                             value: @fecha,
+                             class: "form-control",
+                             readonly: true,
+                             required: true %>
+          </div>
+          <%= f.submit "Iniciar Cálculo",
+                       class: "btn btn-primary w-100",
+                       data: { turbo_submits_with: "Preparando..." } %>
+        <% end %>
+
+        <hr>
+
+        <div id="progreso_nomina">
+          <p class="text-muted text-center small">Esperando inicio de proceso...</p>
+        </div>
+      </div>
+    <% elsif @contador.eql?(6) %>
+      <%= render "admins/parciales/antiguedades_boton_eliminar" %>
+    <% else %>
+      <%= render "admins/parciales/no_opciones_disponibles" %>
     <% end %>
   <% end %>
 </turbo-frame>

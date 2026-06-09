@@ -1,11 +1,9 @@
 <turbo-frame id= 'contenido'>
   <%= turbo_stream_from 'nomina_channel' %>
   <%= content_tag :div,
-                  class: "d-flex flex-column mt-3 justify-content-center" do %>
+                  class: "d-flex flex-column justify-content-center" do %>
     <% if cont < 2 %>
-      <h5 class="text-center text-success">
-        Aún no existe una nomina para depurar
-      </h5>
+      <%= render "admins/parciales/no_opciones_disponibles" %>
     <% elsif cont >= 5 %>
       <div class="d-flex justify-content-center">
         <h5 class="col-md-5 text-success text-center">
