@@ -206,12 +206,6 @@ class AdminsController < ApplicationController
     antiguedades
   end
 
-  def editar_fecha_antiguedades
-    antiguedades = HistoricoPago.where(CO_CONCEPTO: %w[A223 A029 A436])
-    nueva_fecha = params[:nueva_fecha]
-    antiguedades.update_all(nueva_fecha)
-  end
-
   private
 
   def procesar_asignaciones(personas, f_nomina)
