@@ -45,11 +45,17 @@ class AdminsController < ApplicationController
       CreacionPrenominaJob.perform_later(filtros)
       respond_to do |format|
         format.turbo_stream do
-          render turbo_stream: turbo_stream.replace(
-            'progreso_cargos_creacion',
-            partial: 'admins/parciales/barra_progreso_creacion',
-            locals: { porcentaje: 0, procesados: 0, total: 100 }
-          )
+          render turbo_stream: [
+            turbo_stream.replace(
+              'progreso_cargos_creacion',
+              partial: 'admins/parciales/barra_progreso_creacion',
+              locals: { porcentaje: 0, procesados: 0, total: 100 }
+            ),
+            turbo_stream.replace(
+              'boton_prenomina',
+              partial: 'admins/parciales/generar_nomina_boton_desactivado'
+            )
+          ]
         end
         format.html { redirect_to admins_path, notice: 'El proceso de generación ha iniciado en segundo plano.' }
       end

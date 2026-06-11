@@ -4,6 +4,11 @@
   <% if @contador.valor >= 1 %>
     <%= render "admins/parciales/eliminar_prenomina" %>
   <% else %>
+    <div class="d-flex justify-content-center mt-3">
+      <h5 class="col-md-5 text-success text-center">
+       Generar prenomina 
+      </h5>
+    </div>
   <%= form_with url: prenomina_admins_path,                                         
                 method: :post,                                                                  
                 class: "d-flex flex-column mt-3 gap-3 justify-content-center",                  
@@ -14,10 +19,10 @@
 
     <div class="d-flex align-self-start gap-3 w-100 align-items-center">                    
       <%= form.submit "Generar prenomina", 
+                      id: "boton_prenomina",
                       class: "btn btn-primary", 
                       data: { 
-                        disable_with: "Procesando...", 
-                        turbo_submits_with: "Enviando..." 
+                      turbo_submits_with: "Procesando..." 
                       } %>                
       <div id="progreso_cargos_creacion" class="align-self-center flex-grow-1"></div>
     </div>                                                                       

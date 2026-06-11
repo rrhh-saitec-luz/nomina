@@ -5,13 +5,13 @@
     <% if cont < 2 %>
       <%= render "admins/parciales/no_opciones_disponibles" %>
     <% elsif cont >= 5 %>
-      <div class="d-flex justify-content-center">
+      <div class="d-flex justify-content-center mt-3">
         <h5 class="col-md-5 text-success text-center">
           Depuración Terminada 
         </h5>
       </div>
     <% else %>
-      <div class="d-flex justify-content-center">
+      <div class="d-flex justify-content-center mt-3">
         <h5 class="col-md-5 text-success text-center">
           Depuración en paso: <%= cont - 1 %> 
         </h5>
