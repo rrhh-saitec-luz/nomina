@@ -29,6 +29,7 @@ Rails.application.routes.draw do
       get 'vcm', action: :verificar_cargos_multiples
       get 'detalles', action: :detalles
       get 'editar_cargo_multiple', action: :editar_cargo_multiple
+      get :adelanto
       patch 'actualizar_cargo_multiple', action: :actualizar_cargo_multiple
       post 'prenomina', action: :prenomina
       post 'actualizar', action: :actualizar_prenomina
@@ -37,7 +38,8 @@ Rails.application.routes.draw do
       post 'destruir_prenomina'
       post 'suma_asigna', action: :suma_de_asignaciones
       post :sincronizar
-      delete :eliminar_antiguedades 
+      post :calcular_x500
+      delete :eliminar_antiguedades
       patch :editar_fecha_antiguedades
       patch 'editar_prenomina', action: :editar_prenomina
     end

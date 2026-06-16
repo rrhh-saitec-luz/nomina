@@ -137,7 +137,6 @@ class AdminsController < ApplicationController
       co_ubicacion: @co_ubicacion_actual,
       tipopersonal: @tipopersonal_actual
     )
-
     if @cargo_muestra.nil?
       redirect_to depurar_admins_path, alert: 'No se encontraron registros locales para este cargo.'
     end
@@ -210,6 +209,13 @@ class AdminsController < ApplicationController
     contador_depurar.update(valor: 5)
     HistoricoPago.delete_by(CO_CONCEPTO: %w[A223 A029 A436])
     antiguedades
+  end
+
+  def adelanto
+    render partial: 'admins/parciales/x500_inicio'
+  end
+
+  def calcular_x500
   end
 
   private

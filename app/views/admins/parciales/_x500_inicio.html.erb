@@ -1,0 +1,21 @@
+<turbo-frame id= 'contenido'>
+  <%= turbo_stream_from 'nomina_channel' %>
+  <%= content_tag :div,
+                  class: "d-flex flex-column justify-content-center" do %>
+    <div class="d-flex justify-content-center mt-3">
+      <h5 class="col-md-5 text-success text-center">
+        Adelanto de quincena
+      </h5>
+    </div>
+    <ol>
+      <li>
+        <%= button_to 'Calcular X500',
+                       calcular_x500_admins_path(tipo: 'unicos'),
+                       class: "btn btn-primary",
+                       data: {
+                               turbo_submits_with: "Enviando..."
+                       } %>
+      </li>
+    </ol>
+<% end %>
+</turbo-fame>
