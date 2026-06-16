@@ -215,7 +215,23 @@ class AdminsController < ApplicationController
     render partial: 'admins/parciales/x500_inicio'
   end
 
-  def calcular_x500
+  def calcular_anticipos
+    CalcularAnticiposJob.perform_later
+
+    respond_to do |format|
+      format.turbo_stream do
+        render turbo_stream: [
+          # Deshabilitar el botón de envío
+          turbo_stream.replace("contenedor_boton_anticipos",
+                               partial: 'admins/parciales/boton_deshabilitado',
+                               locals: { tipo: 'anticipos' }),
+          # Inicializar la barra de progreso vacía en Bootstrap
+          turbo_stream.replace("progreso_anticipos",
+                              partial: 'admins/parciales/barra_progreso_anticipos',
+                              locals: { porcentaje: 0, procesados: 0, total: 100 })
+        ]
+      end
+    end
   end
 
   private
