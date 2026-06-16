@@ -1,0 +1,21 @@
+<!-- app/views/admins/parciales/_barra_progreso_anticipos.html.erb -->
+<div id="progreso_cargos_anticipos" class="card p-3 my-3 shadow-sm">
+  <div class="d-flex justify-content-between mb-1">
+    <strong class="text-primary">Calculando anticipos X500...</strong>
+    <span class="badge bg-primary text-white p-2">
+      <%= procesados %> / <%= total %> (<%= porcentaje %>%)
+    </span>
+  </div>
+  
+  <div class="progress" style="height: 25px;">
+    <div class="progress-bar progress-bar-striped progress-bar-animated bg-success" 
+         role="progressbar" 
+         style="width: <%= porcentaje %>%;" 
+         aria-valuenow="<%= porcentaje %>" 
+         aria-valuemin="0" 
+         aria-valuemax="100">
+         <%= porcentaje %>%
+    </div>
+  </div>
+</div>
+

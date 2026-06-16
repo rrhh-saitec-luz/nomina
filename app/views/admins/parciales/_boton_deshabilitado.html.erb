@@ -11,6 +11,9 @@
     when :inactivos
       tipo_boton = "Depurar trabajadores inactivos"
       clase_color = "btn-danger"
+    when :anticipos 
+      tipo_boton = "Calcular Anticipos Quincenales"
+      clase_color = "btn-primary" 
     end
   %>
 
@@ -20,7 +23,6 @@
     </button>
     
     <%= content_tag :div, id: "progreso_cargos_#{tipo}", class: "align-self-center" do %>
-      <%# Este contenedor se llenará dinámicamente mediante Turbo Streams %>
     <% end %>
   </div>
 <% end %>

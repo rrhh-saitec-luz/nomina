@@ -1,21 +1,27 @@
 <turbo-frame id= 'contenido'>
   <%= turbo_stream_from 'nomina_channel' %>
-  <%= content_tag :div,
-                  class: "d-flex flex-column justify-content-center" do %>
-    <div class="d-flex justify-content-center mt-3">
-      <h5 class="col-md-5 text-success text-center">
-        Adelanto de quincena
-      </h5>
-    </div>
-    <ol>
-      <li>
-        <%= button_to 'Calcular X500',
-                       calcular_x500_admins_path(tipo: 'unicos'),
-                       class: "btn btn-primary",
-                       data: {
-                               turbo_submits_with: "Enviando..."
-                       } %>
-      </li>
-    </ol>
-<% end %>
+  <% if @contador.eql?(6) %>
+    <%= content_tag :div,
+                    class: "d-flex flex-column justify-content-center" do %>
+      <div class="d-flex justify-content-center mt-3">
+        <h5 class="col-md-5 text-success text-center">
+          Adelanto de quincena
+        </h5>
+      </div>
+      <ol>
+        <%= content_tag :li, id: "contenedor_boton_anticipos" do %>
+          <div class="d-flex flex-row gap-2">
+            <%= button_to 'Calcular Anticipos Quincenales', calcular_anticipos_admins_path, 
+                          method: :post, 
+                          class: 'btn btn-primary',
+                          data: { turbo_stream: true } %>
+          </div>
+        <% end %>
+          <div id="progreso_anticipos"></div>
+      </ol>
+    <% end %>
+  <% end%>
+  <% if @contador > 6 %>
+    <%= render 'admins/parciales/barra_progreso_anticipos_final' %> 
+  <% end %>
 </turbo-fame>

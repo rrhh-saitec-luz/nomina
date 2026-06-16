@@ -26,7 +26,8 @@
           <p class="text-muted text-center small">Esperando inicio de proceso...</p>
         </div>
       </div>
-    <% elsif @contador.eql?(6) %>
+    <% end %>
+    <% if @contador >= (6) %>
       <%= render "admins/parciales/antiguedades_boton_eliminar" %>
     <% else %>
       <%= render "admins/parciales/no_opciones_disponibles" %>
