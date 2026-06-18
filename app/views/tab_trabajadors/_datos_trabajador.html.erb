@@ -1,11 +1,30 @@
-<div class="d-flex justify-content-center border border-bottom-2 bg-primary">
-  <h5 class="text-light">Datos del Trabajador</h5>
+<%# Contenedor principal con sombra suave para dar profundidad %>
+<div class="card shadow-sm mb-4 border-0">
+  
+  <%# Encabezado estilizado con un azul profesional %>
+  <div class="card-header bg-dark text-white d-flex align-items-center py-3">
+    <i class="bi bi-person-badge me-2 fs-4"></i> <%# Icono opcional si usas Bootstrap Icons %>
+    <h5 class="card-title mb-0 fw-bold">Datos del Trabajador</h5>
+  </div>
+
+  <%# Lista de datos con filas alternadas (striped) para mejorar la lectura %>
+  <ul class="list-group list-group-flush">
+    <% @presenter.datos_personales.each do |key, val| %>
+      <li class="list-group-item d-flex justify-content-between align-items-center py-3 px-4">
+        
+        <%# Etiqueta / Título del dato %>
+        <span class="text-secondary fw-semibold small text-uppercase tracking-wider">
+          <%= key.delete(':') %> <%# Limpia los dos puntos si vienen desde el Hash %>
+        </span>
+        
+        <%# Valor del dato destacado %>
+        <span class="text-dark fw-bold fs-6">
+          <%= val %>
+        </span>
+
+      </li>
+    <% end %>
+  </ul>
+
 </div>
-<ul class="list-group list-group-horizontal-sm">
-  <% @datos_trabajador.each do |key, val| %>
-    <li class="list-group-item flex-fill">
-      <div><b><p><%= key %></p></b></div>
-      <div><%= val %></div>
-    </li>
-  <% end %>
-</ul>
+
