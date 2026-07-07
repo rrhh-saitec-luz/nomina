@@ -1,30 +1,13 @@
-<% fechas = @fechas_estatus_cargo if tipo_fecha.eql?(1) %>
-<% fechas = @fechas_estatus_adm if tipo_fecha.eql?(2) %>
-<% fechas.each do |key, val| %>
-  <li class="list-group-item flex-fill">
-    <div><b><p><%= key %></p></b></div>
-    <div>
-      <% if val.nil? %>
-        <%= '00/00/000' %>
-      <% else %>
-        <%= val.strftime('%d/%m/%Y') %>
-      <% end %>
-    </div>
-  </li>
-<% end %>
-<li class="list-group-item flex-fill">
-  <div>
-    <% if tipo_fecha.eql?(1) %>
-      <div><b>Años de Servicios</b></div>
-    <% else %>
-      <div><b>Turno</b></div>
-    <% end %>
-  </div>
-  <p>
-    <% if tipo_fecha.eql?(1) %>
-      <%= @antiguedad %>
-    <% else %>
-      <%= @turno[@trabajador.horario] %>
-    <% end %>
-  </p>
+<% lista_fechas.each do |key, val| %>                                                       
+  <li class="list-group-item flex-fill d-flex flex-column justify-content-center align-items-center py-3">                                              
+    <div class="text-secondary fw-semibold small text-uppercase mb-1"><%= key %></div>                                               
+    <div class="text-dark fw-bold"><%= val %></div>                                                                            
+  </li>                                                                               
+<% end %>                                                                             
+
+<% # Fila extra dinámica: Ahora con colores neutros (Gris y Negro) %>
+<li class="list-group-item flex-fill d-flex flex-column justify-content-center align-items-center py-3 bg-light">                 
+  <div class="text-secondary fw-semibold small text-uppercase mb-1"><%= extra_titulo %></div>                                             
+  <div class="text-dark fw-bold fs-6"><%= extra_valor %></div>                                             
 </li>
+

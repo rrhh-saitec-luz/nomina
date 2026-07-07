@@ -1,13 +1,7 @@
 <div class="container-fluid">
-  <%= @trabajador.inspect %>
-  <div class="card border-primary mb-3 mt-sm-3">
-    <%= render "datos_trabajador" %>
-  </div>
-  <%#
-  <% @renders.each do |show_render|  
-       <div class="card border-primary mb-3 mt-sm-3">
-         <%= render show_render 
-       </div>
-     <% end
-%>
+  <% @renders.each do |show_render| %> 
+    <div class="card border-primary mb-3 mt-sm-3">
+      <%= render show_render %>
+    </div>
+  <% end %>
 </div>

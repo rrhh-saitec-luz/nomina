@@ -18,15 +18,9 @@ class TabTrabajadorsController < ApplicationController
   def show
     @trabajador = Admon.find(params[:id])
     @presenter = TrabajadorPresenter.new(@trabajador)
-    @antiguedad = calculo_de_antiguedad(@trabajador)
-    @turno = HORARIOS
-    @fechas_estatus_cargo = fechas_gral_cargo(@trabajador)
-    @fechas_estatus_adm = fechas_adm_cargo(@trabajador)
-    @datos_cargo = datos_cargo_trabajador(@trabajador)
-    @datos_trabajador = datos_personales(@trabajador)
-    @datos_ingreso = ingreso_trabajador(@trabajador)
     @renders = %w[datos_trabajador datos_cargo_trabajador datos_ingreso_trabajador datos_fechas_trabajador]
   end
+  # datos_fechas_trabajador
 
   def create
     @nuevo = TabTrabajador.new(nuevo_ingreso_params)

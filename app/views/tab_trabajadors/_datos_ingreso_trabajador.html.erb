@@ -1,16 +1,36 @@
-<div class="d-flex justify-content-center border border-bottom-2 bg-primary">
-  <h5 class="text-light">Datos del ingreso</h5>
+<div class="card shadow-sm mb-4 border-0">
+  
+  <div class="card-header bg-dark text-white d-flex align-items-center py-3">
+    <i class="bi bi-box-arrow-in-right me-2 fs-4"></i> <%# Icono de ingreso %>
+    <h5 class="card-title mb-0 fw-bold">Datos de Ingreso</h5>
+  </div>
+
+  <ul class="list-group list-group-flush">
+    <% @presenter.datos_ingreso.each do |key, valores| %>
+      <li class="list-group-item d-flex justify-content-between align-items-center py-3 px-4">
+        
+        <%# Título del dato %>
+        <span class="text-secondary fw-semibold small text-uppercase tracking-wider">
+          <%= key.delete(':') %>
+        </span>
+        
+        <%# Bloque de valores %>
+        <div class="d-flex align-items-center gap-2">
+          <% if valores.size > 1 && valores[0].present? %>
+            <%# Código de ingreso destacado en un badge %>
+            <span class="badge bg-light text-dark border fw-medium px-2 py-1.5"><%= valores[0] %></span>
+            <span class="text-dark fw-bold fs-6"><%= valores[1] %></span>
+          <% else %>
+            <%# Valores únicos (Fechas, oficios, etc.) %>
+            <span class="text-dark fw-bold fs-6">
+              <%= valores[0].presence || 'N/A' %> <%# Muestra N/A si el campo está vacío %>
+            </span>
+          <% end %>
+        </div>
+
+      </li>
+    <% end %>
+  </ul>
+
 </div>
-<ul class="list-group list-group-horizontal-md">
-  <% @datos_ingreso.each do |key, val| %>
-    <li class="list-group-item flex-fill">
-      <div><b><p><%= key %></p></b></div>
-      <div>
-        <% if val.size.eql?(1) %>
-          <%= val.first %>
-        <% else %>
-          <%= val.first %> - <%= val.last %>
-        <% end %>
-    </li>
-  <% end %>
-</ul>
+

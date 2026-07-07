@@ -1,17 +1,34 @@
-<div class="d-flex justify-content-center border border-bottom-2 bg-primary">
-  <h5 class="text-light">Datos del Cargo</h5>
-</div>
-<ul class="list-group list-group-horizontal-lg">
-  <% @datos_cargo.each do |key, val| %>
-    <li class="list-group-item flex-fill">
-      <div><b><p><%= key %></p></b></div>
-      <div>
-        <% if val.size.eql?(1) %>
-        <%= val.first %>
+<div class="card shadow-sm mb-4 border-0">
+  
+  <div class="card-header bg-dark text-white d-flex align-items-center py-3">
+    <i class="bi bi-briefcase me-2 fs-4"></i>
+    <h5 class="card-title mb-0 fw-bold">Datos del Cargo</h5>
+  </div>
+
+  <ul class="list-group list-group-flush">
+    <% @presenter.datos_cargo.each do |key, valores| %>
+      <li class="list-group-item d-flex justify-content-between align-items-center py-3 px-4">
+        
+        <%# Título del dato %>
+        <span class="text-secondary fw-semibold small text-uppercase tracking-wider">
+          <%= key.delete(':') %>
+        </span>
+        
+        <%# Bloque de valores %>
+        <div class="d-flex align-items-center gap-2">
+          <% if valores.size > 1 %>
+            <%# Si tiene código y descripción, el código va en un badge gris %>
+            <span class="badge bg-light text-dark border fw-medium px-2 py-1.5"><%= valores[0] %></span>
+            <span class="text-dark fw-bold fs-6"><%= valores[1] %></span>
           <% else %>
-            <%= val.first  %> - <%= val.last %>
-        <% end %>
-      </div>
-    </li>
-  <% end %>
-</ul>
+            <%# Si solo tiene un valor (como Escala o Estatus) %>
+            <span class="text-dark fw-bold fs-6"><%= valores[0] %></span>
+          <% end %>
+        </div>
+
+      </li>
+    <% end %>
+  </ul>
+
+</div>
+
