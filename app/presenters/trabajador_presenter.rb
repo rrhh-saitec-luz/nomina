@@ -5,10 +5,6 @@ class TrabajadorPresenter < SimpleDelegator
   include ActionView::Helpers::UrlHelper
   include Constantes
 
-  def initialize(trabajador)
-    super(trabajador)
-  end
-
   def datos_personales
     { 'Nombre del Trabajador:' => nombres,
       'Cédula del Trabajador:' => ce_trabajador,
@@ -56,27 +52,39 @@ class TrabajadorPresenter < SimpleDelegator
                             'Nombramiento:' => fe_nombramiento })
   end
 
-def antiguedad
-  fecha_final = fe_efectiva || fe_jubilacion || retiro_efectivo || Date.today
-  fecha_inicio = fe_ingreso
-  
-  # Temporal: Esto nos mostrará las dos fechas en la vista para ver el misterio
-  return "Inicio: #{fecha_inicio&.strftime('%Y-%m-%d')} | Final: #{fecha_final&.strftime('%Y-%m-%d')}"
-  
-  # (El resto del código se queda igual abajo...)
-end
+  def antiguedad
+    return '0 años de servicio' if estatus == 'P'
+
+    fecha_inicio = fe_ingreso
+    return 'Fecha de ingreso no disponible' if fecha_inicio.nil? || !fecha_valida?(fecha_inicio)
+
+    fecha_final = determinar_fecha_final
+
+    años_servicio = calcular_años(fecha_inicio, fecha_final)
+    "#{años_servicio} años de servicio"
+  end
+
   def turno_actual
     HORARIOS[horario] || 'No asignado'
   end
 
   private
 
-  def check_fecha_final
-    return fe_efectiva unless fe_efectiva.nil?
-    return fe_jubilacion unless fe_jubilacion.nil?
-    return retiro_efectivo unless retiro_efectivo.nil?
-
+  def determinar_fecha_final
+    [fe_jubilacion, fe_retiro].each do |fecha|
+      return fecha if fecha_valida?(fecha)
+    end
     Date.today
+  end
+
+  def fecha_valida?(fecha)
+    fecha.present? && fecha.year > 1
+  end
+
+  def calcular_años(inicio, final)
+    años = final.year - inicio.year
+    años -= 1 if final < inicio + años.years
+    años
   end
 
   def fecha_oficio_formateada

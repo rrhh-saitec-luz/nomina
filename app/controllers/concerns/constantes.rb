@@ -14,7 +14,7 @@ module Constantes
 
   DESCRIPCION_PRINCIPAL = { 'S' => 'SI', 'N' => 'NO' }.freeze
 
-  HORARIOS = { 1 => 'Diurno', 2 => 'Mixto' }.freeze
+  HORARIOS = { 1 => 'Diurno', 3 => 'Mixto' }.freeze
 
   MESES = [[1, 'Enero'],
            [2, 'Febrero'],
