@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2026_05_05_155244) do
+ActiveRecord::Schema[7.1].define(version: 2026_07_09_144831) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -134,30 +134,12 @@ ActiveRecord::Schema[7.1].define(version: 2026_05_05_155244) do
     t.integer "ce_trabajador"
     t.string "co_ubicacion"
     t.string "tipopersonal"
-    t.string "descripcion_tp"
-    t.integer "ce_beneficiario"
-    t.string "co_concepto"
-    t.string "descripcion_co"
-    t.string "in_nomina"
-    t.string "indic_pago"
-    t.string "estatus_concepto"
-    t.date "fe_nomina"
-    t.date "fe_efectiva"
-    t.date "fe_efectiva_real"
-    t.decimal "estatus_deduccion"
-    t.decimal "mo_concepto"
-    t.decimal "mo_saldo"
-    t.decimal "status_deduc"
-    t.integer "tipo_nomina"
-    t.integer "tipo_nomina_especifica"
-    t.integer "ano"
-    t.integer "mes"
-    t.string "indice_concepto"
     t.string "usuario"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.boolean "status", default: false
     t.string "accion"
+    t.string "co_concepto"
   end
 
 end
