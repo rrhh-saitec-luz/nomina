@@ -6,8 +6,8 @@ class VariacionsController < ApplicationController
   def index; end
 
   def show
-    @trab = ubicar_cargo(params[:id])
-    @datos_cargo = datos_cargo_trabajador(@trab)
+    @trab = Admon.find(params[:id])
+    @presenter = TrabajadorPresenter.new(@trab)
   end
 
   def new
