@@ -28,12 +28,50 @@ class VariacionsController < ApplicationController
   def create
     @trab = Admon.find(params[:variacion][:id_trabajador])
     @variacion = Variacion.new(variacion_params_completos)
-
-    # 3. Asignamos los campos de auditoría exclusivos de Variacion
     @variacion.usuario = current_user&.nombre
     @variacion.status  = false
 
-    # 4. Construimos el HistoricoPago extrayendo los datos desde el objeto @variacion
+    return render_new_with_errors unless @variacion.valid?
+
+    ActiveRecord::Base.transaction do
+      if @variacion.accion == 'eliminar'
+        ejecutar_eliminacion!
+      else
+        ejecutar_creacion!
+      end
+
+      redirect_to variacion_path(@trab), notice: mensaje_exito
+    end
+  rescue ActiveRecord::Rollback, ActiveRecord::RecordInvalid
+    render _new_with_errors
+  end
+
+  def historico_variaciones
+    @datos = HistoricoPago.where(
+      CE_TRABAJADOR: params[:cedula],
+      CO_UBICACION: params[:codigo],
+      TIPOPERSONAL: params[:tipo]
+    )
+  end
+
+  def destroy
+    @elemento = Variacion.find(params[:id])
+    @elemento.destroy
+    redirect_to historico_variacions_path(trabajador: @elemento.to_json),
+                notice: 'El elemento fue eliminado exitosamente.'
+  end
+
+  private
+
+  def ubicar_cargo(id)
+    Admon.find(id)
+  end
+
+  def estatus(trabajador)
+    trabajador.estatus.eql?('P') and 'P' or trabajador.tp
+  end
+
+  def ejecutar_creacion!
     @historico_pago = HistoricoPago.new(
       CE_TRABAJADOR: @variacion.ce_trabajador,
       CO_UBICACION: @variacion.co_ubicacion,
@@ -57,42 +95,41 @@ class VariacionsController < ApplicationController
       INDICE_CONCEPTO: @variacion.indice_concepto
     )
 
-    # 5. Guardado seguro con transacciones de Base de Datos
-    ActiveRecord::Base.transaction do
-      if @historico_pago.save && @variacion.save
-        redirect_to variacion_path(@trab), notice: 'Variación registrada e historial de pago creado con éxito.'
-      else
-        raise ActiveRecord::Rollback
-      end
-    end
-  rescue ActiveRecord::Rollback, ActiveRecord::RecordInvalid
-    render :new
+    raise ActiveRecord::Rollback unless @historico_pago.save && @variacion.save
   end
 
-  def historico_variaciones
-    datos = JSON.parse(params[:trabajador])
-    @hist = Variacion.where(
-      ce_trabajador: datos['ce_trabajador'],
-      co_ubicacion: datos['co_ubicacion'],
-      tipopersonal: datos['tipopersonal']
+  def ejecutar_eliminacion!
+    variacion_previa = Variacion.find_by(
+      ce_trabajador: @variacion.ce_trabajador,
+      co_ubicacion: @variacion.co_ubicacion, tipopersonal: @variacion.tipopersonal,
+      co_concepto: @variacion.co_concepto, status: false
     )
+
+    @variacion.accion = variacion_previa.present? ? 'eliminar_abierto' : 'eliminar'
+    @historico_pago = HistoricoPago.find_by(
+      CE_TRABAJADOR: @variacion.ce_trabajador,
+      CO_UBICACION: @variacion.co_ubicacion, TIPOPERSONAL: @variacion.tipopersonal,
+      CO_CONCEPTO: @variacion.co_concepto
+    )
+    @historico_pago.destroy if @historico_pago
+    raise ActiveRecord::Rollback unless @variacion.save
   end
 
-  def destroy
-    @elemento = Variacion.find(params[:id])
-    @elemento.destroy
-    redirect_to historico_variacions_path(trabajador: @elemento.to_json),
-                notice: 'El elemento fue eliminado exitosamente.'
+  def mensaje_exito
+    if @variacion.accion == 'eliminar_abierto'
+      'Concepto removido de la nómina actual.'
+    elsif @variacion.accion == 'eliminar'
+      'Concepto eliminado del historial de pagos.'
+    else
+      'Variación registrada e historial de pago creado con éxito.'
+    end
   end
 
-  private
-
-  def ubicar_cargo(id)
-    Admon.find(id)
-  end
-
-  def estatus(trabajador)
-    trabajador.estatus.eql?('P') and 'P' or trabajador.tp
+  def render_new_with_errors
+    @con = Listado.all
+    @tipo_nomina = NominaTipo.all
+    @estatus = estatus(@trab)
+    render :new and return
   end
 
   def variacion_params_completos

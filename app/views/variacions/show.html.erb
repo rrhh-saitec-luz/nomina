@@ -2,7 +2,13 @@
 
   <%= render 'tab_trabajadors/datos_trabajador', acciones: capture { %>
     <%= link_to 'Crear variación', new_variacion_path(id: @trab), class: "btn btn-sm btn-outline-light" %>                                                                           
-    <%= link_to 'Ver variaciones', historico_variacions_path(trabajador: @trab.to_json), class: "btn btn-sm btn-outline-light" %>
+    <%= link_to 'Ver variaciones',
+                 historico_variacions_path(
+                   cedula: @trab.ce_trabajador,
+                   codigo: @trab.co_ubicacion,
+                   tipo: @trab.tipopersonal
+                 ),
+                 class: "btn btn-sm btn-outline-light" %>
   <% } %>
 
   <div class="mt-3">                                                
