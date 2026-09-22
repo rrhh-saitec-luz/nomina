@@ -3,8 +3,8 @@
     <div class="d-flex align-items-center flex-wrap gap-2">
       <i class="bi bi-list-task me-1 fs-4"></i>
       <h5 class="card-title mb-0 fw-bold me-2">Conceptos</h5>
-      
-      <% if datos.any? %>
+
+      <% if datos.present? && datos.any? %>
         <span class="badge bg-secondary text-white fw-semibold">Ubicación: <%= datos.first.co_ubicacion %></span>
         <span class="badge bg-info text-dark fw-semibold">Personal: <%= datos.first.tipopersonal %></span>
       <% end %>
@@ -18,25 +18,32 @@
   </div>
 
   <div class="table-responsive">
-    <table class="table table-hover align-middle mb-0">
-      <thead class="table-light">
-        <tr>
-          <th scope="col" class="ps-4" style="width: 15%">#</th>
-          <th scope="col" style="width: 30%">Código</th>
-          <th scope="col" class="pe-4" style="width: 55%">Descripción</th>
-        </tr>
-      </thead>
-      <tbody>
-        <%# Ordenamos alfabéticamente por CO_CONCEPTO antes de iterar %>
-        <% datos.sort_by { |d| d.CO_CONCEPTO.to_s }.each_with_index do |variacion, index| %>
+    <% if datos.present? && datos.any? %>
+      <table class="table table-hover align-middle mb-0">
+        <thead class="table-light">
           <tr>
-            <th scope="row" class="ps-4 fw-normal text-muted"><%= index + 1 %></th>
-            <td class="fw-bold text-secondary"><%= variacion.CO_CONCEPTO %></td>
-            <td class="pe-4"><%= variacion.DESCRIPCION_CO %></td>
+            <th scope="col" class="ps-4" style="width: 15%">#</th>
+            <th scope="col" style="width: 30%">Código</th>
+            <th scope="col" class="pe-4" style="width: 55%">Descripción</th>
           </tr>
-        <% end %>
-      </tbody>
-    </table>
+        </thead>
+        <tbody>
+          <% datos.sort_by { |d| d.CO_CONCEPTO.to_s }.each_with_index do |variacion, index| %>
+            <tr>
+              <th scope="row" class="ps-4 fw-normal text-muted"><%= index + 1 %></th>
+              <td class="fw-bold text-secondary"><%= variacion.CO_CONCEPTO %></td>
+              <td class="pe-4"><%= variacion.DESCRIPCION_CO %></td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    <% else %>
+      <% # Mensaje elegante si el trabajador no tiene conceptos en el histórico %>
+      <div class="p-4 text-center text-muted fw-semibold">
+        <i class="bi bi-info-circle me-1"></i> No se encontraron conceptos registrados para este trabajador.
+      </div>
+    <% end %>
   </div>
 </div>
+
 
