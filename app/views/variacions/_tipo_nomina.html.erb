@@ -1,11 +1,14 @@
-<%= content_tag :div,
-                class: "input-group mb-3" do %>
-  <%= form.label :tipo_nomina,
-                  class: 'fw-bold input-group-text' %>
-  <%= form.select :tipo_nomina,
-                  options_from_collection_for_select(tipo_nomina, :id, :descripcion),
-                  { include_blank: "Seleccione nomina", required: true },
-                  data: { varconcepto_target: "tiponomina",
-                          action: "change->varconcepto#cargarNominaEspecifica" },
-                  class: 'form-select' %>
-<% end %>
+<div class="py-3 border-bottom">
+  <div class="form-floating">
+    <%= form.select :tipo_nomina, 
+                    options_from_collection_for_select(tipo_nomina, :id, :descripcion), 
+                    { include_blank: "Seleccione nómina", required: true }, 
+                    data: { varconcepto_target: "tiponomina", 
+                            action: "change->varconcepto#cargarNominaEspecifica" }, 
+                    class: 'form-select border fw-semibold',
+                    id: 'floatingSelectTipoNomina' %>
+                    
+    <%= form.label :tipo_nomina, "Tipo de Nómina", class: 'fw-bold text-secondary', for: 'floatingSelectTipoNomina' %>
+  </div>
+</div>
+

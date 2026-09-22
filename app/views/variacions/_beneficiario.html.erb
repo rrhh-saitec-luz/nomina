@@ -1,6 +1,12 @@
-<%= content_tag :div do %>
-  <%= form.label :ce_beneficiario, 'Beneficiario',
-                class: 'form-control fw-bold' %>
-  <%= form.number_field :ce_beneficiario,
-                       class: 'form-control' %>
-<% end %>
+<div class="py-3 border-bottom">
+  <div class="form-floating">
+    <%= form.number_field :ce_beneficiario, 
+                          class: 'form-control border fw-semibold', 
+                          id: 'floatingInputBeneficiario',
+                          placeholder: 'Ej: 12345' %>
+    <%= form.label :ce_beneficiario, 'Beneficiario', 
+                   class: 'fw-bold text-secondary', 
+                   for: 'floatingInputBeneficiario' %>
+  </div>
+</div>
+

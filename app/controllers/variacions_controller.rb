@@ -31,22 +31,18 @@ class VariacionsController < ApplicationController
     @variacion.usuario = current_user&.nombre
     @variacion.status  = false
 
-    return render_new_with_errors unless @variacion.valid?
-
-    ActiveRecord::Base.transaction do
-      if @variacion.accion == 'eliminar'
-        ejecutar_eliminacion!
-      else
-        ejecutar_creacion!
-      end
-
-      redirect_to variacion_path(@trab), notice: mensaje_exito
-    end
+    transaccion(@trab, @variacion)
+    render_new_with_errors unless @variacion.valid?
   rescue ActiveRecord::Rollback, ActiveRecord::RecordInvalid
     render _new_with_errors
   end
 
   def historico_variaciones
+    @trabajador = Admon.find_by(
+      ce_trabajador: params[:cedula], co_ubicacion: params[:codigo],
+      tipopersonal: params[:tipo]
+    )
+    @presenter = TrabajadorPresenter.new(@trabajador)
     @datos = HistoricoPago.where(
       CE_TRABAJADOR: params[:cedula],
       CO_UBICACION: params[:codigo],
@@ -62,10 +58,6 @@ class VariacionsController < ApplicationController
   end
 
   private
-
-  def ubicar_cargo(id)
-    Admon.find(id)
-  end
 
   def estatus(trabajador)
     trabajador.estatus.eql?('P') and 'P' or trabajador.tp
@@ -113,6 +105,18 @@ class VariacionsController < ApplicationController
     )
     @historico_pago.destroy if @historico_pago
     raise ActiveRecord::Rollback unless @variacion.save
+  end
+
+  def transaccion(trabajador, variacion)
+    ActiveRecord::Base.transaction do
+      if variacion.accion == 'eliminar'
+        ejecutar_eliminacion!
+      else
+        ejecutar_creacion!
+      end
+
+      redirect_to variacion_path(trabajador), notice: mensaje_exito
+    end
   end
 
   def mensaje_exito

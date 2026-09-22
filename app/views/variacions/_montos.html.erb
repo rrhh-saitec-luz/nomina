@@ -1,51 +1,74 @@
-<%= content_tag :div, class: "d-flex" do %>
-  <%= content_tag :div,
-                  class: "input-group mb-3" do %>
-    <%= form.label :indicador_pago, "Indicador de Pago",
-                   class: 'fw-bold input-group-text' %> 
-    <%= form.text_field :indicador_pago,
-                         disabled: true,
-                         value: "Indicador",
-                         data: {varconcepto_target: "indicadorPago"} %>
-    <%= form.hidden_field :indic_pago,
-                            data: { varconcepto_target: "indicadorReal" } %>
-  <% end %>
-  <%= content_tag :div,
-                  class: "input-group mb-3" do %>
-    <%= form.label :monto_concepto_previo, "Monto concepto",
-                   class: 'fw-bold input-group-text' %> 
-    <%= form.text_field :monto_concepto_previo,
-                        value: 0.0,
-                        data: { varconcepto_target: "montoPrevio",
-                                action: "input->varconcepto#calculoMontoConcepto"} %>
-  <% end %>
-  <%= content_tag :div,
-                  data: { varconcepto_target: "salarioContent"},
-                  class: "input-group mb-3 d-none container" do %>
-    <%= form.label :mo_base, "Sueldo Base",
-                   class: 'fw-bold input-group-text' %> 
-    <%= form.number_field :mo_base,
-                          value: 0.0,
-                          data: {varconcepto_target: "salario",
-                                 action: "input->varconcepto#calculoMontoSaldo"},
-                          step: :any %>
-  <% end %>
-  <%= content_tag :div,
-                  class: "input-group mb-3 d-none",
-                  data: { varconcepto_target: "saldoContent"} do %>
-    <%= form.label :mo_saldo, "Ingresar Cantidad",
-                   class: 'fw-bold input-group-text' %> 
-    <%= form.number_field :mo_saldo,
-                          value: 0.00,
-                          data: {varconcepto_target: "saldo",
-                                 action: "input->varconcepto#calculoMontoSaldo"} %>
-  <% end %>
-  <%= content_tag :div, class: "input-group mb-3" do %>
-    <%= form.label :mo_concepto, "Total concepto",
-                   class: 'fw-bold input-group-text' %> 
-    <%= form.number_field :mo_concepto,
-                          value: 0.00,
-                          data: { varconcepto_target: "subTotal"},
-                          step: :any %>
-  <% end %>
-<% end %>
+<div class="row g-3 py-3 border-bottom">
+  <%# Indicador de Pago (Solución con Input Nativo sin simulación) %>
+  <div class="col-md">
+    <div class="form-floating">
+      <%= form.text_field :indicador_pago, 
+                          disabled: true, 
+                          value: "Pendiente...", 
+                          class: "form-control border bg-light fw-semibold text-muted",
+                          data: { varconcepto_target: "indicadorPago" },
+                          placeholder: "Pendiente..." %>
+      <%= form.label :indicador_pago, "Indicador de Pago", class: 'fw-bold text-secondary' %>
+      <%= form.hidden_field :indic_pago, value: "-", data: { varconcepto_target: "indicadorReal" } %>
+    </div>
+  </div>
+
+  <%# Monto Concepto %>
+  <div class="col-md">
+    <div class="form-floating">
+      <%= form.text_field :monto_concepto_previo, 
+                          value: "0.00", 
+                          class: 'form-control border fw-semibold', 
+                          id: 'floatingMontoPrevio',
+                          placeholder: '0.00',
+                          data: { varconcepto_target: "montoPrevio", 
+                                  action: "input->varconcepto#calculoMontoConcepto" } %>
+      <%= form.label :monto_concepto_previo, "Monto concepto", class: 'fw-bold text-secondary', for: 'floatingMontoPrevio' %>
+    </div>
+  </div>
+
+  <%# Sueldo Base (Dinámico) %>
+  <div class="col-md d-none" data-varconcepto-target="salarioContent">
+    <div class="form-floating">
+      <%= form.number_field :mo_base, 
+                          value: "0.00", 
+                          step: :any,
+                          class: 'form-control border fw-semibold', 
+                          id: 'floatingMoBase',
+                          placeholder: '0.00',
+                          data: { varconcepto_target: "salario", 
+                                  action: "input->varconcepto#calculoMontoSaldo" } %>
+      <%= form.label :mo_base, "Sueldo Base", class: 'fw-bold text-secondary', for: 'floatingMoBase' %>
+    </div>
+  </div>
+
+  <%# Ingresar Cantidad / Saldo (Dinámico) %>
+  <div class="col-md d-none" data-varconcepto-target="saldoContent">
+    <div class="form-floating">
+      <%= form.number_field :mo_saldo, 
+                          value: "0.00", 
+                          step: :any,
+                          class: 'form-control border fw-semibold', 
+                          id: 'floatingMoSaldo',
+                          placeholder: '0.00',
+                          data: { varconcepto_target: "saldo", 
+                                  action: "input->varconcepto#calculoMontoSaldo" } %>
+      <%= form.label :mo_saldo, "Ingresar Cantidad", class: 'fw-bold text-secondary', for: 'floatingMoSaldo' %>
+    </div>
+  </div>
+
+  <%# Total Concepto %>
+  <div class="col-md">
+    <div class="form-floating">
+      <%= form.number_field :mo_concepto, 
+                          value: "0.00", 
+                          step: :any,
+                          class: 'form-control border fw-bold text-dark', 
+                          id: 'floatingMoConcepto',
+                          placeholder: '0.00',
+                          data: { varconcepto_target: "subTotal" } %>
+      <%= form.label :mo_concepto, "Total concepto", class: 'fw-bold text-secondary', for: 'floatingMoConcepto' %>
+    </div>
+  </div>
+</div>
+

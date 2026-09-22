@@ -1,28 +1,48 @@
-<%= content_tag :div,
-                class: "d-flex" do %>
-  <%= content_tag :div,
-                  class: 'input-group mb-3' do %>
-    <%= form.label :fe_nomina, "Fecha Nómina",
-                   class: 'fw-bold input-group-text' %> 
-    <%= form.date_field :fe_nomina ,
-                        data: { action: "change->varconcepto#actualizarFecha" },
-                        required: true %> 
-  <% end %>
-  <%= content_tag :div,
-                  class: 'input-group mb-3' do %>
-    <%= form.label :fe_efectiva, "Fecha efectiva",
-                   class: 'fw-bold input-group-text' %> 
-    <%= form.date_field :fe_efectiva,
-                        required: true %> 
-  <% end %>
-  <%= content_tag :div,
-                  class: 'input-group mb-3' do %>
-    <%= form.label :fe_efectiva_real, "Fecha efectiva real",
-                  class: 'fw-bold input-group-text' %> 
-    <%= form.date_field :fe_efectiva_real %> 
-  <% end %>
-  <%= form.hidden_field :mes,
-                        data: { varconcepto_target: "mes" } %>
-  <%= form.hidden_field :ano,
-                        data: { varconcepto_target: "ano" } %>
-<% end %>
+<div class="row g-3 py-3 border-bottom">
+  <%# Fecha Nómina %>
+  <div class="col-md-4">
+    <div class="form-floating">
+      <%= form.date_field :fe_nomina, 
+                          data: { action: "change->varconcepto#actualizarFecha" }, 
+                          required: true,
+                          class: 'form-control border fw-semibold',
+                          id: 'floatingDateFeNomina',
+                          placeholder: 'dd/mm/aaaa' %>
+      <%= form.label :fe_nomina, "Fecha Nómina", 
+                     class: 'fw-bold text-secondary', 
+                     for: 'floatingDateFeNomina' %>
+    </div>
+  </div>
+
+  <%# Fecha Efectiva %>
+  <div class="col-md-4">
+    <div class="form-floating">
+      <%= form.date_field :fe_efectiva, 
+                          required: true,
+                          class: 'form-control border fw-semibold',
+                          id: 'floatingDateFeEfectiva',
+                          placeholder: 'dd/mm/aaaa' %>
+      <%= form.label :fe_efectiva, "Fecha efectiva", 
+                     class: 'fw-bold text-secondary', 
+                     for: 'floatingDateFeEfectiva' %>
+    </div>
+  </div>
+
+  <%# Fecha Efectiva Real %>
+  <div class="col-md-4">
+    <div class="form-floating">
+      <%= form.date_field :fe_efectiva_real, 
+                          class: 'form-control border fw-semibold',
+                          id: 'floatingDateFeReal',
+                          placeholder: 'dd/mm/aaaa' %>
+      <%= form.label :fe_efectiva_real, "Fecha efectiva real", 
+                     class: 'fw-bold text-secondary', 
+                     for: 'floatingDateFeReal' %>
+    </div>
+  </div>
+
+  <%# Campos ocultos para mes y año %>
+  <%= form.hidden_field :mes, data: { varconcepto_target: "mes" } %>
+  <%= form.hidden_field :ano, data: { varconcepto_target: "ano" } %>
+</div>
+

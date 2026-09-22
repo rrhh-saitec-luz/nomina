@@ -1,18 +1,16 @@
-<%= content_tag :div,
-                class: "d-flex" do %>
-  <%= content_tag :div,
-                  class: "flex-fill" do %>
-    <%= label_tag :nombres, 'Nombres',
-                  class: 'form-control fw-bold' %>
-    <%= text_field_tag :nombres, trab.nombres, class: 'form-control', disabled: true %>
-  <% end %>
-  <%= content_tag :div, class: "flex-fill" do %>
-    <%= label_tag :ubicacion,
-                  'Ubicacion',
-                  class: 'form-control fw-bold' %>
-    <%= text_field_tag :ubicacion,
-                       trab.descripcion_larga,
-                       class: 'form-control',
-                       disabled: true %>
-  <% end %>
-<% end %>
+<div class="row g-3 py-2 border-bottom pb-3">
+  <div class="col-md-6">
+    <span class="d-block fw-bold text-secondary small mb-1">Nombres</span>
+    <div class="form-control bg-light border-0 fw-semibold text-dark py-2">
+      <%= trab.nombres %>
+    </div>
+  </div>
+  
+  <div class="col-md-6">
+    <span class="d-block fw-bold text-secondary small mb-1">Ubicación</span>
+    <div class="form-control bg-light border-0 fw-semibold text-dark py-2">
+      <%= trab.descripcion_larga %>
+    </div>
+  </div>
+</div>
+

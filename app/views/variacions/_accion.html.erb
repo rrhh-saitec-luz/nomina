@@ -1,15 +1,17 @@
-<%= content_tag :div,
-                class: "input-group mb-3" do %>
-  <%= form.label :accion, "Accion",
-                  class: 'fw-bold input-group-text' %>
-  <%= form.select :accion,
-                  [["Crear", "crear"],
-                  ["Sustituir", "sustituir"],
-                  ["Sumar", "sumar"],
-                  [" Restar", "restar"],
-                  ["Eliminar", "eliminar"]],
-                  { selected: "crear", required: true },
-                  data: { varconcepto_target: "action",
-                          action: "change->varconcepto#action"},
-                  class: "form-select" %>
-<% end %>
+<div class="py-3 border-bottom">
+  <div class="form-floating">
+    <%= form.select :accion,
+                    [["Crear", "crear"],
+                     ["Sustituir", "sustituir"],
+                     ["Sumar", "sumar"],
+                     ["Restar", "restar"],
+                     ["Eliminar", "eliminar"]],
+                    { selected: "crear", required: true },
+                    data: { varconcepto_target: "action",
+                            action: "change->varconcepto#action" },
+                    class: "form-select border fw-semibold",
+                    id: "floatingSelectAccion" %>
+    <%= form.label :accion, "Acción", class: 'fw-bold text-secondary', for: "floatingSelectAccion" %>
+  </div>
+</div>
+

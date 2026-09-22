@@ -1,26 +1,40 @@
-<%= content_tag :div, class: "container-fluid" do %>
-<% end %>
-<%= content_tag :div,
-                class: "container-fluid border mt-2 d-flex justify-content-center" do %> 
-  <%= form_with model: @variacion,
-                data: {controller: "varconcepto"},
-                local: true,
-                class:"d-flex flex-column col-11 gap-2 mt-2" do |form| %>
-    <%= render "cabecera_variacion", trab: @trab %>
-    <%= render "accion", form: form %>
-    <%= render "seleccion_concepto", form: form, con: @con %>
-    <%= render "beneficiario", form: form %>
-    <%= render "tipo_nomina", form: form, tipo_nomina: @tipo_nomina %>
-    <%= render "nomina_especifica", form: form %>
-    <%= render "fechas_nomina", form: form %>
-    <%= render "montos", form: form %>
-    <%= form.hidden_field :ce_trabajador, value: @trab.ce_trabajador %>
-    <%= form.hidden_field :co_ubicacion, value: @trab.co_ubicacion %>
-    <%= form.hidden_field :tipopersonal, value: @trab.tipopersonal %>
-    <%= form.hidden_field :descripcion_tp, value: @trab.descripcion_tp %>
-    <%= form.hidden_field :id_trabajador, value: @trab.id %>
-    <%= form.hidden_field :usuario, value: current_user.nombre %>
-    <%= form.hidden_field :in_nomina, value: @estatus %>
-    <%= form.submit "Crear", class: "btn btn-secondary col-1 align-self-center" %>
-  <% end %>
-<% end %>
+<div class="card shadow-sm mb-4 border-0">
+  <%# Encabezado de la tarjeta con el diseño oscuro e icono %>
+  <div class="card-header bg-dark text-white d-flex justify-content-between align-items-center py-3">
+    <div class="d-flex align-items-center">
+      <i class="bi bi-file-earmark-medical me-2 fs-4"></i>
+      <h5 class="card-title mb-0 fw-bold">Nueva Variación de Concepto</h5>
+    </div>
+  </div>
+
+  <%# Contenedor del formulario dentro del cuerpo de la tarjeta %>
+  <div class="card-body bg-light">
+    <%= form_with model: @variacion, 
+                  data: { controller: "varconcepto" }, 
+                  local: true, 
+                  class: "d-flex flex-column col-12 gap-3" do |form| %>
+                  
+      <%= render "cabecera_variacion", trab: @trab %>
+      <%= render "accion", form: form %>
+      <%= render "seleccion_concepto", form: form, con: @con %>
+      <%= render "beneficiario", form: form %>
+      <%= render "tipo_nomina", form: form, tipo_nomina: @tipo_nomina %>
+      <%= render "nomina_especifica", form: form %>
+      <%= render "fechas_nomina", form: form %>
+      <%= render "montos", form: form %>
+
+      <%# Campos ocultos %>
+      <%= form.hidden_field :ce_trabajador, value: @trab.ce_trabajador %>
+      <%= form.hidden_field :co_ubicacion, value: @trab.co_ubicacion %>
+      <%= form.hidden_field :tipopersonal, value: @trab.tipopersonal %>
+      <%= form.hidden_field :descripcion_tp, value: @trab.descripcion_tp %>
+      <%= form.hidden_field :id_trabajador, value: @trab.id %>
+      <%= form.hidden_field :usuario, value: current_user.nombre %>
+      <%= form.hidden_field :in_nomina, value: @estatus %>
+
+      <%# Botón de acción alineado al centro %>
+      <%= form.submit "Crear", class: "btn btn-dark col-md-2 align-self-center mt-3 shadow-sm" %>
+    <% end %>
+  </div>
+</div>
+
