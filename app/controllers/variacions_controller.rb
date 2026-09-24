@@ -37,24 +37,23 @@ class VariacionsController < ApplicationController
       concepto_duplicado = buscar_historico_vinculado
 
       if concepto_duplicado.present?
-        @variacion.errors.add(:base, "El concepto #{@variacion.co_concepto} ya se encuentra registrado y activo para este trabajador. No puede crearlo dos veces.")
+        @variacion.errors.add(:base,
+                              "El concepto #{@variacion.co_concepto} ya está registrado  y activo.")
         render_new_with_errors and return
       end
     end
-    # --------------------------------------------------------------
 
     # Invocamos tu método de transacción original
     transaccion(@trab, @variacion)
-    
+
     render_new_with_errors unless @variacion.valid?
   rescue ActiveRecord::Rollback, ActiveRecord::RecordInvalid
     render_new_with_errors
   end
 
-  # ¡AQUÍ ESTÁ EL MÉTODO QUE HACÍA FALTA! 
   def historico_variaciones
     @trabajador = Admon.find_by(
-      ce_trabajador: params[:cedula], 
+      ce_trabajador: params[:cedula],
       co_ubicacion: params[:codigo],
       tipopersonal: params[:tipo]
     )
@@ -69,7 +68,9 @@ class VariacionsController < ApplicationController
   def destroy
     @elemento = Variacion.find(params[:id])
     @elemento.destroy
-    redirect_to historico_variacions_path(cedula: @elemento.ce_trabajador, codigo: @elemento.co_ubicacion, tipo: @elemento.tipopersonal),
+    redirect_to historico_variacions_path(cedula: @elemento.ce_trabajador,
+                                          codigo: @elemento.co_ubicacion,
+                                          tipo: @elemento.tipopersonal),
                 notice: 'El elemento fue eliminado exitosamente.'
   end
 
@@ -83,21 +84,20 @@ class VariacionsController < ApplicationController
   def buscar_historico_vinculado
     HistoricoPago.find_by(
       CE_TRABAJADOR: @variacion.ce_trabajador,
-      CO_UBICACION:  @variacion.co_ubicacion,
-      TIPOPERSONAL:  @variacion.tipopersonal,
-      CO_CONCEPTO:   @variacion.co_concepto
+      CO_UBICACION: @variacion.co_ubicacion,
+      TIPOPERSONAL: @variacion.tipopersonal,
+      CO_CONCEPTO: @variacion.co_concepto
     )
   end
-
 
   # Tu método original corregido para procesar el borrado financiero real
   def ejecutar_eliminacion!
     variacion_previa = Variacion.find_by(
       ce_trabajador: @variacion.ce_trabajador,
-      co_ubicacion:  @variacion.co_ubicacion, 
-      tipopersonal:  @variacion.tipopersonal,
-      co_concepto:   @variacion.co_concepto, 
-      status:        false
+      co_ubicacion: @variacion.co_ubicacion,
+      tipopersonal: @variacion.tipopersonal,
+      co_concepto: @variacion.co_concepto,
+      status: false
     )
 
     # Definimos la acción de auditoría exacta
@@ -107,16 +107,16 @@ class VariacionsController < ApplicationController
     # Buscamos el registro financiero real en HistoricoPago
     @historico_pago = HistoricoPago.find_by(
       CE_TRABAJADOR: @variacion.ce_trabajador,
-      CO_UBICACION:  @variacion.co_ubicacion, 
-      TIPOPERSONAL:  @variacion.tipopersonal,
-      CO_CONCEPTO:   @variacion.co_concepto
+      CO_UBICACION: @variacion.co_ubicacion,
+      TIPOPERSONAL: @variacion.tipopersonal,
+      CO_CONCEPTO: @variacion.co_concepto
     )
 
     # CORE: Si existe el registro financiero, lo destruimos
     if @historico_pago
       @historico_pago.destroy
     else
-      @variacion.errors.add(:base, "El concepto seleccionado no existe en el Histórico de Pago.")
+      @variacion.errors.add(:base, 'El concepto seleccionado no existe en el Histórico de Pago.')
       raise ActiveRecord::Rollback
     end
 
@@ -130,26 +130,26 @@ class VariacionsController < ApplicationController
   # Tu método original de creación completado con los campos
   def ejecutar_creacion!
     @historico_pago = HistoricoPago.new(
-      CE_TRABAJADOR:          @variacion.ce_trabajador,
-      CO_UBICACION:           @variacion.co_ubicacion,
-      TIPOPERSONAL:           @variacion.tipopersonal,
-      CO_CONCEPTO:            @variacion.co_concepto,
-      DESCRIPCION_TP:         @variacion.descripcion_tp,
-      DESCRIPCION_CO:         @variacion.descripcion_co,
-      IN_NOMINA:              @variacion.in_nomina,
-      INDICPAGO:              @variacion.indic_pago,
-      ESTATUS_CONCEPTO:       @variacion.estatus_concepto,
-      FE_NOMINA:              @variacion.fe_nomina,
-      FE_EFECTIVA:            @variacion.fe_efectiva,
-      STATUS_DEDUCCION:       @variacion.estatus_deduccion,
-      MO_CONCEP:              @variacion.mo_concepto,
-      MO_SALDO:               @variacion.mo_saldo,
-      STATUS_DEDUC:           @variacion.status_deduc,
-      TIPO_NOMINA:            @variacion.tipo_nomina,
+      CE_TRABAJADOR: @variacion.ce_trabajador,
+      CO_UBICACION: @variacion.co_ubicacion,
+      TIPOPERSONAL: @variacion.tipopersonal,
+      CO_CONCEPTO: @variacion.co_concepto,
+      DESCRIPCION_TP: @variacion.descripcion_tp,
+      DESCRIPCION_CO: @variacion.descripcion_co,
+      IN_NOMINA: @variacion.in_nomina,
+      INDICPAGO: @variacion.indic_pago,
+      ESTATUS_CONCEPTO: @variacion.estatus_concepto,
+      FE_NOMINA: @variacion.fe_nomina,
+      FE_EFECTIVA: @variacion.fe_efectiva,
+      STATUS_DEDUCCION: @variacion.estatus_deduccion,
+      MO_CONCEP: @variacion.mo_concepto,
+      MO_SALDO: @variacion.mo_saldo,
+      STATUS_DEDUC: @variacion.status_deduc,
+      TIPO_NOMINA: @variacion.tipo_nomina,
       TIPO_NOMINA_ESPECIFICA: @variacion.tipo_nomina_especifica,
-      ANO:                    @variacion.ano,
-      MES:                    @variacion.mes,
-      INDICE_CONCEPTO:        @variacion.indice_concepto
+      ANO: @variacion.ano,
+      MES: @variacion.mes,
+      INDICE_CONCEPTO: @variacion.indice_concepto
     )
 
     raise ActiveRecord::Rollback unless @historico_pago.save && @variacion.save
@@ -168,10 +168,10 @@ class VariacionsController < ApplicationController
 
       # Redirección usando tu ruta correcta con "s"
       redirect_to historico_variacions_path(
-                    cedula: trabajador.ce_trabajador, 
-                    codigo: trabajador.co_ubicacion, 
-                    tipo: trabajador.tipopersonal
-                  ), notice: mensaje_exito
+        cedula: trabajador.ce_trabajador,
+        codigo: trabajador.co_ubicacion,
+        tipo: trabajador.tipopersonal
+      ), notice: mensaje_exito
     end
   end
 
