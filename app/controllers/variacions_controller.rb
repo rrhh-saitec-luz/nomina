@@ -33,15 +33,7 @@ class VariacionsController < ApplicationController
     @variacion.status  = false # Control inicial (nace libre)
 
     # --- CERROJO DE SEGURIDAD: EVITAR DUPLICADOS AL CREAR ---
-    if @variacion.accion == 'crear'
-      concepto_duplicado = buscar_historico_vinculado
-
-      if concepto_duplicado.present?
-        @variacion.errors.add(:base,
-                              "El concepto #{@variacion.co_concepto} ya está registrado  y activo.")
-        render_new_with_errors and return
-      end
-    end
+    return if duplicado_detectado?
 
     # Invocamos tu método de transacción original
     transaccion(@trab, @variacion)
@@ -75,6 +67,18 @@ class VariacionsController < ApplicationController
   end
 
   private
+
+  def duplicado_detectado?
+    return false unless @variacion.accion == 'crear'
+
+    if buscar_historico_vinculado.present?
+      @variacion.errors.add(:base, "El concepto #{@variacion.co_concepto} ya está registrado y activo.")
+      render_new_with_errors
+      return true
+    end
+
+    false
+  end
 
   def estatus(trabajador)
     trabajador.estatus.eql?('P') and 'P' or trabajador.tp
@@ -179,7 +183,7 @@ class VariacionsController < ApplicationController
     @con = Listado.all
     @tipo_nomina = NominaTipo.all
     @estatus = estatus(@trab)
-    render :new
+    render :new, status: :unprocessable_entity
   end
 
   def variacion_params_completos
