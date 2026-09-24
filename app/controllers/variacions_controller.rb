@@ -2,7 +2,7 @@
 
 class VariacionsController < ApplicationController
   include Constantes
-  
+
   def index; end
 
   def show
