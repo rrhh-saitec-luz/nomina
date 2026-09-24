@@ -1,21 +1,31 @@
-<div class="card shadow-sm mb-4 border-0">
-  <div class="card-header bg-dark text-white d-flex justify-content-between align-items-center py-3">
-    <div class="d-flex align-items-center flex-wrap gap-2">
-      <i class="bi bi-list-task me-1 fs-4"></i>
-      <h5 class="card-title mb-0 fw-bold me-2">Conceptos</h5>
-
-      <% if datos.present? && datos.any? %>
-        <span class="badge bg-secondary text-white fw-semibold">Ubicación: <%= datos.first.co_ubicacion %></span>
-        <span class="badge bg-info text-dark fw-semibold">Personal: <%= datos.first.tipopersonal %></span>
+<div class="card shadow-sm mb-4 border-0">                                                                           
+  <div class="card-header bg-dark text-white d-flex justify-content-between align-items-center py-3">                
+    <div class="d-flex align-items-center flex-wrap gap-2">                                                          
+      <i class="bi bi-list-task me-1 fs-4"></i>                                                                      
+      <h5 class="card-title mb-0 fw-bold me-2">Conceptos</h5>                                                        
+                                                                                                                     
+      <% if datos.present? && datos.any? %>                                                                          
+        <span class="badge bg-secondary text-white fw-semibold">Ubicación: <%= datos.first.co_ubicacion %></span>    
+        <span class="badge bg-info text-dark fw-semibold">Personal: <%= datos.first.tipopersonal %></span>           
+      <% end %>                                                                                                      
+    </div>                                                                                                           
+                                                                                                                     
+    <div class="d-flex gap-2">                                                                                     
+      <% if local_assigns[:acciones] %>                                                                                
+        <%= acciones %>                                                                                              
+      <% end %>                                                                                                        
+      <% if @trabajador.present? %>
+        <%= link_to new_variacion_path(id: @trabajador.id), class: "btn btn-sm btn-outline-light d-inline-flex align-items-center gap-1 fw-semibold shadow-sm" do %>
+          <i class="bi bi-plus-circle"></i>
+          <span>Crear variación</span>
+        <% end %>
+        <%= link_to variacion_path(id: @trabajador.id), class: "btn btn-sm btn-outline-light d-inline-flex align-items-center gap-1 fw-semibold shadow-sm" do %>
+          <i class="bi bi-plus-circle"></i>
+          <span>Volver a inicio</span>
+        <% end %>
       <% end %>
-    </div>
-
-    <% if local_assigns[:acciones] %>
-      <div class="d-flex gap-2">
-        <%= acciones %>
-      </div>
-    <% end %>
-  </div>
+    </div>                                                                                                           
+  </div>                         
 
   <div class="table-responsive">
     <% if datos.present? && datos.any? %>
