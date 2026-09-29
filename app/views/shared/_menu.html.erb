@@ -1,19 +1,42 @@
-<div class='d-flex align-items-center justify-content-between mt-2'>
-  <ul class='list-group list-group-horizontal'>                                                                    
-    <li class="list-group-item <%= active_class(root_path) %>">
-      <%= link_to 'Home', root_path, class: 'link-primary active' %>
-    </li>
-    <li class="list-group-item <%= active_class(tab_trabajadors_path) %>">
-      <%= link_to 'Trabajadores', tab_trabajadors_path, class: 'link-primary active' %>
-    </li>
-    <% if current_user.rol.eql?("admin") %>
-      <li class="list-group-item <%= active_class(admins_path) %>">
-        <%= link_to 'Administrar', admins_path, class: 'link-primary active' %>
+<div class="card shadow-sm mb-4 border-0">
+  <div class="card-body p-2 d-flex align-items-center justify-content-between flex-wrap gap-3">
+    
+    <%# Grupo de navegación izquierdo %>
+    <ul class="nav nav-pills align-items-center gap-1">
+      <li class="nav-item">
+        <%= link_to root_path, class: "nav-link d-flex align-items-center gap-2 py-2 px-3 fw-semibold #{active_class(root_path)}" do %>
+          <i class="bi bi-house-door fs-5"></i>
+          <span>Home</span>
+        <% end %>
       </li>
-    <% end %>
-    <li class='list-group-item'>
-      <%= link_to 'Volver', :back %>
-    </li>
-  </ul>
-   <%= render 'shared/logout' %>
+      
+      <li class="nav-item">
+        <%= link_to tab_trabajadors_path, class: "nav-link d-flex align-items-center gap-2 py-2 px-3 fw-semibold #{active_class(tab_trabajadors_path)}" do %>
+          <i class="bi bi-people fs-5"></i>
+          <span>Trabajadores</span>
+        <% end %>
+      </li>
+      
+      <% if current_user.rol.eql?("admin") %>
+        <li class="nav-item">
+          <%= link_to admins_path, class: "nav-link d-flex align-items-center gap-2 py-2 px-3 fw-semibold #{active_class(admins_path)}" do %>
+            <i class="bi bi-gear fs-5"></i>
+            <span>Administrar</span>
+          <% end %>
+        </li>
+      <% end %>
+
+      <li class="nav-item ms-2 border-start ps-2">
+        <%= link_to :back, class: "btn btn-link text-secondary d-flex align-items-center gap-1 text-decoration-none py-2 px-2 small fw-medium" do %>
+          <i class="bi bi-arrow-left-short fs-4"></i>
+          <span>Volver</span>
+        <% end %>
+      </li>
+    </ul>
+
+    <%# Botón Logout %>
+    <%= render 'shared/logout' %>
+    
+  </div>
 </div>
+

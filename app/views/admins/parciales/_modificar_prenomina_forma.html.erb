@@ -1,22 +1,43 @@
-  <%= form_with url: actualizar_admins_path,
-                method: :post,
-                class: "d-flex flex-column mt-3 gap-3 justify-content-center"  do |form| %>
-    <%= content_tag :div do %>
-      <%= form.label :fecha, "Nueva fecha", class: "form-label" %>
-      <%= form.date_field :fecha, class: "form-control", required: true %>
-    <% end %>  
-    <%= content_tag :div do %>
-      <%= form.label :mes, "Nuevo mes", class: "form-label" %>
-      <%= form.select :mes, options_for_select(
-                      [["Seleccione mes", nil, {selected: true, disabled: true}]] + meses.map { |val, mes| [mes,val] }),
-                      { required: true },
-                      class: "form-select" %>
-    <% end %>  
-    <%= content_tag :div do %>
-      <%= form.label :year, "Nuevo año", class: "form-label" %>
-      <%= form.number_field :year, class: "form-control", required: true %>
-    <% end %>  
-    <%= content_tag :div, class: "d-flex justify-content-center mb-3" do %>
-      <%= form.submit "Actualizar", class:"btn btn-primary" %>
-    <% end %>  
-  <% end %>
+<%= form_with url: actualizar_admins_path,                                                                         
+              method: :post,                                                                                       
+              class: "d-flex flex-column gap-3 mx-auto", 
+              style: "max-width: 500px;" do |form| %>                          
+    
+    <%# Campo: Nueva Fecha %>
+    <div>                                                                                                               
+      <%= form.label :fecha, "Nueva Fecha de Emisión", class: "form-label fw-semibold text-secondary small text-uppercase" %>                                                   
+      <%= form.date_field :fecha, class: "form-control shadow-sm py-2", required: true %>                                           
+    </div>                                                                                                        
+    
+    <%# Fila de dos columnas para Mes y Año %>
+    <div class="row g-3">
+      
+      <%# Campo: Nuevo Mes %>
+      <div class="col-12 col-sm-6">                                                                                                                     
+        <%= form.label :mes, "Nuevo Mes Contable", class: "form-label fw-semibold text-secondary small text-uppercase" %>                                                       
+        <%= form.select :mes, options_for_select(                                                                      
+                        [["Seleccione mes...", nil, {selected: true, disabled: true}]] + meses.map { |val, mes| [mes, val] }),                                                                                                                  
+                        { required: true },                                                                            
+                        class: "form-select shadow-sm py-2" %>                                                                        
+      </div>                                                                                                        
+      
+      <%# Campo: Nuevo Año %>
+      <div class="col-12 col-sm-6">                                                                                        
+        <%= form.label :year, "Nuevo Año Fiscal", class: "form-label fw-semibold text-secondary small text-uppercase" %>                                                      
+        <%= form.number_field :year, class: "form-control shadow-sm py-2", required: true, min: 2020, max: 2040 %>                                          
+      </div>                                                                                                        
+    
+    </div>
+
+    <%# Botón de Guardar/Actualizar %>
+    <div class="d-flex justify-content-end mt-3 pt-3 border-top">                                          
+      <%= form.button type: 'submit', 
+                      class: "btn btn-dark px-4 py-2 fw-semibold shadow-sm d-inline-flex align-items-center gap-2",
+                      data: { turbo_submits_with: "Actualizando..." } do %>
+        <i class="bi bi-check-circle fs-5"></i>
+        <span>Actualizar Período</span>
+      <% end %>                                                                                                        
+    </div>                                                                                                        
+
+<% end %>
+

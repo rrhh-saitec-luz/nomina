@@ -1,18 +1,31 @@
-<div id="progreso_cargos_creacion" class="w-100 animate__animated animate__fadeIn">
-  <div class="d-flex justify-content-between align-items-center mb-1 small text-muted">
-    <span><i class="bi bi-database-add text-success"></i> Generando prenómina...</span>
-    <strong><%= procesados %> / <%= total %> registros</strong>
-  </div>
+<div id="progreso_cargos_creacion" class="w-100 animate__animated animate__fadeIn">                                    
   
-  <div class="progress" style="height: 20px;">
-    <div class="progress-bar progress-bar-striped progress-bar-animated bg-success" 
-         role="progressbar" 
-         style="width: <%= porcentaje %>%;" 
-         aria-valuenow="<%= porcentaje %>" 
-         aria-valuemin="0" 
-         aria-valuemax="100">
-      <%= porcentaje %>%
-    </div>
+  <%# Etiquetas superiores estilizadas %>
+  <div class="d-flex justify-content-between align-items-center mb-2 small">                              
+    <span class="text-success fw-semibold d-flex align-items-center gap-2">
+      <i class="bi bi-database-add fs-5"></i> 
+      <span>Generando prenómina...</span>
+    </span>                                
+    <span class="badge bg-light text-dark border fw-medium px-2 py-1">
+      <%= procesados %> / <%= total %> registros
+    </span>                                                      
+  </div>                                                                                                             
+                                                                                                                     
+  <%# Contenedor de la Barra de Progreso Modernizada (Más delgada y limpia) %>
+  <div class="progress position-relative shadow-inner" style="height: 12px; background-color: rgba(var(--bs-success-rgb), 0.1);">                                                                       
+    <div class="progress-bar progress-bar-striped progress-bar-animated bg-success rounded-pill"                                    
+         role="progressbar"                                                                                          
+         style="width: <%= porcentaje %>%; transition: width 0.4s ease;"                                                                           
+         aria-valuenow="<%= porcentaje %>"                                                                           
+         aria-valuemin="0"                                                                                           
+         aria-valuemax="100">                                                                                        
+    </div>                                                                                                            
+  </div>                                                                                                             
+  
+  <%# Indicador de porcentaje flotante a la derecha para no amontonar la barra %>
+  <div class="text-end text-success extra-small fw-bold mt-1" style="font-size: 0.8rem;">
+    <%= porcentaje %>% completado
   </div>
+
 </div>
 

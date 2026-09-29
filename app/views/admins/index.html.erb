@@ -1,49 +1,84 @@
-<%= content_tag :div,
-                class: "container-fluid" do %>
-  <%= content_tag :div,
-                  class:"d-flex mt-3 gap-2" do %>
-    <%= content_tag :ul,
-                    class:"list-group",
-                    data: { controller: "admin"} do %>
-      <%= content_tag :li,
-                      class:"list-group-item",
-                      data: { admin_target: "links", action: "click->admin#menu" } do %>
-        <%= link_to "Generar nomina",
-                     generar_nomina_admins_path,
-                     data: { turbo_frame: "contenido" } %>
+<div class="container-fluid mt-4">
+  <div class="row g-4">
+    
+    <%# Columna del Menú Lateral (Ancho de 3 columnas en pantallas grandes) %>
+    <div class="col-12 col-lg-3">
+      <div class="card shadow-sm border-0 mb-3">
+        <div class="card-header bg-dark text-white py-3">
+          <div class="d-flex align-items-center">
+            <i class="bi bi-shield-lock-fill me-2 fs-5"></i>
+            <h6 class="card-title mb-0 fw-bold text-uppercase tracking-wider small">Operaciones Admin</h6>
+          </div>
+        </div>
+        
+        <div class="card-body p-2">
+          <ul class="nav flex-column nav-pills gap-1" data-controller="admin">
+            
+            <%# Opción: Generar Nómina %>
+            <li class="nav-item" data-admin-target="links" data-action="click->admin#menu">
+              <%= link_to generar_nomina_admins_path, data: { turbo_frame: "contenido" }, 
+                  class: "nav-link d-flex align-items-center gap-2.5 py-2.5 px-3 text-secondary fw-medium rounded card-hover-effect" do %>
+                <i class="bi bi-calculator fs-5"></i>
+                <span class="small">Generar nómina</span>
+              <% end %>
+            </li>
+            
+            <%# Opción: Actualizar Fechas %>
+            <li class="nav-item" data-admin-target="links" data-action="click->admin#menu">
+              <%= link_to modificar_prenomina_admins_path, data: { turbo_frame: "contenido" }, 
+                  class: "nav-link d-flex align-items-center gap-2.5 py-2.5 px-3 text-secondary fw-medium rounded card-hover-effect" do %>
+                <i class="bi bi-calendar-range fs-5"></i>
+                <span class="small">Actualizar fechas de prenómina</span>
+              <% end %>
+            </li>
+            
+            <%# Opción: Depurar Nómina %>
+            <li class="nav-item" data-admin-target="links" data-action="click->admin#menu">
+              <%= link_to depurar_admins_path, data: { turbo_frame: "contenido" }, 
+                  class: "nav-link d-flex align-items-center gap-2.5 py-2.5 px-3 text-secondary fw-medium rounded card-hover-effect" do %>
+                <i class="bi bi-shield-x fs-5"></i>
+                <span class="small">Depurar Nómina</span>
+              <% end %>
+            </li>
+            
+            <%# Opción: Antigüedades %>
+            <li class="nav-item" data-admin-target="links" data-action="click->admin#menu">
+              <%= link_to antiguedades_admins_path, data: { turbo_frame: "contenido" }, 
+                  class: "nav-link d-flex align-items-center gap-2.5 py-2.5 px-3 text-secondary fw-medium rounded card-hover-effect" do %>
+                <i class="bi bi-hourglass-split fs-5"></i>
+                <span class="small">Antigüedades</span>
+              <% end %>
+            </li>
+            
+            <%# Opción: Adelanto de Quincena %>
+            <li class="nav-item" data-admin-target="links" data-action="click->admin#menu">
+              <%= link_to adelanto_admins_path, data: { turbo_frame: "contenido" }, 
+                  class: "nav-link d-flex align-items-center gap-2.5 py-2.5 px-3 text-secondary fw-medium rounded card-hover-effect" do %>
+                <i class="bi bi-cash-coin fs-5"></i>
+                <span class="small">Adelanto de quincena</span>
+              <% end %>
+            </li>
+
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <%# Columna del Contenedor Dinámico (Ancho de 9 columnas) %>
+    <div class="col-12 col-lg-9">
+      <%= turbo_frame_tag "contenido", class: "d-block card shadow-sm border-0 h-100 min-vh-50" do %>
+        <div class="card-body d-flex flex-column align-items-center justify-content-center text-center p-5 text-muted min-vh-50">
+          <div class="mb-3 bg-light rounded-circle p-3 text-secondary">
+            <i class="bi bi-window-sidebar display-4 opacity-50"></i>
+          </div>
+          <h5 class="fw-bold text-dark mb-1">Módulo de Administración</h5>
+          <p class="text-secondary small mb-0" style="max-width: 320px;">
+            Selecciona una opción del menú lateral izquierdo para cargar y gestionar las herramientas operativas.
+          </p>
+        </div>
       <% end %>
-      <%= content_tag :li,
-                      class:"list-group-item",
-                      data: { admin_target: "links", action: "click->admin#menu" } do %>
-        <%= link_to "Actualizar fechas de prenomina",
-                     modificar_prenomina_admins_path,
-                     data: { turbo_frame: "contenido" } %>
-      <% end %>
-      <%= content_tag :li,
-                      class:"list-group-item",
-                      data: { admin_target: "links", action: "click->admin#menu" } do %>
-        <%= link_to "Depurar Nomina",
-                     depurar_admins_path,
-                     data: { turbo_frame: "contenido" } %>
-      <% end %>
-      <%= content_tag :li,
-                      class:"list-group-item",
-                      data: { admin_target: "links", action: "click->admin#menu" } do %>
-        <%= link_to "Antiguedades",
-                     antiguedades_admins_path,
-                     data: { turbo_frame: "contenido" } %>
-      <% end %>
-      <%= content_tag :li,
-                      class:"list-group-item",
-                      data: { admin_target: "links", action: "click->admin#menu" } do %>
-        <%= link_to "Adelanto de quincena",
-                     adelanto_admins_path,
-                     data: { turbo_frame: "contenido" } %>
-      <% end %>
-    <% end %>
-    <%= turbo_frame_tag "contenido",
-                        class:" container-fluid border border-primary rounded-3" do %>
-      <p>Selecciona una opción para cargar contenido.</p>
-    <% end %>
-  <% end %>  
-<% end %>
+    </div>
+
+  </div>
+</div>
+

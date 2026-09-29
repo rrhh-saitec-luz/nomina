@@ -1,17 +1,48 @@
-<%= content_tag :h1, "Generar Nomina" %>
-<%= content_tag :h3, "En el campo Mes base indique el ordinal del mes" %>
-<%= content_tag :ul, class: " d-flex gap-3 list-group-numbered list-group-item-primary flex-wrap" do %>
-  <%= content_tag :li, "Enero", class:"list-group-item" %>
-  <%= content_tag :li, "Febrero", class:"list-group-item" %>
-  <%= content_tag :li, "Marzo", class:"list-group-item" %>
-  <%= content_tag :li, "Abril", class:"list-group-item" %>
-  <%= content_tag :li, "Mayo", class:"list-group-item" %>
-  <%= content_tag :li, "Junio", class:"list-group-item" %>
-  <%= content_tag :li, "Julio", class:"list-group-item" %>
-  <%= content_tag :li, "Agosto", class:"list-group-item" %>
-  <%= content_tag :li, "Septiembre", class:"list-group-item" %>
-  <%= content_tag :li, "Octubre", class:"list-group-item" %>
-  <%= content_tag :li, "Noviembre", class:"list-group-item" %>
-  <%= content_tag :li, "Diciembre", class:"list-group-item" %>
-<% end %>
-<%= content_tag :h3, "En el campo Año base indique el año ejemplo: 2025" %>
+<%# Contenedor Informativo del Módulo %>
+<div class="card bg-light border-0">
+  <div class="card-body p-3">
+    
+    <%# Encabezado de la Guía %>
+    <div class="d-flex align-items-center gap-2 mb-2 text-secondary">
+      <i class="bi bi-info-circle-fill fs-5"></i>
+      <h6 class="mb-0 fw-bold text-uppercase tracking-wider small">Guía de Operación</h6>
+    </div>
+    
+    <p class="text-secondary small mb-3">
+      Este módulo automatiza la creación de la prenómina mensual. Asegúrate de verificar los siguientes parámetros antes de procesar:
+    </p>
+
+    <%# Rejilla de Consejos Rápidos %>
+    <div class="row g-2">
+      
+      <%# Consejo: Período Base %>
+      <div class="col-12 col-md-6">
+        <div class="d-flex align-items-start gap-2 bg-white p-2.5 rounded border border-opacity-10 h-100">
+          <i class="bi bi-calendar-check text-primary fs-5 mt-0.5"></i>
+          <div>
+            <div class="fw-bold text-dark small">Período de Base</div>
+            <div class="text-muted extra-small" style="font-size: 0.8rem;">
+              Selecciona el mes y año correspondientes del menú desplegable. El sistema cargará automáticamente los registros de ese período.
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <%# Consejo: Tipo de Nómina %>
+      <div class="col-12 col-md-6">
+        <div class="d-flex align-items-start gap-2 bg-white p-2.5 rounded border border-opacity-10 h-100">
+          <i class="bi bi-layers text-warning fs-5 mt-0.5"></i>
+          <div>
+            <div class="fw-bold text-dark small">Tipos de Nómina</div>
+            <div class="text-muted extra-small" style="font-size: 0.8rem;">
+              Verifica el tipo de nómina a generar. Puedes seguir el progreso de creación en tiempo real mediante la barra de estado.
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+</div>
+

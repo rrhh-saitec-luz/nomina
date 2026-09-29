@@ -53,7 +53,7 @@ class AdminsController < ApplicationController
             ),
             turbo_stream.replace(
               'boton_prenomina',
-              partial: 'admins/parciales/generar_nomina_boton_desactivado'
+              partial: 'admins/parciales/generar_nomina_boton_procesando'
             )
           ]
         end
@@ -63,12 +63,9 @@ class AdminsController < ApplicationController
   end
 
   def modificar_prenomina
-    cont_val = contador_depurar.valor
-    if cont_val.eql?(1)
-      render partial: 'admins/parciales/modificar_prenomina', locals: { meses: MESES }
-    else
-      render partial: 'admins/parciales/otro_proceso', locals: { meses: MESES, cont: cont_val }
-    end
+    @cont_val = contador_depurar.valor
+    @meses = MESES
+    render partial: 'admins/parciales/modificar_prenomina', formats: [:html]
   end
 
   def destruir_prenomina
