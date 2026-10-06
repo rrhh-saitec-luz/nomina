@@ -1,29 +1,30 @@
-<%= content_tag :li, id: "contenedor_boton_#{tipo}" do %>
-  <% 
-    # Asignamos el texto y estilo según el tipo de proceso
-    case tipo
-    when :unicos
-      tipo_boton = "Sincronizar cargos únicos"
-      clase_color = "btn-warning"
-    when :multiple
-      tipo_boton = "Detectar inconsistencias"
-      clase_color = "btn-warning"
-    when :inactivos
-      tipo_boton = "Depurar trabajadores inactivos"
-      clase_color = "btn-danger"
-    when :anticipos 
-      tipo_boton = "Calcular Anticipos Quincenales"
-      clase_color = "btn-primary" 
-    end
-  %>
-
-  <div class="d-flex flex-row gap-2">
-    <button class="btn <%= clase_color %>" disabled>
-      <%= tipo_boton %>
-    </button>
-    
-    <%= content_tag :div, id: "progreso_cargos_#{tipo}", class: "align-self-center" do %>
-    <% end %>
+<%= content_tag :li, id: "contenedor_boton_#{tipo}", class: "mb-3" do %>
+  <%
+      case tipo
+      when :unicos
+        tipo_boton = "Sincronizar cargos únicos"
+        clase_color = "btn-warning"
+      when :multiple
+        tipo_boton = "Detectar inconsistencias"
+        clase_color = "btn-warning"
+      when :inactivos
+        tipo_boton = "Depurar trabajadores inactivos"
+        clase_color = "btn-danger"
+      when :anticipos
+        tipo_boton = "Calcular Anticipos Quincenales"
+        clase_color = "btn-primary"
+      end
+  %>                                                                                  
+  <div class="d-flex align-items-center gap-3">
+    <!-- Botón altura consistente -->
+    <div class="flex-shrink-0">
+      <button class="btn <%= clase_color %>" disabled>
+        <%= tipo_boton %>
+      </button>                 
+    </div>
+    <!-- Contenedor dinámico de la barra (Crece para ocupar el espacio restante) -->
+    <div id="progreso_cargos_<%= tipo %>" class="flex-grow-1 align-self-center">
+      <!-- Se renderiza vacío inicialmente o con el parcial correspondiente -->
+    </div>
   </div>
-<% end %>
-
+<% end %> 

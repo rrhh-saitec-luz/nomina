@@ -1,12 +1,17 @@
-<div id="progreso_cargos_<%= tipo %>"> 
-  <div class="progress">
-    <div class="progress-bar progress-bar-striped progress-bar-animated bg-warning text-dark" 
-         role="progressbar" 
-         style="width: <%= porcentaje %>%">
+<div id="progreso_cargos_<%= tipo %>" class="w-100">
+  <!-- Barra de progreso con una altura fija para evitar saltos visuales -->
+  <div class="progress" style="height: 20px;">
+    <div class="progress-bar progress-bar-striped progress-bar-animated bg-warning text-dark fw-bold"
+         role="progressbar"
+         style="width: <%= porcentaje %>%"
+         aria-valuenow="<%= porcentaje %>"
+         aria-valuemin="0"
+         aria-valuemax="100">
       <%= porcentaje %>%
     </div>
   </div>
-  <p class="text-center small fw-bold">
-    Sincronizando cargos: <%= procesados %> de <%= total %> procesados...
-  </p>
-</div>
+  <!-- Texto descriptivo inmediatamente abajo, con margen superior mínimo -->
+  <p class="text-muted small fw-bold mb-0 mt-1">
+    Sincronizando cargos: <span class="text-dark"><%= procesados %></span> de <span class="text-dark"><%= total %></span> procesados...
+  </p>                                                                                
+</div> 
