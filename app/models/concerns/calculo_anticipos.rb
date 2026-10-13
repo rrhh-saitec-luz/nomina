@@ -35,7 +35,6 @@ module CalculoAnticipos # <-- Asegúrate de que esté escrito exactamente así (
         totales_por_cargo.each_with_index do |cargo, index|
           total_a  = cargo.total_asignaciones.to_f
           total_xy = cargo.total_deducciones.to_f
-          
           # Fórmula de adelanto quincenal
           adelanto_quincena = (total_a - total_xy) / 2.0
 
@@ -76,7 +75,7 @@ module CalculoAnticipos # <-- Asegúrate de que esté escrito exactamente así (
             # Transmitir al navegador en tiempo real
             Turbo::StreamsChannel.broadcast_replace_to(
               'nomina_channel',
-              target: 'progreso_cargos_anticipos',
+              target: 'progreso_anticipos',
               partial: 'admins/parciales/barra_progreso_anticipos',
               locals: { porcentaje: porcentaje, procesados: procesados, total: total_registros }
             )
@@ -84,10 +83,16 @@ module CalculoAnticipos # <-- Asegúrate de que esté escrito exactamente así (
         end
       end
 
+      Turbo::StreamsChannel.broadcast_action_to(
+        'nomina_channel',
+        action: :remove,
+        target: 'contenedor_boton_anticipos'
+      )
+
       # Mensaje final de éxito al terminar las inserciones
       Turbo::StreamsChannel.broadcast_replace_to(
         'nomina_channel',
-        target: 'progreso_cargos_anticipos', # <-- Cambiado
+        target: 'progreso_anticipos', # <-- Cambiado
         partial: 'admins/parciales/barra_progreso_anticipos_final'
       )
     end

@@ -219,15 +219,23 @@ class AdminsController < ApplicationController
       format.turbo_stream do
         render turbo_stream: [
           # REUTILIZAMOS TU PARCIAL ORIGINAL pasándole el tipo como símbolo
-          turbo_stream.replace("contenedor_boton_anticipos",
-                               partial: 'admins/parciales/boton_deshabilitado',
+          turbo_stream.replace('contenedor_boton_anticipos',
+                               partial: 'admins/parciales/generar_anticipos_boton_procesando',
                                locals: { tipo: :anticipos }),
-          turbo_stream.replace("progreso_cargos_anticipos",
+          turbo_stream.replace('progreso_anticipos',
                                partial: 'admins/parciales/barra_progreso_anticipos',
                                locals: { porcentaje: 0, procesados: 0, total: 100 })
         ]
       end
     end
+  end
+
+  def cerrar_nomina
+    @cont_val = contador_depurar.valor # Usamos tu contador de fases
+    render partial: 'admins/parciales/controlador_cierre', formats: [:html]
+  end
+
+  def procesar_cierre
   end
 
   private

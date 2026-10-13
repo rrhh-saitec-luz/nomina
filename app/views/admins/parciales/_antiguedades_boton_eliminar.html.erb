@@ -1,13 +1,30 @@
-<%= content_tag :h5,
-                class: "d-flex flex-column mt-3 justify-content-center text-success text-center" do %>
-  Ya usted generó las antiguedades
-<% end %>
-<%= content_tag :ol,
-                class: "d-flex flex-column gap-3 justify-content-center" do %>
-  <li>
-    <%= button_to "Eliminar antiguedades",
-                   eliminar_antiguedades_admins_path,
-                   method: :delete,
-                   class: "btn btn-danger" %>
-  </li>
-<% end %>
+<div class="card p-4 shadow-sm border-0 mt-4">
+  <!-- TÍTULO ALINEADO A LA IZQUIERDA CON LÍNEA DEBAJO -->
+  <div class="border-bottom pb-2 mb-4">
+    <h5 class="fw-bold text-success mb-0">Generar Antigüedades del Personal</h5>
+  </div>
+   <!-- Caja informativa sin bordes laterales extras -->
+  <div class="d-flex align-items-center gap-3 mb-3 bg-success bg-opacity-10 p-3 rounded">
+    <div class="text-success">
+       <i class="bi bi-check-circle-fill fs-3"></i>
+    </div>
+    <div>
+      <h6 class="fw-bold text-success mb-0">Antigüedades Generadas</h6>
+      <p class="text-muted small mb-0">
+        El proceso para este periodo se completó exitosamente.
+      </p>
+    </div>
+  </div>
+  <div class="d-flex flex-column align-items-center bg-light p-3 rounded text-center">
+    <p class="small text-secondary mb-3">
+      Si necesitas realizar modificaciones en el personal o recalcular los valores, puedes revertir este paso:
+    </p>
+    <%= button_to eliminar_antiguedades_admins_path,
+                    method: :delete,
+                    class: "btn btn-outline-danger d-inline-flex align-items-center gap-2 px-4 fw-bold shadow-sm",
+                    data: { turbo_confirm: "¿Estás completamente seguro de eliminar las antigüedades generadas?" } do %>
+      <i class="bi bi-trash3-fill"></i> Eliminar Antigüedades
+    <% end %> 
+  </div>
+</div>
+

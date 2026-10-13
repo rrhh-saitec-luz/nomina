@@ -136,6 +136,7 @@ class HistoricoPago < ApplicationRecord
       locals: {tipo: tipo}
     )
   end
+
   def self.generar_prenomina_en_segundo_plano(filtros)
     filtros = filtros.with_indifferent_access
     query_conceptos = Concepto.where(ANO: filtros[:year], MES: filtros[:month], TIPO_NOMINA: filtros[:tpn], TIPO_NOMINA_ESPECIFICA: filtros[:tpns]).where.not(CO_CONCEPTO: %w[X500 A029 A223 A436])

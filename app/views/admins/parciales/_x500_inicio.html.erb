@@ -1,27 +1,71 @@
-<turbo-frame id= 'contenido'>
-  <%= turbo_stream_from 'nomina_channel' %>
-  <% if @contador.eql?(6) %>
-    <%= content_tag :div,
-                    class: "d-flex flex-column justify-content-center" do %>
-      <div class="d-flex justify-content-center mt-3">
-        <h5 class="col-md-5 text-success text-center">
-          Adelanto de quincena
-        </h5>
-      </div>
-      <ol>
-        <%= content_tag :li, id: "contenedor_boton_anticipos" do %>
-          <div class="d-flex flex-row gap-2">
-            <%= button_to 'Calcular Anticipos Quincenales', calcular_anticipos_admins_path, 
-                          method: :post, 
-                          class: 'btn btn-primary',
-                          data: { turbo_stream: true } %>
+<turbo-frame id="contenido">                                                         
+  <%= turbo_stream_from 'nomina_channel' %>                                           
+  
+  <div class="card-body p-4">
+    
+    <%# Encabezado Único del Submódulo %>
+    <div class="d-flex align-items-center gap-2 mb-4 pb-3 border-bottom text-success">                                                                 
+      <i class="bi bi-cash-coin fs-4"></i>
+      <h5 class="mb-0 fw-bold">Gestión de Anticipos Quincenales (X-500)</h5>                                                                           
+    </div>                                                                                                           
+
+    <% if @contador == 6 %>                                                          
+      
+      <%# Panel de Ejecución del Proceso %>
+      <div class="card bg-light border-0 p-4 text-center rounded-3 shadow-sm mx-auto mb-4" style="max-width: 550px;">
+        <div class="mb-3 text-primary">
+          <i class="bi bi-calculator-history display-4 opacity-75"></i>
+        </div>
+        
+        <h5 class="fw-bold text-dark mb-2">Cálculo Masivo de Anticipos</h5>
+        <p class="text-secondary small mb-4">
+          Esta operación procesará de manera automatizada los montos correspondientes al adelanto de la primera quincena para todo el personal apto en el período activo.
+        </p>
+
+        <%# Fila del Botón de Acción y Contenedor del Parcial del Falso Botón al hacer clic %>
+        <div class="d-flex flex-column align-items-center justify-content-center gap-3">
+          <div id="contenedor_boton_anticipos" class="w-100">
+            <%= button_to calcular_anticipos_admins_path,                                                                                 
+                          method: :post,                                              
+                          id: 'boton_anticipos_submit',
+                          class: 'btn btn-success px-4 py-2.5 fw-semibold shadow-sm w-100 d-inline-flex align-items-center justify-content-center gap-2',                                   
+                          data: { turbo_stream: true } do %>
+              <i class="bi bi-cpu fs-5"></i>
+              <span>Procesar Cálculo X-500</span>
+            <% end %>
           </div>
-        <% end %>
-          <div id="progreso_anticipos"></div>
-      </ol>
-    <% end %>
-  <% end%>
-  <% if @contador > 6 %>
-    <%= render 'admins/parciales/barra_progreso_anticipos_final' %> 
-  <% end %>
-</turbo-fame>
+          
+          <%# Contenedor de la barra de progreso que alimentará ActionCable %>
+          <div id="progreso_anticipos" class="w-100 mt-2"></div>
+        </div>
+      </div>
+
+    <% elsif @contador > 6 %>                                                              
+      
+      <%# Estado: El proceso ya finalizó o está en la fase final %>
+      <div class="card border-0 shadow-sm rounded-3 bg-white p-3">
+        <%= render 'admins/parciales/barra_progreso_anticipos_final' %>                   
+      </div>
+
+    <% else %>
+
+      <%# CONTROL DE ACCESO SEGURIDAD: Mensaje elegante cuando no está disponible (Fase menor a 6) %>
+      <div class="text-center py-5 mx-auto" style="max-width: 450px;">
+        <div class="text-muted mb-3">
+          <i class="bi bi-shield-lock display-3 opacity-50 text-secondary"></i>
+        </div>
+        <h5 class="fw-bold text-dark mb-1">Módulo no disponible</h5>
+        <p class="text-secondary small mb-0">
+          El proceso X-500 se habilitará automáticamente una vez que la prenómina base haya sido generada y debidamente depurada en los pasos previos.
+        </p>
+        <div class="mt-3">
+          <span class="badge bg-light text-secondary border fw-medium px-2 py-1.5 small">
+            Fase Actual: Esperando Depuración
+          </span>
+        </div>
+      </div>
+
+    <% end %>                                                                           
+  </div>
+</turbo-frame>
+

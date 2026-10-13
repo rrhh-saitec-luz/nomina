@@ -42,6 +42,8 @@ Rails.application.routes.draw do
       delete :eliminar_antiguedades
       patch :editar_fecha_antiguedades
       patch 'editar_prenomina', action: :editar_prenomina
+      get :cerrar_nomina
+      post :procesar_cierre
     end
   end
 

@@ -8,7 +8,7 @@ class CalcularAnticiposJob < ApplicationJob
     cont = Contador.find(1)
     begin
       # Seteamos el contador en un estado inicial (ej. 10 para "Procesando Anticipos")
-      cont.update!(valor: 10)
+      cont.update!(valor: 7)
 
       # Invocamos la lógica pesada en el modelo HistoricoPago
       HistoricoPago.generar_anticipos_x500_segundo_plano

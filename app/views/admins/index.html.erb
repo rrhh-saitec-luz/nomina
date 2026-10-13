@@ -59,6 +59,15 @@
               <% end %>
             </li>
 
+            <%# Opción: Cierre de Nómina %>
+            <li class="nav-item" data-admin-target="links" data-action="click->admin#menu">
+              <%= link_to cerrar_nomina_admins_path, data: { turbo_frame: "contenido" }, 
+                  class: "nav-link d-flex align-items-center gap-2.5 py-2.5 px-3 text-secondary fw-medium rounded card-hover-effect" do %>
+                <i class="bi bi-cash-coin fs-5"></i>
+                <span class="small">Cierre de Nómina</span>
+              <% end %>
+            </li>
+
           </ul>
         </div>
       </div>
