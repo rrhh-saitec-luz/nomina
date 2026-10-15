@@ -1,61 +1,85 @@
-<turbo-frame id="contenido">
-  <div class="card-body p-4">
-    
-    <%# Encabezado Único de Alta Seguridad %>
-    <div class="d-flex align-items-center gap-2 mb-4 pb-3 border-bottom text-danger">                                                                 
-      <i class="bi bi-shield-lock-fill fs-4"></i>
-      <h5 class="mb-0 fw-bold">Cierre Definitivo de Nómina</h5>                                                                           
-    </div>                                                                                                           
-
-    <% if @cont_val > 6 %>                                                                                                  
-      
-      <%# Tarjeta de Advertencia Crítica %>
-      <div class="card border-0 bg-danger bg-opacity-10 p-4 text-center rounded-3 shadow-sm mx-auto mb-4" style="max-width: 550px;">
-        <div class="mb-3 text-danger">
-          <i class="bi bi-exclamation-triangle-fill display-3 opacity-75"></i>
-        </div>
-        
-        <h5 class="fw-bold text-dark mb-2">¡Atención: Operación Inmutable!</h5>
-        <p class="text-secondary small mb-4">
-          Está a punto de cerrar la nómina activa. Este proceso consolidará toda la información modificada en <strong>Histórico de Pago</strong> y la trasladará de forma íntegra a la tabla definitiva de <strong>Conceptos</strong>. Una vez ejecutado, los datos quedarán congelados permanentemente y no habrá vuelta atrás.
-        </p>
-
-        <%# Área del Botón de Cierre %>
-        <div class="d-flex flex-column align-items-center justify-content-center gap-3">
-          <div id="contenedor_boton_cierre" class="w-100">
-            <%= button_to procesar_cierre_admins_path,                                                                                 
+<turbo-frame id="contenido">                                                          
+  <%= turbo_stream_from 'nomina_channel' %>                                            
+                                                                                      
+  <div class="card-body p-4">                                                          
+                                                                                      
+    <%# Encabezado Único de Alta Seguridad Rígido %>                                           
+    <div class="d-flex align-items-center gap-2 mb-4 pb-3 border-bottom text-danger">                                                                                             
+      <i class="bi bi-shield-lock-fill fs-4"></i>                                       
+      <h5 class="mb-0 fw-bold">Cierre Definitivo de Nómina</h5>                                                                                                                   
+    </div>                                                                                                                                                                        
+                                                                                                                                                                                  
+    <% if @cont_val.to_i == 7 %>                                                                                                                                                       
+                                                                                                                                                                                  
+      <%# ESTADO A: Formulario de Cierre Activo (Solo si vale exactamente 7) %>         
+      <div class="card border-0 bg-danger bg-opacity-10 p-4 text-center rounded-3 shadow-sm mx-auto mb-4" style="max-width: 550px;">                                        
+        <div class="mb-3 text-danger">                                                  
+          <i class="bi bi-exclamation-triangle-fill display-3 opacity-75"></i>          
+        </div>                                                                          
+                                                                                      
+        <h5 class="fw-bold text-dark mb-2">¡Atención: Operación Inmutable!</h5>       
+        <p class="text-secondary small mb-4 px-2">                                         
+          Está a punto de cerrar la nómina activa. Este proceso consolidará toda la información modificada en <strong>Histórico de Pago</strong> y la trasladará de forma íntegra a la tabla definitiva de <strong>Conceptos</strong>. Una vez ejecutado, los datos quedarán congelados permanentemente y no habrá vuelta atrás.                        
+        </p>                                                                          
+                                                                                      
+        <div class="d-flex flex-column align-items-center justify-content-center gap-3">                                                                                    
+          <div id="contenedor_boton_cierre" class="w-100">                            
+            <%= button_to procesar_cierre_admins_path,                                                                                                                          
                           method: :post,                                              
-                          class: 'btn btn-danger px-4 py-2.5 fw-semibold shadow-sm w-100 d-inline-flex align-items-center justify-content-center gap-2',
-                          data: { turbo_confirm: "¿Está COMPLETAMENTE SEGURO de proceder con el Cierre de Nómina? Esta acción congelará los registros contables para el resto de los tiempos." } do %>
-              <i class="bi bi-file-earmark-lock2-fill fs-5"></i>
-              <span>Ejecutar Cierre Fiscal</span>
-            <% end %>
-          </div>
-          
-          <%# Espacio para la barra de progreso dynamic %>
-          <div id="progreso_cierre" class="w-100 mt-2"></div>
-        </div>
+                          class: 'btn btn-danger px-4 py-2.5 fw-semibold shadow-sm w-100 d-inline-flex align-items-center justify-content-center gap-2',                    
+                          data: { turbo_confirm: "¿Está COMPLETAMENTE SEGURO de proceder con el Cierre de Nómina? Esta acción congelará los registros contables para el resto de los tiempos." } do %>                                                            
+              <i class="bi bi-file-earmark-lock2-fill fs-5"></i>                      
+              <span>Ejecutar Cierre Fiscal</span>                                     
+            <% end %>                                                                 
+          </div>                                                                      
+          <div id="progreso_cierre" class="w-100 mt-2"></div>                         
+        </div>                                                                        
       </div>
-    
-    <% else %>                                                                                                         
-      
-      <%# CONTROL DE ACCESO SEGURIDAD: Mensaje bonito cuando está deshabilitado %>
-      <div class="text-center py-5 mx-auto" style="max-width: 450px;">
-        <div class="text-muted mb-3">
-          <i class="bi bi-lock display-3 opacity-50 text-secondary"></i>
-        </div>
-        <h5 class="fw-bold text-dark mb-1">Módulo no disponible</h5>
-        <p class="text-secondary small mb-0">
-          El Cierre Definitivo de Nómina se activará estrictamente una vez que se hayan calculado y validado los anticipos quincenales (X-500) del período actual.
-        </p>
-        <div class="mt-3">
-          <span class="badge bg-light text-secondary border fw-medium px-2 py-1.5 small">
-            Fase de Nómina: Esperando Ejecución X-500
-          </span>
-        </div>
-      </div>
-
-    <% end %>                                                                                                          
-
-  </div>
+          <% elsif @cont_val.to_i >= 8 %>                                                        
+                                                                                          
+      <%# 🌟 ESTADO B: NUEVO DISEÑO CENTRADO CON BORDE PARA CLAUSURA FISCAL %>                         
+      <div class="text-center py-5 bg-light rounded-3 border border-danger border-opacity-10 mx-auto shadow-sm" style="max-width: 500px;">                                  
+        <div class="text-danger mb-3">                                                
+          <i class="bi bi-shield-fill-check display-3 opacity-75"></i>                                                                                                          
+        </div>                                                                        
+        <h5 class="fw-bold text-dark mb-1">Período Fiscal Clausurado</h5>                                                                                                  
+        <p class="text-muted small mb-3 px-4">                                        
+          Este período de nómina ha sido cerrado con total integridad. Toda la información se encuentra resguardada de forma inmutable en los registros históricos de la tabla <code>Concepto</code> en el esquema <strong>"nomina"."hist_detalle_pago"</strong>.
+        </p>                                 
+                                                                                      
+        <%# ETIQUETAS DE ESTADO UNIFICADAS %>                                         
+        <div class="d-flex justify-content-center gap-2">                             
+          <span class="badge bg-danger-subtle text-danger border border-danger border-opacity-15 px-2.5 py-1.5 small fw-semibold">                                          
+            <i class="bi bg-transparent me-1"></i> Copia Íntegra Verificada                   
+          </span>                                                                     
+          <span class="badge bg-light text-secondary border px-2 py-1.5 small fw-medium">                                                                                   
+            Fase: <%= @cont_val %>                                                    
+          </span>                                                                     
+        </div>                                                                        
+      </div>                                                                          
+                                                                                          
+    <% else %>                                                                            
+                                                                                          
+      <%# ESTADO C: BLOQUEO INICIAL (Cuando vale menos de 7) %>                       
+      <div class="text-center py-5 bg-light rounded-3 border border-warning border-opacity-10 mx-auto shadow-sm" style="max-width: 500px;">                
+        <div class="text-warning mb-3">                                                 
+          <i class="bi bi-lock display-3 opacity-50"></i>              
+        </div>                                                                        
+        <h5 class="fw-bold text-dark mb-1">Módulo no disponible</h5>                  
+        <p class="text-secondary small mb-3 px-4">                                         
+          El Cierre Definitivo de Nómina se activará estrictamente una vez que se hayan calculado y validado los anticipos quincenales (X-500) en la fase 6.          
+        </p>                                                                          
+        <div class="d-flex justify-content-center gap-2">                             
+          <span class="badge bg-warning-subtle text-warning border border-warning border-opacity-15 px-2.5 py-1.5 small fw-semibold text-dark">                                          
+            <i class="bi bi-hourglass-split me-1"></i> Esperando Fase X-500
+          </span>                                                                     
+          <span class="badge bg-light text-secondary border px-2 py-1.5 small fw-medium">                                                                                   
+            Fase: <%= @cont_val %>                                                    
+          </span>                                                                     
+        </div>                                                                        
+      </div>                                                                          
+                                                                                          
+    <% end %>                                                                             
+  </div>                                                                              
 </turbo-frame>
+

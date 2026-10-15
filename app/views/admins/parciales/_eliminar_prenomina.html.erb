@@ -1,28 +1,96 @@
-<turbo-frame id="contenido">                                                                                         
-  <div class="card-body p-4 text-center py-5">
-    
-    <%# Icono de Advertencia de Estado %>
-    <div class="mb-3 text-warning">
-      <i class="bi bi-exclamation-triangle display-3 opacity-75"></i>
-    </div>
-    
-    <%# Mensaje Principal %>
-    <h4 class="fw-bold text-dark mb-2">Proceso de Prenómina Activo</h4>
-    <p class="text-secondary mx-auto mb-4 small" style="max-width: 420px;">
-      El sistema detectó que ya se encuentra una prenómina generada en este período. Para iniciar un proceso nuevo, es necesario remover la actual.
-    </p>
+<turbo-frame id="contenido">
+  <%= turbo_stream_from 'nomina_channel' %>
+  <div id="contenido_formulario_nomina" class="card-body p-4">                        
 
-    <%# Contenedor del Botón de Acción %>
-    <div class="d-flex justify-content-center align-items-center gap-3">
-      <%= button_to destruir_prenomina_admins_path, 
+    <%# --- ENCABEZADO UNIFICADO: Solo cambia entre Verde y Rojo --- %>                                             
+    <div class="d-flex align-items-center gap-2 mb-4 pb-3 border-bottom <%= @contador.valor.to_i >= 8 ? 'text-danger' : 'text-success' %>">                                            
+      <i class="bi <%= @contador.valor.to_i >= 8 ? 'bi-calendar-x-fill' : 'bi-play-circle-fill' %> fs-4"></i>                                                                           
+      <h5 class="mb-0 fw-bold">Generar Nueva Prenómina Base</h5>          
+    </div>                                                                            
+
+    <%# 1. ESCENARIO DE ELIMINACIÓN O REINICIO CÍCLICO (Fases >= 1) %>
+    <% if @contador.valor.to_i >= 1 %>
+ 
+      <%# 🌟 CAJA UNIFICADA CON BORDE SUAVE, SOMBRA Y MÁXIMO ANCHO CONTROLADO %>
+      <div class="text-center py-5 bg-light rounded-3 border <%= @contador.valor.to_i >= 8 ? 'border-success' : 'border-warning' %> border-opacity-10 mx-auto shadow-sm" style="max-width: 500px;">                                  
+        
+        <% if @contador.valor.to_i >= 8 %>
+          <%# Estado Post-Cierre: Éxito e Instrucción de Reinicio %>
+          <div class="text-success mb-3">                                                   
+            <i class="bi bi-archive-fill display-3 opacity-75"></i>                 
+          </div>                                                                            
+          <h5 class="fw-bold text-dark mb-1">Cierre de Período Consolidado</h5>               
+          <p class="text-muted small mb-4 px-4">           
+            La información fiscal de este mes ha sido migrada con éxito a <code>Concepto</code>. La tabla de trabajo ya puede ser vaciada de forma segura para abrir el ciclo del mes siguiente.
+          </p>
+        <% else %>
+          <%# Estado Intermedio: Advertencia de Proceso Abierto %>
+          <div class="text-warning mb-3">                                                   
+            <i class="bi bi-exclamation-triangle-fill display-3 opacity-75"></i>                 
+          </div>                                                                            
+          <h5 class="fw-bold text-dark mb-1">Proceso de Prenómina Activo</h5>               
+          <p class="text-secondary small mb-4 px-4">           
+            El sistema detectó un cálculo base en la Fase <%= @contador.valor %>. Para inicializar un proceso de datos completamente nuevo, es necesario remover la actual de la memoria volátil.
+          </p>
+        <% end %>                                                                              
+        <%# Contenedor del Botón Maestro de Destrucción Transaccional %>                                             
+        <div class="d-flex flex-column align-items-center justify-content-center gap-3 px-4">              
+          <%= button_to destruir_prenomina_admins_path,
+                        method: :post,
+                        class: "btn btn-danger px-4 py-2.5 fw-bold shadow-sm w-100 d-inline-flex align-items-center justify-content-center gap-2",
+                        data: { turbo_confirm: @contador.valor.to_i >= 8 ? "¿Desea vaciar el espacio de trabajo 'HistoricoPago' para dar inicio a un nuevo mes contable?" : "¿Está completamente seguro de eliminar la prenómina actual? Esta acción no se puede deshacer y borrará los cálculos intermedios." } do %>                          
+            <i class="bi bi-trash3-fill fs-5"></i>
+            <span><%= @contador.valor.to_i >= 8 ? "Vaciar Canal y Reabrir Sistema" : "Eliminar Prenómina Activa" %></span>                                        
+          <% end %>                                                                       
+        </div>
+
+        <%# ETIQUETAS DE ESTADO UNIFICADAS %>                                         
+        <div class="d-flex justify-content-center gap-2 mt-4">                             
+          <span class="badge <%= @contador.valor.to_i >= 8 ? 'bg-success-subtle text-success border-success' : 'bg-warning-subtle text-warning border-warning' %> border border-opacity-15 px-2.5 py-1.5 small fw-semibold">                                          
+            <i class="bi <%= @contador.valor.to_i >= 8 ? 'bi-patch-check-fill' : 'bi-hourglass-split' %> me-1"></i> 
+            <%= @contador.valor.to_i >= 8 ? "Historial Resguardado" : "Cálculo Abierto" %>
+          </span>                                                                     
+          <span class="badge bg-light text-secondary border px-2 py-1.5 small fw-medium">                                                                                   
+            Fase: <%= @contador.valor %>                                                    
+          </span>                                                                     
+        </div>
+
+      </div>
+
+          <% else %>
+
+      <%# Formulario Principal (Solo activo si el contador fue reseteado y vale exactamente 0) %>
+      <%= form_with url: prenomina_admins_path,
                     method: :post,
-                    class: "btn btn-danger px-4 py-2 fw-semibold shadow-sm d-inline-flex align-items-center gap-2",
-                    data: { turbo_confirm: "¿Está completamente seguro de eliminar la prenómina actual? Esta acción no se puede deshacer." } do %>
-        <i class="bi bi-trash3 fs-5"></i>
-        <span>Eliminar Prenómina Activa</span>
-      <% end %>
-    </div>
+                    class: "d-flex flex-column gap-3 mx-auto",
+                    style: "max-width: 600px;",
+                    data: { controller: "admin" } do |form| %>
 
+        <%# Sección de Parciales (Meses, Años y Tipos de Nómina) %>
+        <div class="card bg-light border-0 p-3 rounded-3 shadow-sm">
+          <%= render "admins/parciales/gen_nom_meses", meses: @meses, years: @years, form: form %>
+        </div>
+
+        <div class="card bg-light border-0 p-3 rounded-3 shadow-sm">
+          <%= render "admins/parciales/gen_nom_nominas", nomina: @nomina, form: form %>
+        </div>
+
+        <%# Fila de Acciones y Barra de Progreso %>
+        <div class="d-flex align-self-start gap-3 w-100 align-items-center mt-2">
+          <%= form.submit "Generar prenómina base",
+            id: "boton_prenomina",
+            class: "btn btn-success px-4 py-2.5 fw-bold shadow-sm",
+            style: "background-color: #198754; border-color: #198754;",
+            data: { turbo_submits_with: "Iniciando volcado..." } %>
+          <div id="progreso_cargos_creacion" class="align-self-center flex-grow-1"></div>
+        </div>
+      <% end %>
+
+      <%# Pie de página informativo %>
+      <div class="mt-4 pt-3 border-top mx-auto" style="max-width: 600px;">
+        <%= render "admins/parciales/gen_nom_footer" %>
+      </div>
+
+    <% end %>
   </div>
 </turbo-frame>
-

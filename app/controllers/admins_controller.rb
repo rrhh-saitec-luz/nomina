@@ -100,7 +100,7 @@ class AdminsController < ApplicationController
 
   # Metodo para renderizar vista de depurar nomina
   def depurar
-    contador = contador_depurar.valor
+    contador = contador_depurar.valor.to_i
     render partial: 'admins/parciales/depurar', locals: { cont: contador }
   end
 
@@ -236,6 +236,20 @@ class AdminsController < ApplicationController
   end
 
   def procesar_cierre
+    CierreNominaJob.perform_later
+    respond_to do |format|
+      format.turbo_stream do
+        render turbo_stream: [
+          # Reemplaza el botón por el estado procesando verde corporativo
+          turbo_stream.replace('contenedor_boton_cierre',
+                               partial: 'admins/parciales/cierre_boton_procesando'),
+          # Prepara la barra de progreso unificada en 0%
+          turbo_stream.replace('progreso_cierre',
+                               partial: 'admins/parciales/barra_progreso_cierre',
+                               locals: { porcentaje: 0, procesados: 0, total: 100 })
+        ]
+      end
+    end
   end
 
   private

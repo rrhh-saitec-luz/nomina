@@ -1,119 +1,143 @@
 <turbo-frame id="contenido">
-  <%= turbo_stream_from 'nomina_channel' %>                                           
+  <%= turbo_stream_from 'nomina_channel' %>
+
   <div class="card-body p-4">
-    <%# Encabezado Único del Submódulo %>
-    <div class="d-flex align-items-center gap-2 mb-4 pb-3 border-bottom text-success">
-      <i class="bi bi-shield-check fs-4"></i>
+
+    <%# --- ENCABEZADO UNIFICADO: Solo cambia entre Verde y Rojo --- %>
+    <div class="d-flex align-items-center gap-2 mb-4 pb-3 border-bottom <%= cont.to_i >= 8 ? 'text-danger' : 'text-success' %>">
+      <i class="bi <%= cont.to_i >= 8 ? 'bi-shield-lock-fill' : 'bi-shield-check' %> fs-4"></i>
       <h5 class="mb-0 fw-bold">Asistente de Depuración de Nómina</h5>
     </div>
 
-    <% if cont < 2 %>                                                                 
-      
-      <%# Estado de Bloqueo Inicial (Reutilizando el estilo del módulo de fechas) %>
+    <% if cont.to_i >= 8 %>
+
+      <%# 🌟 ESCENARIO DE CLAUSURA FISCAL: Bloqueo absoluto e inmutable %>
+      <div class="text-center py-5 bg-light rounded-3 border border-danger border-opacity-10 mx-auto shadow-sm" style="max-width: 500px;">
+        <div class="text-danger mb-3">
+          <i class="bi bi-shield-fill-check display-3 opacity-75"></i>
+        </div>
+        <h5 class="fw-bold text-dark mb-1">Módulo de Depuración Clausurado</h5>
+        <p class="text-muted small mb-3 px-4">
+          Este período de nómina ha sido procesado y archivado de forma inmutable. Los filtros de seguridad y depuración de cargos ya no se encuentran editables.
+        </p>
+        <div class="d-flex justify-content-center gap-2">
+          <span class="badge bg-danger-subtle text-danger border border-danger border-opacity-15 px-2.5 py-1.5 small fw-semibold">
+            <i class="bi bi-lock-fill me-1"></i> Período Consolidado
+          </span>
+          <span class="badge bg-light text-secondary border px-2 py-1.5 small fw-medium">
+            Fase: <%= cont %>
+          </span>
+        </div>
+      </div>
+
+    <% elsif cont.to_i < 2 %>
+
+      <%# Estado de Bloqueo Inicial (Mantiene tu parcial original) %>
       <div class="py-4">
         <%= render "admins/parciales/no_opciones_disponibles" %>
       </div>
-
     <% else %>
 
-      <%# Banner de Estado del Proceso %>
-      <div class="alert mb-4 border-0 rounded-3 p-3 shadow-sm d-flex align-items-center gap-3 <%= cont >= 5 ? 'bg-success bg-opacity-10 text-success' : 'bg-dark bg-opacity-10 text-dark' %>">
-        <div class="rounded-circle p-2 d-flex align-items-center justify-content-center <%= cont >= 5 ? 'bg-success text-white' : 'bg-dark text-white' %>">
-          <i class="bi <%= cont >= 5 ? 'bi-check-all fs-4' : 'bi-gear-wide-connected fs-5' %>"></i>
-        </div>
+      <%# Banner de Estado Superior Inteligente %>
+      <div class="alert mb-4 border-0 rounded-3 p-3 shadow-sm d-flex align-items-center gap-3 <%= cont.to_i >= 5 ? 'bg-success bg-opacity-10 text-success' : 'bg-dark bg-opacity-10 text-dark' %>" style="max-width: 650px; margin: 0 auto;">
+        <i class="bi <%= cont.to_i >= 5 ? 'bi-check-circle-fill text-success' : 'bi-exclamation-circle-fill text-secondary' %> fs-4"></i>
         <div>
-          <h6 class="fw-bold mb-0"><%= cont >= 5 ? '¡Depuración Completada!' : "Depuración en Progreso" %></h6>
-          <p class="mb-0 small text-secondary">
-            <%= cont >= 5 ? 'Todos los filtros de seguridad y sincronización se aplicaron con éxito.' : "Actualmente te encuentras en el Paso #{cont - 1} de la secuencia de depuración." %>
+          <h6 class="mb-0 fw-bold small text-uppercase tracking-wider">Control de Calidad de Datos</h6>
+          <p class="mb-0 extra-small opacity-75">
+            <%= cont.to_i >= 5 ? "Depuración Terminada con Éxito" : "Depuración en paso activo: #{cont.to_i - 1}" %>
           </p>
         </div>
       </div>
-      <%# Contenedor del Timeline / Pasos de Depuración %>
-      <div class="d-flex flex-column gap-3">
-        <!-- PASO 1: Sincronizar Cargos Únicos -->
-        <div class="card border-0 shadow-sm rounded-3 <%= cont.eql?(2) ? 'bg-white border-start border-warning border-4' : 'bg-light opacity-75' %>">
-          <div class="card-body d-flex flex-wrap align-items-center justify-content-between p-3 gap-3">
+
+      <%# Contenedor de la Línea de Tiempo %>
+      <div class="d-flex flex-column gap-3 mx-auto mt-4" style="max-width: 650px;">
+
+        <%# === PASO 2: SINCRONIZAR CARGOS ÚNICOS === %>
+        <% if cont.to_i >= 2 %>
+          <div class="p-3 bg-white border rounded-3 shadow-sm d-flex justify-content-between align-items-center" id="contenedor_boton_unicos">
             <div class="d-flex align-items-center gap-3">
-              <span class="badge <%= cont > 2 ? 'bg-success' : (cont.eql?(2) ? 'bg-warning text-dark' : 'bg-secondary') %> rounded-circle p-2.5 d-flex align-items-center justify-content-center" style="width: 35px; height: 35px;">
-                <% if cont > 2 %><i class="bi bi-check-lg fs-6"></i><% else %>1<% end %>
-              </span>
+              <div class="rounded-circle bg-light p-2.5 text-center <%= cont.to_i > 2 ? 'text-success' : 'text-muted' %>" style="width: 42px; height: 42px;">
+                <i class="bi <%= cont.to_i > 2 ? 'bi-check-circle-fill' : 'bi-person-check' %> fs-5"></i>
+              </div>
               <div>
-                <h6 class="fw-bold text-dark mb-0">Sincronizar Cargos Únicos</h6>
-                <p class="text-secondary mb-0 extra-small" style="font-size: 0.8rem;">Establece y consolida los registros base de cargos individuales.</p>
+                <h6 class="mb-0 fw-bold text-dark small">Paso 1: Sincronizar cargos únicos</h6>
+                <p class="mb-0 text-muted extra-small">
+                  <%= cont.to_i > 2 ? "✅ Sincronización Exitosa" : "Actualiza las plazas de un solo titular en el período actual." %>
+                </p>
               </div>
             </div>
-            <div id="contenedor_boton_unicos" class="d-flex align-items-center gap-3 flex-grow-1 flex-md-grow-0 justify-content-end">
-              <div id="progreso_cargos_unicos" class="small fw-semibold text-success">
-                <% if cont > 2 %>
-                  <span class="badge bg-success-subtle text-success border border-success border-opacity-15 px-2.5 py-1.5"><i class="bi bi-check-circle-fill me-1"></i> Sincronización Exitosa</span>
-                <% end %>
-              </div>
-              <% if cont.eql?(2) %>
-                <%= button_to 'Sincronizar únicos', sincronizar_admins_path(tipo: 'unicos'), disabled: !(cont.eql?(2)), class: "btn btn-warning px-3 py-2 fw-semibold shadow-sm text-dark btn-sm", data: { turbo_submits_with: "Enviando..." } %>
+            <div>
+              <%= button_to sincronizar_admins_path(tipo: 'unicos'),
+                            disabled: !(cont.to_i == 2),
+                            class: "btn #{cont.to_i == 2 ? 'btn-success' : 'btn-light border'} btn-sm fw-bold px-3 shadow-sm",
+                            data: { disable_with: "Procesando...", turbo_submits_with: "Enviando..." } do %>
+                <i class="bi bi-arrow-repeat me-1"></i> Sincronizar
               <% end %>
-            </div>
-          </div>
-        </div>
-        <!-- PASO 2: Detectar Inconsistencias -->
-        <% if cont >= 3 %>
-          <div class="card border-0 shadow-sm rounded-3 <%= cont.eql?(3) ? 'bg-white border-start border-warning border-4' : 'bg-light opacity-75' %>">
-            <div class="card-body d-flex flex-wrap align-items-center justify-content-between p-3 gap-3">
-              <div class="d-flex align-items-center gap-3">
-                <span class="badge <%= cont > 3 ? 'bg-success' : (cont.eql?(3) ? 'bg-warning text-dark' : 'bg-secondary') %> rounded-circle p-2.5 d-flex align-items-center justify-content-center" style="width: 35px; height: 35px;">
-                  <% if cont > 3 %><i class="bi bi-check-lg fs-6"></i><% else %>2<% end %>
-                </span>
-                <div>
-                  <h6 class="fw-bold text-dark mb-0">Detectar Inconsistencias Múltiples</h6>
-                  <p class="text-secondary mb-0 extra-small" style="font-size: 0.8rem;">Analiza duplicados o conflictos de asignaciones en las tablas contables.</p>
-                </div>
-              </div>
-              <div id="contenedor_boton_multiple" class="d-flex align-items-center gap-3 flex-grow-1 flex-md-grow-0 justify-content-end">
-                <div id="progreso_cargos_multiple" class="d-flex align-items-center gap-2">
-                  <% if cont > 3 %>
-                    <span class="badge bg-success-subtle text-success border border-success border-opacity-15 px-2.5 py-1.5"><i class="bi bi-check-circle-fill"></i></span>
-                  <% end %>
-                  <%= link_to vcm_admins_path, class: "btn btn-sm btn-outline-dark d-inline-flex align-items-center gap-1 py-1.5 px-2.5 fw-medium text-decoration-none" do %>
-                    <i class="bi bi-sliders small"></i>
-                    <span class="small">Manejar Inconsistencias</span>
-                  <% end %>
-                </div>
-                <% if cont.eql?(3) %>
-                  <%= button_to 'Detectar', sincronizar_admins_path(tipo: 'multiple'), disabled: !(cont.eql?(3)), class: "btn btn-warning px-3 py-2 fw-semibold shadow-sm text-dark btn-sm", data: { turbo_submits_with: "Enviando..." } %>
-                <% end %>
-              </div>
             </div>
           </div>
         <% end %>
 
-        <!-- PASO 3: Depurar Trabajadores Inactivos -->
-        <% if cont >= 4 %>
-          <div class="card border-0 shadow-sm rounded-3 <%= cont.eql?(4) ? 'bg-white border-start border-danger border-4' : 'bg-light opacity-75' %>">
-            <div class="card-body d-flex flex-wrap align-items-center justify-content-between p-3 gap-3">
-              <div class="d-flex align-items-center gap-3">
-                <span class="badge <%= cont > 4 ? 'bg-success' : (cont.eql?(4) ? 'bg-danger' : 'bg-secondary') %> rounded-circle p-2.5 d-flex align-items-center justify-content-center" style="width: 35px; height: 35px;">
-                  <% if cont > 4 %><i class="bi bi-check-lg fs-6"></i><% else %>3<% end %>
-                </span>
-                <div>
-                  <h6 class="fw-bold text-dark mb-0">Depurar Trabajadores Inactivos</h6>
-                  <p class="text-secondary mb-0 extra-small" style="font-size: 0.8rem;">Elimina de forma segura del período los registros que no reportan actividad.</p>
-                </div>
+        <%# === PASO 3: DETECTAR INCONSISTENCIAS MÚLTIPLES === %>
+        <% if cont.to_i >= 3 %>
+          <div class="p-3 bg-white border rounded-3 shadow-sm d-flex justify-content-between align-items-center" id="contenedor_boton_multiple">
+            <div class="d-flex align-items-center gap-3">
+              <div class="rounded-circle bg-light p-2.5 text-center <%= cont.to_i > 3 ? 'text-success' : 'text-muted' %>" style="width: 42px; height: 42px;">
+                <i class="bi <%= cont.to_i > 3 ? 'bi-exclamation-triangle-fill text-warning' : 'bi-people' %> fs-5"></i>
               </div>
-              
-              <div id="contenedor_boton_inactivos" class="d-flex align-items-center gap-3 flex-grow-1 flex-md-grow-0 justify-content-end">
-                <div id="progreso_cargos_inactivos" class="small fw-semibold text-success">
-                  <% if cont > 4 %>
-                    <span class="badge bg-danger-subtle text-danger border border-danger border-opacity-15 px-2.5 py-1.5"><i class="bi bi-shield-check me-1"></i> Depuración completada</span>
+              <div>
+                <h6 class="mb-0 fw-bold text-dark small">Paso 2: Detectar inconsistencias múltiples</h6>
+                <p class="mb-0 text-muted extra-small d-flex align-items-center gap-2">
+                  <%= cont.to_i > 3 ? "✅ Evaluado" : "Analiza colisiones de personal con doble cargo." %>
+                  <% if cont.to_i >= 3 %>
+                    <%= link_to vcm_admins_path, class: "text-decoration-none fw-semibold border-start ps-2 text-primary" do %>
+                      <i class="bi bi-box-arrow-up-right me-1"></i> Manejar inconsistencias
+                    <% end %>
                   <% end %>
-                </div>
-                <% if cont.eql?(4) %>
-                  <%= button_to 'Depurar inactivos', sincronizar_admins_path(tipo: 'inactivos'), disabled: !(cont.eql?(4)), class: "btn btn-danger px-3 py-2 fw-semibold shadow-sm btn-sm", data: { turbo_confirm: "¿Está seguro de que desea eliminar todos los registros inactivos? Esta acción no se puede deshacer.", turbo_submits_with: "Enviando..." } %>
-                <% end %>
+                </p>
               </div>
+            </div>
+            <div>
+              <%= button_to sincronizar_admins_path(tipo: 'multiple'),
+                            disabled: !(cont.to_i == 3),
+                            class: "btn #{cont.to_i == 3 ? 'btn-success' : 'btn-light border'} btn-sm fw-bold px-3 shadow-sm",
+                            data: { disable_with: "Procesando...", turbo_submits_with: "Enviando..." } do %>
+                <i class="bi bi-shield-radar me-1"></i> Detectar
+              <% end %>
+            </div>
+          </div>
+        <% end %>
+
+        <%# === PASO 4: DEPURAR TRABAJADORES INACTIVOS === %>
+        <% if cont.to_i >= 4 %>
+          <div class="p-3 bg-white border rounded-3 shadow-sm d-flex justify-content-between align-items-center" id="contenedor_boton_inactivos">
+            <div class="d-flex align-items-center gap-3">
+              <div class="rounded-circle bg-light p-2.5 text-center <%= cont.to_i > 4 ? 'text-success' : 'text-danger' %>" style="width: 42px; height: 42px;">
+                <i class="bi <%= cont.to_i > 4 ? 'bi-trash-fill text-muted' : 'bi-person-x-fill' %> fs-5"></i>
+              </div>
+              <div>
+                <h6 class="mb-0 fw-bold text-dark small">Paso 3: Depurar trabajadores inactivos</h6>
+                <p class="mb-0 text-muted extra-small">
+                  <%= cont.to_i > 4 ? "✅ Depuración completada con éxito" : "Elimina de la pre-nómina los registros de personal dado de baja." %>
+                </p>
+              </div>
+            </div>
+            <div>
+              <%= button_to sincronizar_admins_path(tipo: 'inactivos'),
+                            disabled: !(cont.to_i == 4),
+                            class: "btn #{cont.to_i == 4 ? 'btn-danger' : 'btn-light border'} btn-sm fw-bold px-3 shadow-sm",
+                            data: { 
+                              confirm: "¿Está seguro de que desea eliminar todos los registros inactivos? Esta acción no se puede deshacer.",
+                              disable_with: "Procesando...",
+                              turbo_submits_with: "Enviando..."
+                            } do %>
+                <i class="bi bi-trash me-1"></i> Depurar
+              <% end %>
             </div>
           </div>
         <% end %>
 
       </div>
+
     <% end %>
   </div>
 </turbo-frame>

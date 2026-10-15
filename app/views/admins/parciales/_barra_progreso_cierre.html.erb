@@ -1,0 +1,15 @@
+<div id="progreso_cierre" class="w-100 animate__animated animate__fadeIn mt-3">                                    
+  <div class="d-flex justify-content-between align-items-center mb-2 small">                              
+    <span class="text-success fw-semibold d-flex align-items-center gap-2">
+      <i class="bi bi-database-fill-down fs-5"></i> 
+      <span>Trasladando registros contables...</span>
+    </span>                                
+    <span class="badge bg-light text-dark border fw-medium px-2 py-1">
+      <%= procesados %> / <%= total %> (<%= porcentaje %>%)
+    </span>                                                      
+  </div>                                                                                                             
+  <div class="progress shadow-inner" style="height: 12px; background-color: rgba(var(--bs-success-rgb), 0.1);">                                                                       
+    <div class="progress-bar progress-bar-striped progress-bar-animated bg-success rounded-pill" role="progressbar" style="width: <%= porcentaje %>%; transition: width 0.3s ease;"></div>                                                                             
+  </div>                                                                                                             
+</div>
+

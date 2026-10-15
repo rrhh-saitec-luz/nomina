@@ -1,80 +1,95 @@
-<turbo-frame id="contenido">
-  <%= turbo_stream_from "nomina_channel" %>
+<turbo-frame id="contenido">                                                          
+  <%= turbo_stream_from "nomina_channel" %>                                           
   
-  <% if @fecha.nil? %>
-    <!-- ESCENARIO 1: No hay nóminas pendientes por procesar -->
-    <div class="card p-4 shadow-sm border-0 mt-4">
-      <div class="border-bottom pb-2 mb-4">
-        <h5 class="fw-bold text-success mb-0">Generar Antigüedades del Personal</h5>
-      </div>
-      <div class="text-center py-4 bg-light rounded">
-        <div class="mb-3 text-secondary">
-          <i class="bi bi-calendar-check fs-1 text-success"></i>
-        </div>
-        <h6 class="fw-bold text-dark mb-2">Todo al día</h6>
-        <p class="text-muted small mx-auto mb-0" style="max-width: 400px;">
+  <%# Contenedor raíz unificado para mantener la misma altura y márgenes que Cierre y Adelanto %>
+  <div class="card-body p-4">
+        <div class="d-flex align-items-center gap-2 mb-4 pb-3 border-bottom <%= @contador.to_i >= 8 ? 'text-danger' : 'text-success' %>">
+      <i class="bi <%= @contador.to_i >= 8 ? 'bi-shield-lock-fill' : 'bi-award-fill' %> fs-4"></i>
+      <h5 class="mb-0 fw-bold">Generar Antigüedades del Personal</h5>
+    </div>
+
+    <% if @fecha.nil? %>                                                                
+      
+      <%# --- ESCENARIO 1: NO HAY NÓMINAS PENDIENTES --- %>
+      <div class="text-center py-5 bg-light rounded-3 mx-auto shadow-sm" style="max-width: 500px;">                                 
+        <div class="mb-3 text-secondary">                                             
+          <i class="bi bi-calendar-check display-4 text-success opacity-75"></i>                      
+        </div>                                                                        
+        <h6 class="fw-bold text-dark mb-1">Todo al día</h6>                           
+        <p class="text-muted small mb-0 px-3">           
           No se encontraron fechas de nómina pendientes para el cálculo de antigüedades en este momento.
         </p>
-      </div>
-  <% else %>
-    <% if @contador.eql?(5) %>
-      <div class="card p-4 shadow-sm border-0">
-        <%= form_with url: suma_asigna_admins_path, method: :post do |f| %>
- 
-          <!-- TÍTULO ALINEADO A LA IZQUIERDA CON LÍNEA DEBAJO -->
-          <div class="border-bottom pb-2 mb-4">
-            <h5 class="fw-bold text-success mb-0">
-              Generar Antigüedades del Personal
-            </h5>
-          </div>
+      </div>                   
+
+    <% else %>                                                                          
+      
+      <%# --- CASO A: CONTADOR EN PASO 5 (INICIAR CÁLCULO) --- %>
+      <% if @contador == 5 %>                                                        
+        <%= form_with url: suma_asigna_admins_path, method: :post, class: "mx-auto", style: "max-width: 500px;" do |f| %>           
           <div class="mb-4">                                                          
-            <%= f.label :fe_nomina,
-                        "Fecha de Nómina Activa",
-                         class: "form-label fw-semibold text-secondary" %>
-            <div class="input-group">
-              <span class="input-group-text bg-white text-secondary">
-                <i class="bi bi-calendar3"></i>
-              </span>
-              <%= f.date_field :fe_nomina,                       
-                               value: @fecha,
-                               class: "form-control bg-light",
-                               readonly: true,
-                               required: true %>
-            </div>
-          </div>
-          <%= f.submit "Iniciar Cálculo",
-                       class: "btn btn-primary w-100 py-2 fw-bold shadow-sm",
-                       data: { turbo_submits_with: "Preparando..." } %>
-        <% end %>
+            <%= f.label :fe_nomina, "Fecha de Nómina Activa", class: "form-label fw-semibold text-secondary small text-uppercase" %>            
+            <div class="input-group shadow-sm">                                                 
+              <span class="input-group-text bg-white text-secondary">                 
+                <i class="bi bi-calendar3"></i>                                       
+              </span>             
+              <%= f.date_field :fe_nomina, value: @fecha, class: "form-control bg-light py-2", readonly: true, required: true %>                                      
+            </div>                                                                    
+          </div>                                                                      
+          <%= f.submit "Iniciar Cálculo", class: "btn btn-success w-100 py-2.5 fw-bold shadow-sm", style: "background-color: #198754; border-color: #198754;" do %>
+            <i class="bi bi-play-fill me-1"></i> Iniciar Cálculo
+          <% end %>
+        <% end %>                                                                     
+                                                                                      
+        <hr class="my-4 text-muted opacity-25 mx-auto" style="max-width: 500px;">                                       
+                                                                                      
+        <div id="progreso_nomina" class="p-3 text-center bg-light rounded-3 shadow-sm mx-auto" style="max-width: 500px;">           
+          <p class="text-muted small mb-0 fw-medium">                                           
+            <i class="bi bi-hourglass-split me-2 text-warning animate-spin"></i>Esperando inicio de proceso...                                            
+          </p>                                                                        
+        </div>                                                                        
 
-        <hr class="my-4 text-muted opacity-25">
+      <% end %>                    
 
-        <div id="progreso_nomina" class="p-2 text-center bg-light rounded">
-          <p class="text-muted small mb-0">
-            <i class="bi bi-hourglass-split me-2"></i>
-            Esperando inicio de proceso...
-          </p>
+      <%# --- CASO B: SEGMENTACIÓN SEGÚN EL AVANCE DEL CONTADOR --- %>
+      <% if @contador == 6 || @contador == 7 %>                                                             
         </div>
-      </div>
+        <%= render "admins/parciales/antiguedades_boton_eliminar" %>                      
+      
+      <% elsif @contador >= 8 %>
+
+        <%# Encabezado Rojo de Alta Seguridad: Período Clausurado Inmutable %>
+        <div class="text-center py-5 bg-light rounded-3 border border-danger border-opacity-10 mx-auto shadow-sm" style="max-width: 500px;">                                 
+          <div class="text-danger mb-3">                                             
+            <i class="bi bi-shield-fill-check display-3 opacity-75"></i>                      
+          </div>                                                                        
+          <h5 class="fw-bold text-dark mb-1">Registros de Antigüedad Protegidos</h5>                           
+          <p class="text-muted small mb-3 px-4">           
+            La nómina de este período ha alcanzado el estado de <strong>Cierre Definitivo</strong>. Las asignaciones por antigüedad han sido consolidadas e indexadas de forma inalterable en el historial fiscal.
+          </p>
+
+          <%# ETIQUETAS DE ESTADO UNIFICADAS %>
+          <div class="d-flex justify-content-center gap-2">
+            <span class="badge bg-danger-subtle text-danger border border-danger border-opacity-15 px-2.5 py-1.5 small fw-semibold">
+              <i class="bi bi-lock-fill me-1"></i> Período Clausurado
+            </span>
+            <span class="badge bg-light text-secondary border px-2 py-1.5 small fw-medium">
+              Fase: <%= @contador %>
+            </span>
+          </div>
+        </div>
+      <% elsif @contador != 5 %>                                                      
+
+        <div class="text-center py-5 rounded-3 mx-auto shadow-sm" style="background-color: #fff9db; max-width: 500px;">       
+          <div class="mb-3 text-warning">                                               
+            <i class="bi bi-exclamation-triangle display-4 opacity-75"></i>                             
+          </div>                                                                        
+          <h6 class="fw-bold text-dark mb-2">Pasos previos pendientes</h6>              
+          <p class="text-muted small mb-0 px-4">           
+            Para generar las antigüedades, primero debes completar de manera secuencial los procesos anteriores de la nómina.                                                   
+          </p>                                                                          
+        </div>                                                                          
+      <% end %>                                                                           
     <% end %>
 
-  <% if @contador >= 6 %>
-    <%= render "admins/parciales/antiguedades_boton_eliminar" %>
-  <% elsif !@contador.eql?(5) %>
-    <!-- ESCENARIO 2: Contador no cumple los requisitos previos -->
-    <div class="card p-4 shadow-sm border-0 mt-4">
-      <div class="border-bottom pb-2 mb-4">
-        <h5 class="fw-bold text-success mb-0">Generar Antigüedades del Personal</h5>
-      </div>
-      <div class="text-center py-4 rounded" style="background-color: #fff9db;">
-        <div class="mb-3 text-warning">
-          <i class="bi bi-exclamation-triangle fs-1"></i>
-        </div>
-        <h6 class="fw-bold text-dark mb-2">Pasos previos pendientes</h6>
-        <p class="text-muted small mx-auto mb-0" style="max-width: 420px;">
-        Para generar las antigüedades, primero debes completar de manera secuencial los procesos anteriores de la nómina.
-        </p>
-      </div>
-    </div>
-  <% end %>
-<% end %>
+  </div>
+</turbo-frame>

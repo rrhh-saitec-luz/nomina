@@ -1,42 +1,53 @@
-<turbo-frame id="contenido">                                                                                         
-  <%= turbo_stream_from 'nomina_channel' %>                                                                          
-  <div id="contenido_formulario_nomina" class="card-body p-4">
-    <% if @contador.valor >= 1 %>
-      <%# Si ya hay un proceso activo, renderiza la alerta de eliminación %>
-      <%= render "admins/parciales/eliminar_prenomina" %>
-    <% else %>
-      <%# Encabezado del Formulario %>
-      <div class="d-flex align-items-center gap-2 mb-4 pb-3 border-bottom text-success">
-        <i class="bi bi-play-circle-fill fs-4"></i>
-        <h5 class="mb-0 fw-bold">Generar Nueva Prenómina</h5>
-      </div>                                                                                                           
-      <%# Formulario Principal %>
-      <%= form_with url: prenomina_admins_path,
-                    method: :post,
-                    class: "d-flex flex-column gap-4",                                       
-                    data: { controller: "admin" } do |form| %>                                                           
-        <%# Sección de Parciales (Meses, Años y Tipos de Nómina) %>
-        <div class="card bg-light border-0 p-3 rounded-3">
-          <%= render "admins/parciales/gen_nom_meses", meses: @meses, years: @years, form: form %>
-        </div>
-
-        <div class="card bg-light border-0 p-3 rounded-3">
-          <%= render "admins/parciales/gen_nom_nominas", nomina: @nomina, form: form %>
-        </div>
-        
-        <%# Fila de Acciones y Barra de Progreso %>
-        <div class="d-flex align-self-start gap-3 w-100 align-items-center">  
+<turbo-frame id="contenido">                                                                                                                                                    
+  <%= turbo_stream_from 'nomina_channel' %>                                                                                                                                     
   
-          <%= form.submit "Generar prenómina",
-            id: "boton_prenomina",
-            class: "btn btn-success px-4 py-2 fw-semibold shadow-sm" %>
-          <div id="progreso_cargos_creacion" class="align-self-center flex-grow-1"></div>
-        </div>
-      <% end %>                                                                                                          
-      <%# Pie de página informativo %>
-      <div class="mt-4 pt-3 border-top">
-        <%= render "admins/parciales/gen_nom_footer" %>
-      </div>
-    <% end %>
-  </div>
+  <div id="contenido_formulario_nomina" class="card-body p-4">                        
+
+    <%# --- ENCABEZADO UNIFICADO: Fijo en Verde Operativo al ser el origen/reinicio del sistema --- %>                                             
+    <div class="d-flex align-items-center gap-2 mb-4 pb-3 border-bottom text-success">                                            
+      <i class="bi bi-play-circle-fill fs-4"></i>                                                                           
+      <h5 class="mb-0 fw-bold">Generar Nueva Prenómina Base</h5>          
+    </div>                                                                            
+
+    <%# 🌟 LÓGICA CORREGIDA: Si hay proceso activo o nómina cerrada en Fase >= 8, habilitamos la purga y reinicio %>
+    <% if @contador.valor.to_i >= 1 %>                                                     
+      
+      <%= render "admins/parciales/eliminar_prenomina" %>
+    <% else %>                                                                        
+                                                                                      
+      <%# Formulario Principal (Solo activo si el contador fue reseteado y vale exactamente 0) %>
+      <%= form_with url: prenomina_admins_path,                                       
+                    method: :post,                                                    
+                    class: "d-flex flex-column gap-3 mx-auto",                                                                                                                          
+                    style: "max-width: 600px;",
+                    data: { controller: "admin" } do |form| %>                                                                                                                  
+                                                                                      
+        <%# Sección de Parciales (Meses, Años y Tipos de Nómina) %>                   
+        <div class="card bg-light border-0 p-3 rounded-3 shadow-sm">                            
+          <%= render "admins/parciales/gen_nom_meses", meses: @meses, years: @years, form: form %>                                                                          
+        </div>                                                                        
+                                                                                      
+        <div class="card bg-light border-0 p-3 rounded-3 shadow-sm">                            
+          <%= render "admins/parciales/gen_nom_nominas", nomina: @nomina, form: form %>                                                                                     
+        </div>                                                                        
+                                                                                      
+        <%# Fila de Acciones y Barra de Progreso %> 
+        <div class="d-flex align-self-start gap-3 w-100 align-items-center mt-2">          
+          <%= form.submit "Generar prenómina base",                                        
+            id: "boton_prenomina",                                                    
+            class: "btn btn-success px-4 py-2.5 fw-bold shadow-sm",
+            style: "background-color: #198754; border-color: #198754;",
+            data: { turbo_submits_with: "Iniciando volcado..." } %>               
+          <div id="progreso_cargos_creacion" class="align-self-center flex-grow-1"></div>                                                                                   
+        </div>                                                                        
+      <% end %>                                                                                                                                                                 
+                                                                                      
+      <%# Pie de página informativo %>                                                
+      <div class="mt-4 pt-3 border-top mx-auto" style="max-width: 600px;">                                              
+        <%= render "admins/parciales/gen_nom_footer" %>                               
+      </div>                                                                          
+                                                                                      
+    <% end %>                                                                         
+  </div>                                                                              
 </turbo-frame>
+
