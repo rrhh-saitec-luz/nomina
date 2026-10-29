@@ -1,7 +1,7 @@
 <%= content_tag :div do %>
   <%= form.label :tpn, "Tipo nomina", class: "form-label" %>
   <%= form.select :tpn,
-      options_from_collection_for_select(nomina, :tipo_nomina, :descripcion),
+      options_from_collection_for_select(NOMINA.call, :tipo_nomina, :descripcion),
       { include_blank: "Seleccione nomina", required: true },
       class: "form-select",
       data: {admin_target: "tipoNomina",

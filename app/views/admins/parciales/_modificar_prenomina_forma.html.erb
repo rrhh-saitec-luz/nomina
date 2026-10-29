@@ -16,7 +16,7 @@
       <div class="col-12 col-sm-6">                                                                                                                     
         <%= form.label :mes, "Nuevo Mes Contable", class: "form-label fw-semibold text-secondary small text-uppercase" %>                                                       
         <%= form.select :mes, options_for_select(                                                                      
-                        [["Seleccione mes...", nil, {selected: true, disabled: true}]] + meses.map { |val, mes| [mes, val] }),                                                                                                                  
+                        [["Seleccione mes...", nil, {selected: true, disabled: true}]] + MESES.map { |val, mes| [mes, val] }),                                                                                                                  
                         { required: true },                                                                            
                         class: "form-select shadow-sm py-2" %>                                                                        
       </div>                                                                                                        

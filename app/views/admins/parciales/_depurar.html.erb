@@ -11,44 +11,57 @@
 
     <% if cont.to_i >= 8 %>
 
-      <%# 🌟 ESCENARIO DE CLAUSURA FISCAL: Bloqueo absoluto e inmutable %>
-      <div class="text-center py-5 bg-light rounded-3 border border-danger border-opacity-10 mx-auto shadow-sm" style="max-width: 500px;">
-        <div class="text-danger mb-3">
-          <i class="bi bi-shield-fill-check display-3 opacity-75"></i>
-        </div>
-        <h5 class="fw-bold text-dark mb-1">Módulo de Depuración Clausurado</h5>
-        <p class="text-muted small mb-3 px-4">
-          Este período de nómina ha sido procesado y archivado de forma inmutable. Los filtros de seguridad y depuración de cargos ya no se encuentran editables.
-        </p>
-        <div class="d-flex justify-content-center gap-2">
-          <span class="badge bg-danger-subtle text-danger border border-danger border-opacity-15 px-2.5 py-1.5 small fw-semibold">
-            <i class="bi bi-lock-fill me-1"></i> Período Consolidado
-          </span>
-          <span class="badge bg-light text-secondary border px-2 py-1.5 small fw-medium">
-            Fase: <%= cont %>
-          </span>
-        </div>
-      </div>
-
+<%# 🌟 ESCENARIO DE CLAUSURA FISCAL: Bloqueo absoluto con borde estilizado %>
+  <div class="text-center py-5 bg-light rounded-3 border border-danger border-opacity-15 mx-auto shadow-sm" style="max-width: 500px;">
+    <div class="text-danger mb-3">
+      <i class="bi bi-shield-fill-check display-3 opacity-75"></i>
+    </div>
+    <h5 class="fw-bold text-dark mb-1">Módulo de Depuración Clausurado</h5>
+    <p class="text-muted small mb-3 px-4">
+      Este período de nómina ha sido procesado y archivado de forma inmutable. Los filtros de seguridad y depuración de cargos ya no se encuentran editables.
+    </p>
+    <div class="d-flex justify-content-center gap-2">
+      <span class="badge bg-danger-subtle text-danger border border-danger border-opacity-15 px-2.5 py-1.5 small fw-semibold">
+        <i class="bi bi-lock-fill me-1"></i> Período Consolidado
+      </span>
+      <span class="badge bg-light text-secondary border px-2 py-1.5 small fw-medium">
+        Fase: <%= cont %>
+      </span>
+    </div>
+  </div>
     <% elsif cont.to_i < 2 %>
 
-      <%# Estado de Bloqueo Inicial (Mantiene tu parcial original) %>
-      <div class="py-4">
-        <%= render "admins/parciales/no_opciones_disponibles" %>
-      </div>
+        <%# 🪄 LA MAGIA: Estado de Bloqueo Inicial Estilizado %>
+  <div class="text-center py-5 bg-light rounded-3 border border-warning border-opacity-15 mx-auto shadow-sm" style="max-width: 500px;">
+    <div class="text-warning mb-3">
+      <i class="bi bi-hourglass-split display-3 opacity-75"></i>
+    </div>
+    <h5 class="fw-bold text-dark mb-1">Depuración en Espera</h5>
+    <p class="text-muted small mb-3 px-4">
+      El sistema se encuentra listo para iniciar. Actualmente no hay un proceso de depuración activo para este período de nómina.
+    </p>
+    <div class="d-flex justify-content-center gap-2">
+      <span class="badge bg-warning-subtle text-warning border border-warning border-opacity-15 px-2.5 py-1.5 small fw-semibold text-dark">
+        <i class="bi bi-hourglass-split me-1"></i> Esperando Fase Inicial 
+      </span>
+      <span class="badge bg-light text-secondary border px-2 py-1.5 small fw-medium">
+        Fase: <%= cont %>
+      </span>
+    </div>
+  </div>
     <% else %>
 
       <%# Banner de Estado Superior Inteligente %>
-      <div class="alert mb-4 border-0 rounded-3 p-3 shadow-sm d-flex align-items-center gap-3 <%= cont.to_i >= 5 ? 'bg-success bg-opacity-10 text-success' : 'bg-dark bg-opacity-10 text-dark' %>" style="max-width: 650px; margin: 0 auto;">
-        <i class="bi <%= cont.to_i >= 5 ? 'bi-check-circle-fill text-success' : 'bi-exclamation-circle-fill text-secondary' %> fs-4"></i>
-        <div>
-          <h6 class="mb-0 fw-bold small text-uppercase tracking-wider">Control de Calidad de Datos</h6>
-          <p class="mb-0 extra-small opacity-75">
-            <%= cont.to_i >= 5 ? "Depuración Terminada con Éxito" : "Depuración en paso activo: #{cont.to_i - 1}" %>
-          </p>
-        </div>
-      </div>
 
+        <div class="alert mb-4 rounded-3 p-3 shadow-sm d-flex align-items-center gap-3 <%= cont.to_i >= 5 ? 'bg-success bg-opacity-10 text-success border border-success border-opacity-15' : 'bg-dark bg-opacity-10 text-dark border border-dark border-opacity-15' %>" style="max-width: 650px; margin: 0 auto;">
+    <i class="bi <%= cont.to_i >= 5 ? 'bi-check-circle-fill text-success' : 'bi-exclamation-circle-fill text-secondary' %> fs-4"></i>
+    <div>
+      <h6 class="mb-0 fw-bold small text-uppercase tracking-wider">Control de Calidad de Datos</h6>
+      <p class="mb-0 extra-small opacity-75">
+        <%= cont.to_i >= 5 ? "Depuración Terminada con Éxito" : "Depuración en paso activo: #{cont.to_i - 1}" %>
+      </p>
+    </div>
+  </div>
       <%# Contenedor de la Línea de Tiempo %>
       <div class="d-flex flex-column gap-3 mx-auto mt-4" style="max-width: 650px;">
 

@@ -11,15 +11,7 @@ class AdminsController < ApplicationController
   def index; end
 
   def generar_nomina
-    @nomina = NominaTipo.all
-    @meses = MESES
-    @years = concepto_pluck(:ANO)
     @contador = contador_depurar
-    if contador_depurar.valor.eql?(0)
-      render partial: 'admins/parciales/generar_nomina'
-    else
-      render partial: 'admins/parciales/eliminar_prenomina'
-    end
   end
 
   def prenomina
@@ -29,17 +21,15 @@ class AdminsController < ApplicationController
       tpn: params[:tpn],
       tpns: params[:tpns]
     }
-
     hay_registros = Concepto.where(ANO: filtros[:year],
                                    MES: filtros[:month],
                                    TIPO_NOMINA: filtros[:tpn],
                                    TIPO_NOMINA_ESPECIFICA: filtros[:tpns])
                             .where.not(CO_CONCEPTO: %w[X500 A029 A223 A436])
                             .exists?
-
     if !hay_registros
       respond_to do |format|
-        format.html { redirect_to admins_path, alert: 'Búsqueda sin resultados.' }
+        format.html { redirect_to generar_nomina_admins_path, alert: 'Búsqueda sin resultados.' }
       end
     else
       CreacionPrenominaJob.perform_later(filtros)
@@ -57,10 +47,14 @@ class AdminsController < ApplicationController
             )
           ]
         end
-        format.html { redirect_to admins_path, notice: 'El proceso de generación ha iniciado en segundo plano.' }
+        format.html do
+          redirect_to generar_nomina_admins_path,
+                      notice: 'Proceso de generación ha iniciado en segundo plano.'
+        end
       end
     end
   end
+
 
   def modificar_prenomina
     @cont_val = contador_depurar.valor
@@ -73,7 +67,14 @@ class AdminsController < ApplicationController
     Multiple.delete_all
     SyncError.delete_all
     reiniciar_contador(contador_depurar)
-    generar_nomina
+    Turbo::StreamsChannel.broadcast_replace_to(
+      'nomina_channel',
+      target: 'contenido',
+      template: 'admins/generar_nomina',
+      layout: false,
+      assigns: { contador: contador_depurar }
+    )
+    head :no_content
   end
 
   def sincronizar

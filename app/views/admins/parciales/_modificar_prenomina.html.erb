@@ -1,29 +1,29 @@
-<turbo-frame id="contenido">                                                                                                                                                    
-  <div class="card-body p-4">                                                         
-                                                                                      
-    <%# 🌟 ENCABEZADO DINÁMICO: Evaluado de forma segura con .to_i %>                                             
-    <div class="d-flex align-items-center gap-2 mb-4 pb-3 border-bottom <%= @cont_val.to_i >= 8 ? 'text-danger' : 'text-success' %>">                                                                                          
-      <i class="bi <%= @cont_val.to_i >= 8 ? 'bi-calendar-x-fill' : 'bi-calendar-event-fill' %> fs-4"></i>                                  
-      <h5 class="mb-0 fw-bold">Actualizar Fecha y Período de Nómina</h5>                                                                                                        
-    </div>                                
+<turbo-frame id="contenido">
+  <div class="card-body p-4">
 
-    <%# 🌟 EVALUACIÓN SEGURA CON TO_I %>
+    <%# 🌟 ENCABEZADO DINÁMICO: Sincronizado y limpio %>
+    <div class="d-flex align-items-center gap-2 mb-4 pb-3 border-bottom <%= @cont_val.to_i >= 8 ? 'text-danger' : 'text-success' %>">
+      <i class="bi <%= @cont_val.to_i >= 8 ? 'bi-calendar-x-fill' : 'bi-calendar-event-fill' %> fs-4"></i>
+      <h5 class="mb-0 fw-bold">Actualizar Fecha y Período de Nómina</h5>
+    </div>
+
+    <%# 🌟 EVALUACIÓN DE ESCENARIOS %>
     <% if @cont_val.to_i >= 8 %>
 
-      <%# Panel Informativo del Bloqueo Histórico de Calendario %>
-      <div class="text-center py-5 bg-light rounded-3 border border-danger border-opacity-10 mx-auto shadow-sm" style="max-width: 500px;">                                 
-        <div class="text-danger mb-3">                                             
-          <i class="bi bi-shield-fill-check display-3 opacity-75"></i>                      
-        </div>                                                                        
-        <h5 class="fw-bold text-dark mb-1">Parámetros Temporales Inmutables</h5>                           
-        <p class="text-muted small mb-3 px-4">           
+      <%# Panel Informativo del Bloqueo Histórico de Calendario (Borde Rojo Homogéneo) %>
+      <div class="text-center py-5 bg-light rounded-3 border border-danger border-opacity-15 mx-auto shadow-sm" style="max-width: 500px;">
+        <div class="text-danger mb-3">
+          <i class="bi bi-shield-fill-check display-3 opacity-75"></i>
+        </div>
+        <h5 class="fw-bold text-dark mb-1">Parámetros Temporales Inmutables</h5>
+        <p class="text-muted small mb-4 px-4">
           La vigencia y fechas de este período han sido congeladas debido al <strong>Cierre Definitivo</strong> de la nómina. No se permiten modificaciones en el calendario fiscal.
         </p>
 
         <%# ETIQUETAS DE ESTADO UNIFICADAS %>
         <div class="d-flex justify-content-center gap-2">
           <span class="badge bg-danger-subtle text-danger border border-danger border-opacity-15 px-2.5 py-1.5 small fw-semibold">
-            <i class="bi bi-lock-fill me-1"></i> Período Clausurado
+            <i class="bi bi-lock-fill me-1"></i> Período Consolidado
           </span>
           <span class="badge bg-light text-secondary border px-2 py-1.5 small fw-medium">
             Fase: <%= @cont_val %>
@@ -31,45 +31,49 @@
         </div>
       </div>
 
-    <% elsif @cont_val.to_i == 0 %>                                                           
-                                                                                      
-      <%# ESTADO 1: BLOQUEO TOTAL (El proceso aún no ha iniciado) %>                  
-      <div class="text-center py-5 mx-auto" style="max-width: 450px;">                
-        <div class="text-muted mb-3">                                                 
-          <i class="bi bi-shield-lock display-3 opacity-50 text-secondary"></i>       
-        </div>                                                                        
-        <h5 class="fw-bold text-dark mb-1">Módulo no disponible</h5>                  
-        <p class="text-secondary small mb-0">                                         
-          Para poder actualizar las fechas, primero debe generar la prenómina base en el sistema desde el menú correspondiente.                                             
-        </p>                                                                          
-        <div class="mt-3">                                                            
-          <span class="badge bg-light text-secondary border fw-medium px-2 py-1.5 small">                                                                                   
-            Estado de Nómina: Esperando Generación                                    
-          </span>                                                                     
-        </div>                                                                        
-      </div>          
+    <% elsif @cont_val.to_i == 0 %>
 
-    <% elsif @cont_val.to_i == 1 %>                                                                                                                                                  
-                                                                                      
-      <%# ESTADO 2: FLUJO NORMAL (Se generó la nómina, toca poner la fecha del nuevo mes) %>                  
-      <div class="alert bg-success bg-opacity-10 border border-success border-opacity-10 rounded-3 d-flex align-items-center gap-2 mx-auto mb-4 py-2.5 px-3 text-success small fw-medium" style="max-width: 500px;">                                              
-        <i class="bi bi-info-circle-fill fs-5"></i>                                   
-        <span>Se ha detectado una prenómina base. Configura la nueva fecha y período contable a continuación.</span>                                                        
-      </div>                                                                          
-                                                                                      
-      <%= render "admins/parciales/modificar_prenomina_forma", meses: @meses %>                                                                                                 
-                                                                                      
-    <% else %>   
+      <%# 🪄 LA MAGIA PARA LA FASE 0: Estado de Espera Estilizado con Borde e insignias correspondientes %>
+      <div class="text-center py-5 bg-light rounded-3 border border-warning border-opacity-15 mx-auto shadow-sm" style="max-width: 500px;">
+        <div class="text-warning mb-3">
+          <i class="bi bi-hourglass-split display-3 opacity-75"></i>
+        </div>
+        <h5 class="fw-bold text-dark mb-1">Módulo no Disponible</h5>
+        <p class="text-muted small mb-4 px-4">
+          Para poder actualizar las fechas y parámetros temporales, primero debe generar la prenómina base en el sistema desde el menú correspondiente.
+        </p>
 
-      <%# ESTADO 3: MODO CORRECCIÓN (Fases operativas 2 a 7, el admin puede rectificar antes del cierre) %>                                                               
-      <div class="alert bg-warning bg-opacity-10 border border-warning border-opacity-15 rounded-3 d-flex align-items-center gap-2 mx-auto mb-4 py-2.5 px-3 small fw-medium" style="max-width: 500px; color: #664d03;">                                           
-        <i class="bi bi-exclamation-triangle-fill fs-5 text-warning"></i>             
-        <span>El período ya fue configurado previamente. Si cometiste un error de dedo, puedes modificar los valores y guardar los cambios nuevamente.</span>               
-      </div>                                                                          
-                                                                                      
-      <%= render "admins/parciales/modificar_prenomina_forma", meses: @meses %>                                                                                                 
-                                                                                      
-    <% end %>                                                                                                                                                                   
-  </div>                                                                              
+        <%# DOBLE BADGE IDENTICO %>
+        <div class="d-flex justify-content-center gap-2">
+          <span class="badge bg-warning-subtle text-warning border border-warning border-opacity-15 px-2.5 py-1.5 small fw-semibold text-dark">
+            <i class="bi bi-hourglass-split me-1"></i> Esperando Generación
+          </span>
+          <span class="badge bg-light text-secondary border px-2 py-1.5 small fw-medium">
+            Fase: <%= @cont_val %>
+          </span>
+        </div>
+      </div>
+
+    <% elsif @cont_val.to_i == 1 %>
+<%# ESTADO 2: FLUJO NORMAL (Se generó la nómina, toca poner la fecha del nuevo mes) %>                          
+      <div class="alert bg-success bg-opacity-10 border border-success border-opacity-15 rounded-3 d-flex align-items-center gap-2 mx-auto mb-4 py-2.5 px-3 text-success small fw-medium" style="max-width: 500px;">                                                                                                                                                    
+        <i class="bi bi-info-circle-fill fs-5"></i>                                                                   
+        <span>Se ha detectado una prenómina base. Configura la nueva fecha y período contable a continuación.</span>                                                                                                                              
+      </div>                                                                                                          
+                                                                                                                      
+      <%# Renderizamos el formulario limpio (ya no requiere pasar meses:) %>
+      <%= render "admins/parciales/modificar_prenomina_forma" %>                                                                                                                                                                   
+                                                                                                                      
+    <% else %>                                                                                                        
+      <%# ESTADO 3: MODO CORRECCIÓN (Fases operativas 2 a 7, el admin puede rectificar antes del cierre) %>                                                                                                                                       
+      <div class="alert bg-warning bg-opacity-10 border border-warning border-opacity-15 rounded-3 d-flex align-items-center gap-2 mx-auto mb-4 py-2.5 px-3 text-warning-emphasis small fw-medium" style="max-width: 500px;">                                                                                                                                                 
+        <i class="bi bi-exclamation-triangle-fill fs-5 text-warning"></i>                                             
+        <span>El período ya fue configurado previamente. Si cometiste un error, puedes modificar los valores y guardar los cambios nuevamente.</span>                                                                               
+      </div>                                                                                                          
+                                                                                                                      
+      <%# Renderizamos el formulario limpio %>
+      <%= render "admins/parciales/modificar_prenomina_forma" %>                                                                                                                                                                   
+                                                                                                                      
+    <% end %>                                                                                                                                                                                                                                     
+  </div>                                                                                                              
 </turbo-frame>
-

@@ -1,95 +1,135 @@
 <turbo-frame id="contenido">                                                          
   <%= turbo_stream_from "nomina_channel" %>                                           
-  
-  <%# Contenedor raíz unificado para mantener la misma altura y márgenes que Cierre y Adelanto %>
-  <div class="card-body p-4">
-        <div class="d-flex align-items-center gap-2 mb-4 pb-3 border-bottom <%= @contador.to_i >= 8 ? 'text-danger' : 'text-success' %>">
-      <i class="bi <%= @contador.to_i >= 8 ? 'bi-shield-lock-fill' : 'bi-award-fill' %> fs-4"></i>
-      <h5 class="mb-0 fw-bold">Generar Antigüedades del Personal</h5>
-    </div>
-
-    <% if @fecha.nil? %>                                                                
+                                                                                      
+  <%# Contenedor raíz unificado para mantener la misma altura y márgenes que Cierre y Adelanto %>                                                                           
+  <div class="card-body p-4">                                                         
+    
+    <%# --- ENCABEZADO UNIFICADO: Solo cambia entre Verde y Rojo --- %>
+    <div class="d-flex align-items-center gap-2 mb-4 pb-3 border-bottom <%= @contador.to_i >= 8 ? 'text-danger' : 'text-success' %>">                                   
+      <i class="bi <%= @contador.to_i >= 8 ? 'bi-shield-lock-fill' : 'bi-award-fill' %> fs-4"></i>                                                                          
+      <h5 class="mb-0 fw-bold">Generar Antigüedades del Personal</h5>                 
+    </div>                                                                            
+                                                                                      
+    <% if @fecha.nil? %>    
       
-      <%# --- ESCENARIO 1: NO HAY NÓMINAS PENDIENTES --- %>
-      <div class="text-center py-5 bg-light rounded-3 mx-auto shadow-sm" style="max-width: 500px;">                                 
-        <div class="mb-3 text-secondary">                                             
-          <i class="bi bi-calendar-check display-4 text-success opacity-75"></i>                      
+      <%# --- 1. RESTRUCTURADO AL PÍXEL: CLON IDÉNTICO AL ESTÁNDAR DE DEPURACIÓN --- %>                           
+      <div class="text-center py-5 bg-light rounded-3 border border-warning border-opacity-15 mx-auto shadow-sm" style="max-width: 500px;">                                                                         
+        <div class="text-warning mb-3">                                             
+          <i class="bi bi-hourglass-split display-3 opacity-75"></i>                                                                                                
         </div>                                                                        
-        <h6 class="fw-bold text-dark mb-1">Todo al día</h6>                           
-        <p class="text-muted small mb-0 px-3">           
-          No se encontraron fechas de nómina pendientes para el cálculo de antigüedades en este momento.
-        </p>
-      </div>                   
-
-    <% else %>                                                                          
-      
-      <%# --- CASO A: CONTADOR EN PASO 5 (INICIAR CÁLCULO) --- %>
-      <% if @contador == 5 %>                                                        
-        <%= form_with url: suma_asigna_admins_path, method: :post, class: "mx-auto", style: "max-width: 500px;" do |f| %>           
-          <div class="mb-4">                                                          
-            <%= f.label :fe_nomina, "Fecha de Nómina Activa", class: "form-label fw-semibold text-secondary small text-uppercase" %>            
-            <div class="input-group shadow-sm">                                                 
-              <span class="input-group-text bg-white text-secondary">                 
+        <h5 class="fw-bold text-dark mb-1">Módulo no disponible</h5>                           
+        <p class="text-muted small mb-3 px-4">                                        
+          El cálculo de antigüedades se activará estrictamente una vez que el asistente de depuración base haya consolidado el paso inicial del período.                                                                    
+        </p>                                                                          
+        
+        <%# ETIQUETAS DE ESTADO UNIFICADAS %>
+        <div class="d-flex justify-content-center gap-2">                             
+          <span class="badge bg-warning-subtle text-warning border border-warning border-opacity-15 px-2.5 py-1.5 small fw-semibold text-dark">                                          
+            <i class="bi bi-hourglass-split me-1"></i> Esperando Depuración
+          </span>                                                                     
+          <span class="badge bg-light text-secondary border px-2 py-1.5 small fw-medium">                                                                                   
+            Fase: <%= @contador %>                                                    
+          </span>                                                                     
+        </div>
+      </div>          
+ 
+    <% else %>                                                                                                                                                                  
+      <%# --- CASO A: CONTADOR EN PASO 5 (INICIAR CÁLCULO ACTIVO) --- %>                     
+      <% if @contador.to_i == 5 %>                                                         
+        
+        <%= form_with url: suma_asigna_admins_path, method: :post, class: "mx-auto d-flex flex-column gap-3", style: "max-width: 500px;" do |f| %>                                                   
+          <div>                                                          
+            <%= f.label :fe_nomina, "Fecha de Nómina Activa", class: "form-label fw-bold text-secondary extra-small text-uppercase tracking-wider" %>                                        
+            <div class="input-group shadow-sm rounded-3">                                                                                                                                 
+              <span class="input-group-text bg-white text-secondary border-end-0">                 
                 <i class="bi bi-calendar3"></i>                                       
-              </span>             
-              <%= f.date_field :fe_nomina, value: @fecha, class: "form-control bg-light py-2", readonly: true, required: true %>                                      
+              </span>                                                                 
+              <%= f.date_field :fe_nomina, value: @fecha, class: "form-control bg-light py-2.5 border-start-0 small", readonly: true, required: true %>                                            
             </div>                                                                    
-          </div>                                                                      
-          <%= f.submit "Iniciar Cálculo", class: "btn btn-success w-100 py-2.5 fw-bold shadow-sm", style: "background-color: #198754; border-color: #198754;" do %>
-            <i class="bi bi-play-fill me-1"></i> Iniciar Cálculo
+          </div>                           
+
+          <%= f.button class: "btn btn-success w-100 py-2.5 fw-bold shadow-sm d-inline-flex align-items-center justify-content-center gap-2", style: "background-color: #198754; border-color: #198754;", data: { turbo_submits_with: "Inicializando motor..." } do %>
+            <i class="bi bi-play-fill fs-5"></i> 
+            <span>Iniciar Cálculo de Asignaciones</span>
           <% end %>
         <% end %>                                                                     
                                                                                       
-        <hr class="my-4 text-muted opacity-25 mx-auto" style="max-width: 500px;">                                       
+        <hr class="my-4 text-muted opacity-25 mx-auto" style="max-width: 500px;">                                                                                               
                                                                                       
-        <div id="progreso_nomina" class="p-3 text-center bg-light rounded-3 shadow-sm mx-auto" style="max-width: 500px;">           
-          <p class="text-muted small mb-0 fw-medium">                                           
-            <i class="bi bi-hourglass-split me-2 text-warning animate-spin"></i>Esperando inicio de proceso...                                            
+        <%# Contenedor de la barra de progreso asíncrona con borde idéntico %>
+        <div id="progreso_nomina" class="p-3 text-center bg-light rounded-3 border border-warning border-opacity-10 shadow-sm mx-auto" style="max-width: 500px;">                                                   
+          <p class="text-muted small mb-0 fw-medium d-inline-flex align-items-center justify-content-center gap-2">                                                                                                                           
+            <i class="bi bi-hourglass-split text-warning"></i>
+            <span>Esperando inicio de proceso masivo...</span>                                                              
           </p>                                                                        
         </div>                                                                        
-
-      <% end %>                    
-
-      <%# --- CASO B: SEGMENTACIÓN SEGÚN EL AVANCE DEL CONTADOR --- %>
-      <% if @contador == 6 || @contador == 7 %>                                                             
-        </div>
-        <%= render "admins/parciales/antiguedades_boton_eliminar" %>                      
-      
-      <% elsif @contador >= 8 %>
-
-        <%# Encabezado Rojo de Alta Seguridad: Período Clausurado Inmutable %>
-        <div class="text-center py-5 bg-light rounded-3 border border-danger border-opacity-10 mx-auto shadow-sm" style="max-width: 500px;">                                 
-          <div class="text-danger mb-3">                                             
-            <i class="bi bi-shield-fill-check display-3 opacity-75"></i>                      
+      <%# --- CASO B: SEGMENTACIÓN SEGÚN EL AVANCE DEL CONTADOR --- %>                
+      <% elsif @contador.to_i == 6 || @contador.to_i == 7 %>                                                                                                                                 
+        
+        <%# 🌟 NUEVO ESTADO: AQUÍ SÍ SE RENDERIZA "TODO AL DÍA" CON SU BORDE VERDE E INSIGNIAS %>
+        <div class="text-center py-5 bg-light rounded-3 border border-success border-opacity-10 mx-auto shadow-sm mb-4" style="max-width: 500px;">                                                                         
+          <div class="mb-3 text-success">                                             
+            <i class="bi bi-calendar-check display-3 opacity-75"></i>                                                                                                
           </div>                                                                        
-          <h5 class="fw-bold text-dark mb-1">Registros de Antigüedad Protegidos</h5>                           
-          <p class="text-muted small mb-3 px-4">           
-            La nómina de este período ha alcanzado el estado de <strong>Cierre Definitivo</strong>. Las asignaciones por antigüedad han sido consolidadas e indexadas de forma inalterable en el historial fiscal.
-          </p>
+          <h5 class="fw-bold text-dark mb-1">Cálculo de Antigüedad al Día</h5>                           
+          <p class="text-muted small mb-4 px-4">                                        
+            Las asignaciones y escalafones de antigüedad han sido calculados con éxito para todo el personal apto en este período.
+          </p>                                                                          
+          
+          <%# ETIQUETAS DE ESTADO UNIFICADAS %>                                         
+          <div class="d-flex justify-content-center gap-2 mb-4">                             
+            <span class="badge bg-success-subtle text-success border border-success border-opacity-15 px-2.5 py-1.5 small fw-semibold">                                        
+              <i class="bi bi-patch-check-fill me-1"></i> Proceso Terminado
+            </span>                                                                   
+            <span class="badge bg-light text-secondary border px-2 py-1.5 small fw-medium">                                                                                 
+              Fase: <%= @contador %>                                                  
+            </span>                                                                   
+          </div>
 
-          <%# ETIQUETAS DE ESTADO UNIFICADAS %>
-          <div class="d-flex justify-content-center gap-2">
-            <span class="badge bg-danger-subtle text-danger border border-danger border-opacity-15 px-2.5 py-1.5 small fw-semibold">
-              <i class="bi bi-lock-fill me-1"></i> Período Clausurado
-            </span>
-            <span class="badge bg-light text-secondary border px-2 py-1.5 small fw-medium">
-              Fase: <%= @contador %>
-            </span>
+          <%# Contenedor del botón parcial de reversión/eliminación %>
+          <div class="px-4">
+            <%= render "admins/parciales/antiguedades_boton_eliminar" %>
           </div>
         </div>
-      <% elsif @contador != 5 %>                                                      
+                                                                                      
+      <% elsif @contador.to_i >= 8 %>
+                                                            
+        <%# Encabezado Rojo de Alta Seguridad: Período Clausurado Inmutable %>        
+        <div class="text-center py-5 bg-light rounded-3 border border-danger border-opacity-10 mx-auto shadow-sm" style="max-width: 500px;">                                                                                                                          
+          <div class="text-danger mb-3">                                              
+            <i class="bi bi-shield-fill-check display-3 opacity-75"></i>                                                                                                        
+          </div>                                                                                                                                                                
+          <h5 class="fw-bold text-dark mb-1">Registros de Antigüedad Protegidos</h5>                                                                                            
+          <p class="text-muted small mb-3 px-4">                                      
+            La nómina de este período ha alcanzado el estado de <strong>Cierre Definitivo</strong>. Las asignaciones por antigüedad han sido consolidadas e indexadas de forma inalterable en el historial fiscal.                                                
+          </p>                  
+          
+          <%# ETIQUETAS DE ESTADO UNIFICADAS %>                                       
+          <div class="d-flex justify-content-center gap-2">                           
+            <span class="badge bg-danger-subtle text-danger border border-danger border-opacity-15 px-2.5 py-1.5 small fw-semibold">                                        
+              <i class="bi bi-lock-fill me-1"></i> Período Clausurado                 
+            </span>                                                                   
+            <span class="badge bg-light text-secondary border px-2 py-1.5 small fw-medium">                                                                                 
+              Fase: <%= @contador %>                                                  
+            </span>                                                                   
+          </div>                                                                      
+        </div>                                                                        
+      
+      <% else %>  
 
-        <div class="text-center py-5 rounded-3 mx-auto shadow-sm" style="background-color: #fff9db; max-width: 500px;">       
-          <div class="mb-3 text-warning">                                               
-            <i class="bi bi-exclamation-triangle display-4 opacity-75"></i>                             
-          </div>                                                                        
-          <h6 class="fw-bold text-dark mb-2">Pasos previos pendientes</h6>              
-          <p class="text-muted small mb-0 px-4">           
-            Para generar las antigüedades, primero debes completar de manera secuencial los procesos anteriores de la nómina.                                                   
-          </p>                                                                          
-        </div>                                                                          
-      <% end %>                                                                           
-    <% end %>
-
-  </div>
+        <%# Alerta Amarilla de Pasos previos pendientes %>
+        <div class="text-center py-5 bg-light rounded-3 border border-warning border-opacity-10 mx-auto shadow-sm" style="max-width: 500px;">                                                     
+          <div class="text-warning mb-3">                                                                                                                                       
+            <i class="bi bi-exclamation-triangle-fill display-3 opacity-75"></i>                                                                                                     
+          </div>                                                                                                                                                                
+          <h5 class="fw-bold text-dark mb-1">Pasos Previos Pendientes</h5>                                                                                                      
+          <p class="text-muted small mb-0 px-4">                                      
+            Para generar las antigüedades, primero debes completar de manera secuencia los procesos anteriores de la nómina.                                                                                                                                         
+          </p>                                                                                                                                                                  
+        </div>                                                                                                                                                                  
+      
+      <% end %>                                                                                                                                                                 
+    <% end %>          
+  </div>                                                                             
 </turbo-frame>
+
