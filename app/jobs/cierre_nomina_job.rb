@@ -54,23 +54,17 @@ class CierreNominaJob < ApplicationJob
 
   # Transmite el aviso de éxito final y remueve el botón falso de "Procesando"
   def comunicar_exito_final
-    contador = Contador.first # O como lo invoques en tu controlador
+    contador = Contador.first
     contador&.update(valor: 8)
-
     Turbo::StreamsChannel.broadcast_replace_to(
       'nomina_channel',
-      target: 'progreso_cierre',
-      partial: 'admins/parciales/barra_progreso_cierre_final'
-    )
-
-    Turbo::StreamsChannel.broadcast_action_to(
-      'nomina_channel',
-      action: :remove,
-      target: 'contenedor_boton_cierre'
+      target: 'contenido', # Reemplaza el turbo-frame principal
+      template: 'admins/parciales/controlador_cierre', # Forzamos la carga del archivo ERB raíz estructurado
+      layout: false,
+      locals: { @cont_val => contador, cont_val: contador.valor.to_i }
     )
   end
 
-  # CORRECCIÓN DE SINTAXIS: Aseguramos que el método exista para el bloque rescue
   def transmitir_error
     Turbo::StreamsChannel.broadcast_replace_to(
       'nomina_channel',

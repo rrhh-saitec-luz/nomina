@@ -301,10 +301,15 @@ class AdminsController < ApplicationController
   end
 
   def barra_progreso_mensaje_final
+    contador = Contador.first
+    fecha_activa = HistoricoPago.first&.fe_nomina
     Turbo::StreamsChannel.broadcast_replace_to(
       'nomina_channel',
-      target: 'contenido',
-      partial: 'admins/parciales/barra_progreso_antiguedades_mensaje_final',
+      target: 'contenido', # Reemplaza el turbo-frame raíz de la pantalla
+      partial: 'admins/parciales/antiguedades',
+      locals: {
+        contador: contador, cont: contador.valor.to_i, fecha: fecha_activa
+      }
     )
   end
 
