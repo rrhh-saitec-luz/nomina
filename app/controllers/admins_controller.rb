@@ -7,7 +7,6 @@ require 'date'
 class AdminsController < ApplicationController
   include Constantes
   include AdminConcerns
-  include AdminComplementoConcerns
   def index; end
 
   def generar_nomina
@@ -154,12 +153,12 @@ class AdminsController < ApplicationController
 
     # Ejecutamos la actualización masiva de la llave compuesta
     if @conceptos.update_all(
-         co_ubicacion: params[:nuevo_co_ubicacion],
-         tipopersonal: params[:nuevo_tipopersonal]
-       )
+      co_ubicacion: params[:nuevo_co_ubicacion],
+      tipopersonal: params[:nuevo_tipopersonal]
+    )
       respond_to do |format|
         # Redirección con estatus :see_other para que Turbo actualice el frame de la tabla
-        format.html { redirect_to depurar_admins_path, status: :see_other, notice: 'Cargo y conceptos actualizados con éxito.' }
+        format.html { redirect_to depurar_admins_path, status: :see_other, notice: 'Cargo y conceptos actualizados.' }
       end
     else
       flash.now[:alert] = 'No se pudieron actualizar los registros.'
@@ -192,21 +191,19 @@ class AdminsController < ApplicationController
 
   def antiguedades
     @fecha = HistoricoPago.first&.FE_NOMINA
-    @fa = FACTOR_DE_ANTIGUEDAD
     @contador = contador_depurar.valor
-    render partial: 'admins/parciales/antiguedades'
   end
 
   def suma_de_asignaciones
-    personas = activos_sin_jubilados_o_pensionados
     f_nomina = params[:fe_nomina].to_date.beginning_of_month
-    procesar_asignaciones(personas, f_nomina)
+    procesar_asignaciones(f_nomina)
   end
 
   def eliminar_antiguedades
     contador_depurar.update(valor: 5)
     HistoricoPago.delete_by(CO_CONCEPTO: %w[A223 A029 A436])
-    antiguedades
+
+    redirect_to antiguedades_admins_path
   end
 
   def adelanto
@@ -214,6 +211,7 @@ class AdminsController < ApplicationController
     render partial: 'admins/parciales/x500_inicio'
   end
 
+  # Fuerza a la variable local a valer 6 para activar el panel verdo
   def calcular_anticipos
     CalcularAnticiposJob.perform_later
     respond_to do |format|
@@ -255,62 +253,9 @@ class AdminsController < ApplicationController
 
   private
 
-  def procesar_asignaciones(personas, f_nomina)
-    idx = IDXS[:a]
-    fecha_limite = f_nomina - 1.year
-    personas_aptas = personas.where('fe_ingreso <= ?', fecha_limite)
-    total = personas_aptas.count
-    procesar_personal_pa(personas_aptas, f_nomina, idx, total)
-    contador_depurar.update(valor: 6)
+  def procesar_asignaciones(f_nomina)
+    CalcularAntiguedadesJob.perform_later(f_nomina.to_s, 'a')
     head :ok
-  end
-
-  def procesar_personal_pa(personas, f_nomina, idx, total)
-    procesados = 0
-    ahora = Time.current
-    personas.in_batches(of: 100) do |batch|
-      datos = batch.filter_map { |p| preparar_registro_historico(p, f_nomina, idx, ahora) }
-      HistoricoPago.insert_all(datos) if datos.any?
-      procesados += batch.size
-      porcentaje = ((procesados.to_f / total) * 100).round
-      barra_progreso(porcentaje, procesados, total)
-    end
-    barra_progreso_mensaje_final
-  end
-
-  def preparar_registro_historico(persona, f_nomina, idx, ahora)
-    f_ingreso = persona.fe_ingreso.beginning_of_month
-    servicio = tds(f_nomina, f_ingreso)
-    monto = sda(persona.ce_trabajador, persona.co_ubicacion,
-                persona.tipopersonal, idx, servicio)
-    return nil if monto.zero?
-
-    tipo = persona.tp
-    concepto = codigo_concepto(persona.tp)
-    persona.slice(:ce_trabajador, :co_ubicacion, :tipopersonal, :descripcion_tp)
-           .merge(atributos_calculados(concepto, f_nomina, idx, servicio, monto, ahora, tipo))
-  end
-
-  def barra_progreso(porcentaje, procesados, total)
-    Turbo::StreamsChannel.broadcast_replace_to(
-      'nomina_channel',
-      target: 'progreso_nomina',
-      partial: 'admins/parciales/barra_progreso',
-      locals: { porcentaje:, procesados:, total: }
-    )
-  end
-
-  def barra_progreso_mensaje_final
-    contador = Contador.first
-    fecha_activa = HistoricoPago.first&.fe_nomina
-    Turbo::StreamsChannel.broadcast_replace_to(
-      'nomina_channel',
-      target: 'contenido', # Reemplaza el turbo-frame raíz de la pantalla
-      partial: 'admins/parciales/antiguedades',
-      locals: {
-        contador: contador, cont: contador.valor.to_i, fecha: fecha_activa
-      }
-    )
   end
 
   # rubocop:disable Metrics/MethodLength, Metrics/ParameterLists
@@ -338,16 +283,6 @@ class AdminsController < ApplicationController
     }
   end
   # rubocop:enable Metrics/MethodLength, Metrics/ParameterLists
-
-  def codigo_concepto(persona_tp)
-    if persona_tp.eql?(1)
-      ['A223', 'PRIMA POR ANTIGUEDAD DOCENTE']
-    elsif persona_tp.eql?(2)
-      ['A029', 'PRIMA POR ANTIGUEDAD ADMINISTRATIVO']
-    else
-      ['A436', 'PRIMA POR ANTIGUEDAD OBRERO']
-    end
-  end
 
   def actualizar_cargos(trab_act, cargos_act)
     actualizar = trab_act.select { |c| c unless cargos_act.include?(c) }.uniq
