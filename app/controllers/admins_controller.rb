@@ -208,25 +208,11 @@ class AdminsController < ApplicationController
 
   def adelanto
     @contador = contador_depurar.valor
-    render partial: 'admins/parciales/x500_inicio'
   end
 
-  # Fuerza a la variable local a valer 6 para activar el panel verdo
   def calcular_anticipos
     CalcularAnticiposJob.perform_later
-    respond_to do |format|
-      format.turbo_stream do
-        render turbo_stream: [
-          # REUTILIZAMOS TU PARCIAL ORIGINAL pasándole el tipo como símbolo
-          turbo_stream.replace('contenedor_boton_anticipos',
-                               partial: 'admins/parciales/generar_anticipos_boton_procesando',
-                               locals: { tipo: :anticipos }),
-          turbo_stream.replace('progreso_anticipos',
-                               partial: 'admins/parciales/barra_progreso_anticipos',
-                               locals: { porcentaje: 0, procesados: 0, total: 100 })
-        ]
-      end
-    end
+    head :ok
   end
 
   def cerrar_nomina

@@ -1,0 +1,110 @@
+<turbo-frame id="contenido">                                                          
+  <%= turbo_stream_from 'nomina_channel' %>                                           
+                                                                                      
+  <div class="card-body p-4">                                                         
+                                                                                      
+    <%# --- ENCABEZADO UNIFICADO: Solo cambia entre Verde y Rojo --- %>                                                                                                         
+    <div class="d-flex align-items-center gap-2 mb-4 pb-3 border-bottom <%= @contador.to_i >= 8 ? 'text-danger' : 'text-success' %>">                                                                                                                                 
+      <i class="bi bi-cash-coin fs-4"></i>                                                                                                                                      
+      <h5 class="mb-0 fw-bold">Gestión de Anticipos Quincenales (X-500)</h5>          
+    </div>                                                                            
+                                                                                      
+    <%# 1. ESCENARIO DE CLAUSURA FISCAL (Fase >= 8 - Calibrado a border-opacity-15) %>
+    <% if @contador.to_i >= 8 %>                                                                                                                                                
+      
+      <div class="text-center py-5 bg-light rounded-3 border border-danger border-opacity-15 mx-auto shadow-sm" style="max-width: 500px;">                                  
+        <div class="text-danger mb-3">                                                
+          <i class="bi bi-shield-fill-check display-3 opacity-75"></i>                
+        </div>                                                                        
+        <h5 class="fw-bold text-dark mb-1">Cálculo de Anticipos Archivado</h5>                                                                                                                                                                                            
+        <p class="text-muted small mb-3 px-4">                                        
+          El procesamiento de anticipos quincenales X-500 para este período se encuentra clausurado. Los montos han sido transferidos transaccionalmente al cierre contable definitivo.                                                                           
+        </p>                      
+        
+        <%# ETIQUETAS DE ESTADO UNIFICADAS %>                                         
+        <div class="d-flex justify-content-center gap-2">                             
+          <span class="badge bg-danger-subtle text-danger border border-danger border-opacity-15 px-2.5 py-1.5 small fw-semibold">                                          
+            <i class="bi bi-lock-fill me-1"></i> Período Clausurado                   
+          </span>                                                                     
+          <span class="badge bg-light text-secondary border px-2 py-1.5 small fw-medium">                                                                                   
+            Fase: <%= @contador %>                                                    
+          </span>                                                                     
+        </div>                                                                        
+      </div>                                                                          
+                                                                                      
+    <%# 2. ESCENARIO DE ÉXITO Y CONSOLIDACIÓN (Fase 7 - Calibrado a border-opacity-15) %>
+    <% elsif @contador.to_i > 6 %>                                                    
+                                                                                      
+      <div class="text-center py-5 bg-light rounded-3 border border-success border-opacity-15 mx-auto shadow-sm" style="max-width: 500px;">                                 
+        <div class="text-success mb-3">                                               
+          <i class="bi bi-check-circle-fill display-3 opacity-75"></i>                                                                                                                                                                                       
+        </div>                                                                        
+        <h5 class="fw-bold text-dark mb-1">Cálculo X-500 Consolidado</h5>             
+        <p class="text-secondary small mb-3 px-4">                                                                                                                              
+          El adelanto quincenal de este período ha sido procesado, auditado y registrado con éxito. Los montos calculados se encuentran integrados en el flujo de pagos.    
+        </p>                               
+        
+        <%# ETIQUETAS DE PROCESO EXITOSO %>                                           
+        <div class="d-flex justify-content-center gap-2">                             
+          <span class="badge bg-success-subtle text-success border border-success border-opacity-15 px-2.5 py-1.5 small fw-semibold">                                                                                                                                 
+            <i class="bi bi-patch-check-fill me-1"></i> Proceso Terminado             
+          </span>                                                                     
+          <span class="badge bg-light text-secondary border px-2 py-1.5 small fw-medium">                                                                                   
+            Fase: <%= @contador %>                                                    
+          </span>                                                                     
+        </div>                                                                        
+      </div>                                                                          
+    <%# 3. ESCENARIO OPERATIVO ACTIVO (Fase == 6) %>                                  
+    <% elsif @contador.to_i == 6 %>                                                                                                                                             
+                                                                                          
+      <div class="card bg-light border-0 p-4 text-center rounded-3 shadow-sm mx-auto mb-4" style="max-width: 550px;">                                                       
+        <div class="mb-3 text-primary">                                               
+          <i class="bi bi-calculator-history display-4 opacity-75"></i>               
+        </div>                                                                        
+        <h5 class="fw-bold text-dark mb-2">Cálculo Masivo de Anticipos</h5>           
+        <p class="text-secondary small mb-4 text-center mx-auto" style="max-width: 440px;">                                                                                 
+          Esta operation procesará de manera automatizada los montos correspondientes al adelanto de la primera quincena para todo el personal apto en el período activo.   
+        </p>                                                                          
+                                                                                      
+        <div class="d-flex flex-column align-items-center justify-content-center gap-3">                                                                                    
+          <div id="contenedor_boton_anticipos" class="w-100">
+            <%= button_to calcular_anticipos_admins_path,                             
+                          method: :post,                                              
+                          id: 'boton_anticipos_submit',                               
+                          class: 'btn btn-success px-4 py-2.5 fw-bold shadow-sm w-100 d-inline-flex align-items-center justify-content-center gap-2',                   
+                          style: 'background-color: #198754; border-color: #198754;',
+                          data: { turbo_submits_with: "Inicializando volcado..." } do %>                                                                                                                    
+              <i class="bi bi-cpu fs-5"></i>                                                                                                                                    
+              <span>Procesar Cálculo X-500</span>                                                                                                                               
+            <% end %>      
+          </div>                                                                      
+                                                                                      
+          <div id="progreso_anticipos" class="w-100 mt-2"></div>                      
+        </div>                                                                        
+      </div>                                                                          
+                                                                                          
+    <%# 4. ESCENARIO DE ADVERTENCIA: PASOS PREVIOS (Fase < 6 - Calibrado al Clon de Depuración) %>                      
+    <% else %>                                                                        
+                                                                                          
+      <div class="text-center py-5 bg-light rounded-3 border border-warning border-opacity-15 mx-auto shadow-sm" style="max-width: 500px;">                                                                                                                           
+        <div class="text-warning mb-3">                                                                                                                                         
+          <i class="bi bi-hourglass-split display-3 opacity-75"></i>                                                                                                                                                                                            
+        </div>                                                                        
+        <h5 class="fw-bold text-dark mb-1">Módulo en Espera Técnica</h5>                                                                                                        
+        <p class="text-muted small mb-3 px-4">                                        
+          Para habilitar el cálculo masivo de anticipos quincenales X-500, primero debe completar el módulo de <strong>Antigüedades del Personal</strong> en la fase 5.     
+        </p>   
+        
+        <%# ETIQUETAS DE ESTADO UNIFICADAS CON BADGES SIMÉTRICOS %>
+        <div class="d-flex justify-content-center gap-2">                             
+          <span class="badge bg-warning-subtle text-warning border border-warning border-opacity-15 px-2.5 py-1.5 small fw-semibold text-dark">                                                                                                                       
+            <i class="bi bi-hourglass-split me-1"></i> Fase Pendiente                 
+          </span>                                                                     
+          <span class="badge bg-light text-secondary border px-2 py-1.5 small fw-medium">                                                                                   
+            Fase Actual: <%= @contador %>                                                                                                                                       
+          </span>                                                                     
+        </div>                                                                        
+      </div>                                                                          
+    <% end %>                                                                         
+  </div>                                                                              
+</turbo-frame>
