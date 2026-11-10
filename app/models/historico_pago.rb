@@ -154,37 +154,14 @@ class HistoricoPago < ApplicationRecord
     registros_procesados = 0
 
     query_conceptos.find_in_batches(batch_size: batch_size) do |batch|
-      # Saneado: Eliminados 'self' redundantes
       nuevos_registros = batch.map { |registro| new(registro.attributes) }
       import nuevos_registros, validate: false
 
       registros_procesados += batch.size
       porcentaje = ((registros_procesados.to_f / total_registros) * 100).round
 
-      # Transmisión en vivo del avance de la barra de progreso
-      Turbo::StreamsChannel.broadcast_replace_to(
-        'nomina_channel',
-        target: 'progreso_cargos_creacion',
-        partial: 'admins/parciales/barra_progreso_creacion',
-        locals: { porcentaje: porcentaje, procesados: registros_procesados, total: total_registros }
-      )
+      # 🌟 REPORTAMOS EL PROGRESO AL JOB: El modelo no sabe qué es un WebSocket ni una vista
+      yield(porcentaje, registros_procesados, total_registros) if block_given?
     end
-
-    # 🌟 LA CORRECCIÓN MAESTRA: Al llegar al 100%, renderizamos la vista raíz de forma reactiva
-    # Instanciamos el contador para que la vista pueda evaluar el cambio de estado inmediatamente
-    @contador = Contador.first # Reemplaza por tu método real para traer el contador
-
-    Turbo::StreamsChannel.broadcast_replace_to(
-      'nomina_channel',
-      target: 'contenido', # Apuntamos al turbo-frame raíz para redibujar la pantalla entera sin saltos
-      template: 'admins/generar_nomina', # Forzamos el renderizado de la estructura limpia con su lógica condicional
-      layout: false,
-      locals: {
-        contador: @contador,
-        cont: @contador.valor.to_i,
-        years: Concepto.pluck(:ANO).uniq,
-        nomina: NominaTipo.all
-      }
-    )
   end
 end

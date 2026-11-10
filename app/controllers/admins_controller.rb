@@ -20,37 +20,19 @@ class AdminsController < ApplicationController
       tpn: params[:tpn],
       tpns: params[:tpns]
     }
+
     hay_registros = Concepto.where(ANO: filtros[:year],
                                    MES: filtros[:month],
                                    TIPO_NOMINA: filtros[:tpn],
                                    TIPO_NOMINA_ESPECIFICA: filtros[:tpns])
                             .where.not(CO_CONCEPTO: %w[X500 A029 A223 A436])
                             .exists?
+
     if !hay_registros
-      respond_to do |format|
-        format.html { redirect_to generar_nomina_admins_path, alert: 'Búsqueda sin resultados.' }
-      end
+      redirect_to generar_nomina_admins_path, alert: 'Búsqueda sin resultados.'
     else
       CreacionPrenominaJob.perform_later(filtros)
-      respond_to do |format|
-        format.turbo_stream do
-          render turbo_stream: [
-            turbo_stream.replace(
-              'progreso_cargos_creacion',
-              partial: 'admins/parciales/barra_progreso_creacion',
-              locals: { porcentaje: 0, procesados: 0, total: 100 }
-            ),
-            turbo_stream.replace(
-              'boton_prenomina',
-              partial: 'admins/parciales/generar_nomina_boton_procesando'
-            )
-          ]
-        end
-        format.html do
-          redirect_to generar_nomina_admins_path,
-                      notice: 'Proceso de generación ha iniciado en segundo plano.'
-        end
-      end
+      head :ok
     end
   end
 
